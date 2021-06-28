@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+{% block css %}
+<link href="{% static 'css/styles.css'%}" rel="stylesheet" />
+{% endblock css %}
+{% block main %}
+
+
+<!-- Masthead-->
+<header class="masthead mt-4">
+    <div class="container px-4 px-lg-5 h-100">
+        <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
+            <div class="col-lg-8 align-self-end">
+                <h1 class="text-white font-weight-bold">Your Favorite Place for Free Bootstrap Themes</h1>
+                <hr class="divider" />
+            </div>
+            <div class="col-lg-8 align-self-baseline">
+                <p class="text-white-75 mb-5">Start Bootstrap can help you build better websites using the Bootstrap
+                    framework! Just download a theme and start customizing, no strings attached!</p>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                    Create Your Resume Now
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalCenterTitle text-center">Are you Experience  or Fresher ? </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+
+
+
+                                <a class="btn btn-primary btn-xl" href="{% url 'fresher_input'%}">Fresher</a>
+                                &nbsp&nbsp&nbsp
+                                <a class="btn btn-primary" href="{% url 'experience_input'%}"> Experience</a>
+
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<!-- Footer-->
+<footer class="bg-light py-5">
+    <div class="container px-4 px-lg-5">
+        <div class="small text-center text-muted">Copyright &copy; 2021 - Company Name</div>
+    </div>
+</footer>
+
+{% endblock main %}
