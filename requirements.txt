@@ -1,0 +1,6 @@
+autopep8==1.5.7
+Django==3.2.4
+pdfkit==0.6.1
+Pillow==8.2.0
+
+
