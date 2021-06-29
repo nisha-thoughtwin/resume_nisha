@@ -8,7 +8,7 @@ from .forms import *
 class Home(View):
 
     def get(self, request):
-        return render(request,'resume/index.html')
+        return render(request,'index.html')
 
 class FresherResumeInput(View):
 
