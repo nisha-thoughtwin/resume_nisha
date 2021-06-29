@@ -6,35 +6,41 @@
     {% block main %}
 
 
-<form id="regForm" action="/">
+<form id="regForm" method="post">
+  {% csrf_token %}
   <h1>Register:</h1>
   <!-- One "tab" for each step in the form: -->
   <div class="tab">Name:
+   
+        {{form1.as_p}}
+    
+  </div>
+  <div class="tab"><h4>Enter general Information:</h4>
+   {{ form2.as_p}}
+  </div>
+  <div class="tab"><h4>Enter About Your Education:</h4>
     <ul id="fieldList">
       <li>
-        <input name="name[]" type="text" placeholder="Name" />
+        {{ form3.as_p}}
       </li>
-      <li>
-        <input name="phone[]" type="text" placeholder="Phone" />
-      </li>
-      <li>
-        <input name="email[]" type="text" placeholder="E-Mail">
-      </li>
+      <hr>
+     
     </ul>
-    <button id="addMore">Add more fields</button>
+    <!-- <button id="addMore">Add more fields</button> -->
+
   </div>
-  <div class="tab">Contact Info:
-    <p><input placeholder="E-mail..." oninput="this.className = ''" name="email"></p>
-    <p><input placeholder="Phone..." oninput="this.className = ''" name="phone"></p>
+  <div class="tab"><h4>Enter  Your Skills and Hobbies:</h4>
+    {{ form4.as_p}}
+    {{ form6.as_p}}
+
   </div>
-  <div class="tab">Birthday:
-    <p><input placeholder="dd" oninput="this.className = ''" name="dd"></p>
-    <p><input placeholder="mm" oninput="this.className = ''" name="nn"></p>
-    <p><input placeholder="yyyy" oninput="this.className = ''" name="yyyy"></p>
+  <div class="tab"><h4>Enter  Your Certificate Details:</h4>
+    {{ form7.as_p}}
+
   </div>
-  <div class="tab">Login Info:
-    <p><input placeholder="Username..." oninput="this.className = ''" name="uname"></p>
-    <p><input placeholder="Password..." oninput="this.className = ''" name="pword" type="password"></p>
+  <div class="tab"><h4>Enter  Your  Achievements:</h4>
+    {{ form8.as_p}}
+
   </div>
   <div style="overflow:auto;">
     <div style="float:right;">
@@ -48,6 +54,10 @@
     <span class="step"></span>
     <span class="step"></span>
     <span class="step"></span>
+    <span class="step"></span>
+    <span class="step"></span>
+
+
   </div>
 </form>
     
@@ -133,9 +143,8 @@ $(function() {
   $("#addMore").click(function(e) {
     e.preventDefault();
     $("#fieldList").append("<li>&nbsp;</li>");
-    $("#fieldList").append("<li><input type='text' name='name[]' placeholder='Name' /></li>");
-    $("#fieldList").append("<li><input type='text' name='phone[]' placeholder='Phone' /></li>");
-    $("#fieldList").append("<li><input type='text' name='email[]' placeholder='E-Mail' /></li>");
+    $("#fieldList").append("<li></li>");
+  
   });
 });
 
