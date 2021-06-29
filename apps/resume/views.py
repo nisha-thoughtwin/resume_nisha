@@ -33,3 +33,8 @@ class GenratePdf(View):
             # resume = Resume.objects.create(resume=pdf) 
             return HttpResponse('download success')
 
+class Template2(View):
+    def get(self, request):
+        return render(request,'resume/template2.html')
+
+    

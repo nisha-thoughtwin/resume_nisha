@@ -7,5 +7,5 @@ urlpatterns =[
 
     path('generate',GenratePdf.as_view(),name='generate_pdf'),
 
-
+    path('resume2/',Template2.as_view(),name='resume2')
 ]
