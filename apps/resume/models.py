@@ -2,12 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-
-
 class Resume(models.Model):
    
     title = models.CharField(max_length=50)
     objective = models.TextField(max_length=400)
+
+    def __str__(self):
+        return str(self.title)
+        
 
 class UserExtraFields(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
@@ -17,6 +19,9 @@ class UserExtraFields(models.Model):
     address = models.CharField(max_length=100)
     photo = models.ImageField(upload_to='images/')
 
+    def __str__(self):
+        return str(self.user)
+
 
 class Education(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
@@ -24,6 +29,9 @@ class Education(models.Model):
     year_of_passing = models.CharField(max_length=100)
     percentage_or_grade = models.CharField(max_length=100)
     university = models.CharField(max_length=100)
+
+    def __str__(self):
+        return str(self.resume)
 
 
 class Experience(models.Model):
@@ -34,22 +42,37 @@ class Experience(models.Model):
     role = models.CharField(max_length=100)
     place = models.CharField(max_length=100)
 
+    def __str__(self):
+        return str(self.resume)
+
 
 class Hobbies(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return str(self.resume)
 
 
 class Skills(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
     name = models.CharField(max_length=30)
 
+    def __str__(self):
+        return str(self.resume)
+
 
 class Certificate(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
 
+    def __str__(self):
+        return str(self.resume)
+
 
 class Achievements(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
+
+    def __str__(self):
+        return str(self.resume)
