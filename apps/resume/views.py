@@ -115,3 +115,6 @@ class Template2(View):
         return render(request,'resume/template2.html')
 
     
+class Template3(View):
+    def get(self, request):
+        return render(request,'resume/template3.html')
