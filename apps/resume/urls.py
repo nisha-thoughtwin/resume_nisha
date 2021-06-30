@@ -1,5 +1,7 @@
 from django.urls import path
+#from .views import FresherResumeInput,ExperienceResumeInput,GenratePdf
 from .views import *
+    
 urlpatterns =[
     path('',Home.as_view(),name='home'),
     path('fresher',FresherResumeInput.as_view(),name='fresher_input'),

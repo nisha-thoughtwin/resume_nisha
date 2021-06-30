@@ -2,8 +2,11 @@ from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.views import View
 import pdfkit
-from .models import *
+from .models import * 
 from .forms import *
+#from .models import Resume, Education,skills,experience,hobbies,certifications,acheivments
+#from .forms import Resume, Education,skills,experience,hobbies,certifications,acheivments
+
 import random
 from datetime import date
 import string
