@@ -17,21 +17,7 @@
 </style>
   <body>
 
-    <div class="container-fluid">
-      <nav class="navbar navbar-expand navbar-light bg-light">
-          <div class="nav navbar-nav">
-              <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-              <a class="nav-item nav-link" href="#">Home</a>
-              <button type="button" class="btn btn-success" onclick="Copy();">generate resume</button>
-          </div>
-      </nav>
-    </div>
 
-    <form method="post" action="{% url 'generate_pdf'%}">
-      {% csrf_token %}
-      <input type="hidden" name="temp_url" value="" id='paste-box' >
-      <input type="submit" value="Save" class="btn btn-primary">
-    </form>
 
       <div class="container mt-4 resume">
           <h1 class= "text-center mt-4"><b>My Resume</b></h1>
