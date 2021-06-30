@@ -66,32 +66,31 @@ class UserExtraFieldsForm(forms.ModelForm):
     class Meta:
         model = UserExtraFields
         widgets = {
-            'resume' : forms.TextInput(attrs={'class':'form-control','placeholder':'title','name':'title','id':'title'}),
-            'user' : forms.TextInput(attrs={'class':'form-control','placeholder':'objective','name':'objective','id':'objective'}),
-            'date_of_birth' : forms.TextInput(attrs={'class':'form-control','placeholder':'date_of_birth','name':'date_of_birth','id':'date_of_birth'}),
-            'phone' : forms.TextInput(attrs={'class':'form-control','placeholder':'phone','name':'phone','id':'phone'}),
+            'date_of_birth' : forms.DateInput(attrs={'class':'form-control','placeholder':'date_of_birth','name':'date_of_birth','id':'date_of_birth'}),
+            'phone' : forms.NumberInput(attrs={'class':'form-control','placeholder':'phone','name':'phone','id':'phone'}),
             'address' : forms.TextInput(attrs={'class':'form-control','placeholder':'address','name':'address','id':'address'}),
-            'photo' : forms.ImageField()
+            
             
         }
-        fields = "__all__"
+        fields = ['date_of_birth','address','phone','photo']
 
 
 
 class EducationForm(forms.ModelForm):
     class Meta:
         model = Education
-        fields = '__all__'
-        widgets = {
+        fields = ['name','year_of_passing','percentage_or_grade','university']
+
         
-            'resume' : forms.TextInput(attrs={'class':'form-control','placeholder':'resume','name':'resume','id':'resume'}),
+        widgets = {
             'name' : forms.TextInput(attrs={'class':'form-control','placeholder':'name','name':'Name','id':'Name'}),
-            'year of passing' : forms.TextInput(attrs={'class':'form-control','placeholder':'year of passing','name':'year of passing','id':'year of passing'}),
+            'year of passing' : forms.DateInput(attrs={'class':'form-control','placeholder':'year of passing','name':'year of passing','id':'year of passing'}),
             'grade/percentage' : forms.TextInput(attrs={'class':'form-control','placeholder':'grade/percentage','name':'grade/percentage','id':'grade/percentage'}),
             'university' : forms.TextInput(attrs={'class':'form-control','placeholder':'university','name':'university','id':'university'}),
 
         
         }
+       
 
 
 
@@ -99,19 +98,18 @@ class EducationForm(forms.ModelForm):
 class SkillsForm(forms.ModelForm):
     class Meta:
         model = Skills
-        fields = '__all__'
+        
         widgets = {
-            'resume' : forms.TextInput(attrs={'class':'form-control','placeholder':'resume','name':'resume','id':'resume'}),
-            'name' : forms.TextInput(attrs={'class':'form-control','placeholder':'Name','name':'Name','id':'Name'}),
+             'name' : forms.TextInput(attrs={'class':'form-control','placeholder':'Name','name':'Name','id':'Name'}),
 
         }
+        fields = ['name']
   
 class ExperienceForm(forms.ModelForm):
     class Meta:
         model = Experience
-        fields = '__all__'
+        
         widgets = {
-            'resume' : forms.TextInput(attrs={'class':'form-control','placeholder':'resume','name':'resume','id':'resume'}),
             'company name ' : forms.TextInput(attrs={'class':'form-control','placeholder':'company name','name':'company name','id':'company name'}),
             'duration' : forms.TextInput(attrs={'class':'form-control','placeholder':'duration','name':'duration','id':'duration'}),
             'designation' : forms.TextInput(attrs={'class':'form-control','placeholder':'designation','name':'designation','id':'designation'}),
@@ -119,6 +117,7 @@ class ExperienceForm(forms.ModelForm):
             'place' : forms.TextInput(attrs={'class':'form-control','placeholder':'place','name':'place','id':'place'}),
 
         }
+        fields = ['company_name','duration','designation','role','place']
 
 
 
@@ -126,32 +125,33 @@ class ExperienceForm(forms.ModelForm):
 class HobbiesForm(forms.ModelForm):
     class Meta:
         model = Hobbies
-        fields = '__all__'
+        
         widgets = {
-            'resume' : forms.TextInput(attrs={'class':'form-control','placeholder':'resume','name':'resume','id':'resume'}),
             'name' : forms.TextInput(attrs={'class':'form-control','placeholder':'name','name':'Name','id':'Name'}),
         }
+        fields = ['name']
 
 
 class CertificateForm(forms.ModelForm):
     class Meta:
         model = Certificate
-        fields = '__all__'
+        
         widgets = {
-            'resume' : forms.TextInput(attrs={'class':'form-control','placeholder':'resume','name':'resume','id':'resume'}),
             'name' : forms.TextInput(attrs={'class':'form-control','placeholder':'name','name':'Name','id':'Name'}),
         }
+        fields = ['name']
 
 
 class AchievementsForm(forms.ModelForm):
     class Meta:
         model = Achievements
-        fields = '__all__'
+       
         widgets = {
             'resume' : forms.TextInput(attrs={'class':'form-control','placeholder':'resume','name':'resume','id':'resume'}),
             'name' : forms.TextInput(attrs={'class':'form-control','placeholder':'name','name':'achievements_name','id':'achievements_name'}),
 
 
         }
+        fields = ['name']
 
 
