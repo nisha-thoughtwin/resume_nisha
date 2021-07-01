@@ -12,6 +12,9 @@ import random
 from datetime import date
 import string
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 date = date.strftime
@@ -21,6 +24,12 @@ class Home(View):
 
     def get(self, request):
         return render(request, 'index.html')
+
+class Dashboard(View):
+
+    @method_decorator(login_required)
+    def get(self, request):
+        return render(request, 'dashboard/dashboard.html')
 
 
 class FresherResumeInput(View):
@@ -32,33 +41,17 @@ class FresherResumeInput(View):
         form2 = UserExtraFieldsForm
         form3 = EducationForm
         form4 = SkillsForm
-<<<<<<< HEAD
-        form5 = ExperienceForm
-        form6 = HobbiesForm
-        form7 = CertificateForm
-        form8 = AchievementsForm
-        form9 = CustomUserCreationForm
-        context = {'form1': form1, 'form2': form2,
-                   'form3': form3, 'form4': form4, 
-                   'form5': form5, 'form6': form6, 
-                   'form7': form7, 'form8': form8,
-                   'form9': form9}
-=======
 
         form5 = HobbiesForm
         form6 = CertificateForm
         form7 = AchievementsForm
+        
         context = {'form': form, 'form1': form1, 'form2': form2,
                    'form3': form3, 'form4': form4, 'form5': form5, 'form7': form7, 'form6': form6}
->>>>>>> 5b339856d7e782259050e3ee73a04979a6ddfdec
 
         return render(request, 'resume/fresher.html', context)
 
     def post(self, request):
-<<<<<<< HEAD
-        form1 = ResumeForm(request.POST)
-        # user = User.objects.create(username=usernameGen("PMK GAC"),password=random_password)
-=======
         print(request.POST)
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -71,31 +64,14 @@ class FresherResumeInput(View):
         form1 = UserForm(request.POST)
 
         form2 = UserExtraFieldsForm(request.POST, request.FILES)
->>>>>>> 5b339856d7e782259050e3ee73a04979a6ddfdec
 
         form3 = EducationForm(request.POST)
         form4 = SkillsForm(request.POST)
-<<<<<<< HEAD
-        form6 = HobbiesForm(request.POST)
-        form7 = CertificateForm(request.POST)
-        form8 = AchievementsForm(request.POST)
-
-        # User Signup
-        form9 = CustomUserCreationForm
-
-        if form1.is_valid and form2.is_valid and form3.is_valid and form4.is_valid and form6.is_valid and form7.is_valid and form8.is_valid and form9.is_valid:
-            form1.save()
-            form2.save()
-            form3.save()
-            form4.save()
-            form6.save()
-            form7.save()
-            form8.save()
-            form9.save()
-=======
         form5 = HobbiesForm(request.POST)
         form6 = CertificateForm(request.POST)
         form7 = AchievementsForm(request.POST)
+
+        # user_data = User.objects.all(request.user)
 
         if form.is_valid and form1.is_valid and form2.is_valid and form3.is_valid and form4.is_valid and form5.is_valid and form6.is_valid and form7.is_valid:
 
@@ -104,7 +80,7 @@ class FresherResumeInput(View):
             username = first_name+str(random.randrange(100, 1000))
             if username not in User.objects.all():
                 user.username = username
-            user.password = random_password
+                user.set_password(random_password)
 
             user.save()
 
@@ -128,9 +104,13 @@ class FresherResumeInput(View):
             achievements = form7.save(commit=False)
             achievements.resume = resume
             achievements.save()
->>>>>>> 5b339856d7e782259050e3ee73a04979a6ddfdec
 
-            return HttpResponse("done")
+            username = username
+            raw_password = random_password
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('dashboard')
+
         return HttpResponse("not done")
 
 
@@ -166,3 +146,8 @@ class GenratePdf(View):
 class Template2(View):
     def get(self, request):
         return render(request, 'resume/template2.html')
+
+
+def logout_request(request):
+	logout(request)
+	return redirect("/")
