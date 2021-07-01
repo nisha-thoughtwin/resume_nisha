@@ -1,4 +1,3 @@
-#from .models import *
 from django import forms
 from .models import Resume, UserExtraFields, Education, Skills, Experience, Hobbies, Certificate, Achievements
 from django.contrib.auth.forms import UserCreationForm
@@ -6,6 +5,7 @@ from .models import User
 from django.contrib.auth.password_validation import validate_password
 
 
+<<<<<<< HEAD
 class CustomUserCreationForm(UserCreationForm):
     def clean_username(self):
         username = self.cleaned_data['username']
@@ -33,6 +33,42 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ('username', 'email', 'password1', 'password2',)
+=======
+# class CustomUserCreationForm(UserCreationForm):
+#     def clean_username(self):
+#         username = self.cleaned_data['username']
+#         if len(username) < 5:
+#             raise forms.ValidationError("Your username is too short. A username must be at least 8 characters long")
+#         if User.objects.filter(username=username).exists():
+#             raise forms.ValidationError("Your username is already taken")
+#         return username
+
+# def clean_password1(self):
+#     password1 = self.cleaned_data['password1']
+#     if validate_password(password1):
+#         raise forms.ValidationError('This password is not valid')
+#     return password1
+
+# def clean(self, *args, **kwargs):
+#     password1 = self.cleaned_data.get("password1")
+#     password2 = self.cleaned_data.get("password2")
+
+#     if password1 != password2:
+#         raise forms.ValidationError("Your passwords do not match. Please try again")
+#     return super(UserCreationForm, self).clean(*args, **kwargs)
+
+class UserForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'first name', 'name': 'fname', 'id': 'fname'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'last name', 'name': 'lname', 'id': 'lname'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'email', 'name': 'email', 'id': 'email'}),
+
+        }
+        fields = ('first_name', 'last_name', 'email')
+>>>>>>> 5b339856d7e782259050e3ee73a04979a6ddfdec
 
 
 class ResumeForm(forms.ModelForm):
@@ -43,14 +79,14 @@ class ResumeForm(forms.ModelForm):
             'objective': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'objective', 'name': 'objective', 'id': 'objective'}),
 
         }
-        fields = "__all__"
+        fields = "__all__" 
 
 
 class UserExtraFieldsForm(forms.ModelForm):
     class Meta:
         model = UserExtraFields
         widgets = {
-            'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'date_of_birth', 'name': 'date_of_birth', 'id': 'date_of_birth'}),
+            'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'name': 'date_of_birth', 'id': 'date_of_birth'}),
             'phone': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'phone', 'name': 'phone', 'id': 'phone'}),
             'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'address', 'name': 'address', 'id': 'address'}),
 
@@ -66,7 +102,12 @@ class EducationForm(forms.ModelForm):
                   'percentage_or_grade', 'university']
 
         widgets = {
+<<<<<<< HEAD
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'name', 'name': 'Name', 'id': 'Name'}),
+=======
+    
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter your degree or class name', 'name': 'Name', 'id': 'Name'}),
+>>>>>>> 5b339856d7e782259050e3ee73a04979a6ddfdec
             'year of passing': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'year of passing', 'name': 'year of passing', 'id': 'year of passing'}),
             'grade/percentage': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'grade/percentage', 'name': 'grade/percentage', 'id': 'grade/percentage'}),
             'university': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'university', 'name': 'university', 'id': 'university'}),
@@ -80,7 +121,7 @@ class SkillsForm(forms.ModelForm):
         model = Skills
 
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Name', 'name': 'Name', 'id': 'Name'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your skills ', 'name': 'Name', 'id': 'Name'}),
 
         }
         fields = ['name']
@@ -106,7 +147,7 @@ class HobbiesForm(forms.ModelForm):
         model = Hobbies
 
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'name', 'name': 'Name', 'id': 'Name'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Hobbies', 'name': 'Name', 'id': 'Name'}),
         }
         fields = ['name']
 
@@ -116,7 +157,7 @@ class CertificateForm(forms.ModelForm):
         model = Certificate
 
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'name', 'name': 'Name', 'id': 'Name'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Certificate', 'name': 'Name', 'id': 'Name'}),
         }
         fields = ['name']
 
@@ -126,8 +167,7 @@ class AchievementsForm(forms.ModelForm):
         model = Achievements
 
         widgets = {
-            'resume': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'resume', 'name': 'resume', 'id': 'resume'}),
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'name', 'name': 'achievements_name', 'id': 'achievements_name'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Achievements', 'name': 'achievements_name', 'id': 'achievements_name'}),
 
 
         }

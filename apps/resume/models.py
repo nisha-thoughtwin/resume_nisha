@@ -17,7 +17,7 @@ class UserExtraFields(models.Model):
     date_of_birth = models.DateField()
     phone = models.IntegerField()
     address = models.CharField(max_length=100)
-    photo = models.ImageField(upload_to='images/')
+    photo = models.ImageField(upload_to='images/' ,blank=True)
 
     def __str__(self):
         return str(self.user)
