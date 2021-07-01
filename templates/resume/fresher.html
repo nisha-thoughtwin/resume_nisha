@@ -5,22 +5,30 @@
 
     {% block main %}
 
-
-<form id="regForm" method="post" action="{% url 'fresher_input' %}">
+<style type="text/css">
+#regForm {
+    background-color: #ffffff;
+    margin: 100px auto;
+    font-family: Raleway;
+    padding: 40px;
+    width: 83%;
+    min-width: 300px;
+}  
+</style>
+<form id="regForm" method="post" enctype="multipart/form-data">
   {% csrf_token %}
-  <h1>Resume Form:</h1>
+  <h1>Resume Form</h1>
   <!-- One "tab" for each step in the form: -->
-  <div class="tab">Enter your Resume Name:
+  <div class="tab">
    
-        {{form.as_p}}
+   {{form.as_p}}
     
   </div>
-  <div class="tab">Your basic Details :
+  <div class="tab">
    
     {{form1.as_p}}
-
-</div>
-
+     
+   </div>
   <div class="tab"><h4>Enter general Information:</h4>
    {{ form2.as_p}}
   </div>
@@ -38,7 +46,6 @@
   <div class="tab"><h4>Enter  Your Skills and Hobbies:</h4>
     {{ form4.as_p}}
     {{ form5.as_p}}
-
 
   </div>
   <div class="tab"><h4>Enter  Your Certificate Details:</h4>
@@ -63,6 +70,8 @@
     <span class="step"></span>
     <span class="step"></span>
     <span class="step"></span>
+    <span class="step"></span>
+
 
 
   </div>
@@ -157,5 +166,3 @@ $(function() {
 
 </script>
 {% endblock js %}
-
-

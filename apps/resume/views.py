@@ -1,3 +1,4 @@
+from collections import UserString
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.views import View
@@ -12,9 +13,6 @@ from datetime import date
 import string
 from django.contrib.auth.models import User
 
-res = ''.join(random.choices(string.ascii_uppercase +
-                             string.digits, k=8))
-random_password = str(res)
 
 date = date.strftime
 
@@ -44,45 +42,56 @@ class FresherResumeInput(View):
         return render(request, 'resume/fresher.html', context)
 
     def post(self, request):
+        print(request.POST)
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        email = request.POST.get('email')
+        res = ''.join(random.choices(string.ascii_uppercase +
+                                     string.digits, k=8))
+        random_password = str(res)
+
         form = ResumeForm(request.POST)
         form1 = UserForm(request.POST)
-        form2 = UserExtraFieldsForm(request.POST)
+
+        form2 = UserExtraFieldsForm(request.POST, request.FILES)
 
         form3 = EducationForm(request.POST)
         form4 = SkillsForm(request.POST)
         form5 = HobbiesForm(request.POST)
         form6 = CertificateForm(request.POST)
         form7 = AchievementsForm(request.POST)
+
         if form.is_valid and form1.is_valid and form2.is_valid and form3.is_valid and form4.is_valid and form5.is_valid and form6.is_valid and form7.is_valid:
-           
-            resume=form.save()
-            first_name = form1.cleaned_data['first_name']
-            last_name = form1.cleaned_data['last_name']
-            email = form1.cleaned_data['email']
-            username = form1.cleaned_data['first_name']
 
-            user = User.objects.create(username=username+date, first_name=first_name,
-                                    last_name=last_name, email=email, password=random_password)
-            userextra=form2.save(commit=False)
+            resume = form.save()
+            user = form1.save(commit=False)
+            username = first_name+str(random.randrange(100, 1000))
+            if username not in User.objects.all():
+                user.username = username
+            user.password = random_password
+
+            user.save()
+
+            userextra = form2.save(commit=False)
+            userextra.resume = resume
             userextra.user = user
-            userextra.save()
-            eductation=form3.save(commit=False)
-            eductation.resume=resume
-            eductation.save()
-            skills=form4.save(commit=False)
-            skills.resume=resume
-            skills.save()
-            hobbies=form5.save(commit=False)
-            hobbies.resume=resume
-            hobbies.save()
-            certificate=form6.save(commit=False)
-            certificate.resume=resume
-            certificate.save()
-            achievements=form7.save(commit=False)
-            achievements.resume=resume
-            achievements.save()
 
-            
+            userextra.save()
+            eductation = form3.save(commit=False)
+            eductation.resume = resume
+            eductation.save()
+            skills = form4.save(commit=False)
+            skills.resume = resume
+            skills.save()
+            hobbies = form5.save(commit=False)
+            hobbies.resume = resume
+            hobbies.save()
+            certificate = form6.save(commit=False)
+            certificate.resume = resume
+            certificate.save()
+            achievements = form7.save(commit=False)
+            achievements.resume = resume
+            achievements.save()
 
             return HttpResponse("done")
         return HttpResponse("not done")

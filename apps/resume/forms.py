@@ -13,24 +13,22 @@ from django.contrib.auth.password_validation import validate_password
 #         if User.objects.filter(username=username).exists():
 #             raise forms.ValidationError("Your username is already taken")
 #         return username
-    
 
-    # def clean_password1(self):
-    #     password1 = self.cleaned_data['password1']
-    #     if validate_password(password1):
-    #         raise forms.ValidationError('This password is not valid')
-    #     return password1
+# def clean_password1(self):
+#     password1 = self.cleaned_data['password1']
+#     if validate_password(password1):
+#         raise forms.ValidationError('This password is not valid')
+#     return password1
 
-    # def clean(self, *args, **kwargs):
-    #     password1 = self.cleaned_data.get("password1")
-    #     password2 = self.cleaned_data.get("password2")
+# def clean(self, *args, **kwargs):
+#     password1 = self.cleaned_data.get("password1")
+#     password2 = self.cleaned_data.get("password2")
 
-    #     if password1 != password2:
-    #         raise forms.ValidationError("Your passwords do not match. Please try again")
-    #     return super(UserCreationForm, self).clean(*args, **kwargs)
+#     if password1 != password2:
+#         raise forms.ValidationError("Your passwords do not match. Please try again")
+#     return super(UserCreationForm, self).clean(*args, **kwargs)
 
 class UserForm(forms.ModelForm):
-
 
     class Meta:
         model = User
@@ -40,7 +38,7 @@ class UserForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'email', 'name': 'email', 'id': 'email'}),
 
         }
-        fields = ('first_name','last_name', 'email')
+        fields = ('first_name', 'last_name', 'email')
 
 
 class ResumeForm(forms.ModelForm):
@@ -51,7 +49,7 @@ class ResumeForm(forms.ModelForm):
             'objective': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'objective', 'name': 'objective', 'id': 'objective'}),
 
         }
-        fields = "__all__"
+        fields = "__all__" 
 
 
 class UserExtraFieldsForm(forms.ModelForm):
@@ -74,6 +72,7 @@ class EducationForm(forms.ModelForm):
                   'percentage_or_grade', 'university']
 
         widgets = {
+    
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter your degree or class name', 'name': 'Name', 'id': 'Name'}),
             'year of passing': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'year of passing', 'name': 'year of passing', 'id': 'year of passing'}),
             'grade/percentage': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'grade/percentage', 'name': 'grade/percentage', 'id': 'grade/percentage'}),
