@@ -5,9 +5,9 @@ from apps.resume.models import *
 
 class EducationAdmin(admin.ModelAdmin):
     readonly_fields = ('year_of_passing',)
-    search_fields = ['name', ]
+    search_fields = ['degree_class', ]
     list_filter = ['percentage_or_grade', ]
-    list_display = ['resume','name', 'percentage_or_grade', 'university', ]
+    list_display = ['resume','degree_class', 'percentage_or_grade', 'university', ]
 
 
 class ExperienceAdmin(admin.ModelAdmin):
@@ -18,23 +18,23 @@ class ExperienceAdmin(admin.ModelAdmin):
 
 class HobbiesAdmin(admin.ModelAdmin):
     search_fields = ['resume', ]
-    list_display = ['resume', 'name', ]
+    list_display = ['resume', 'hobbies', ]
 
 
 class SkillAdmin(admin.ModelAdmin):
     search_fields = ['resume', ]
-    list_display = ['resume', 'name', ]
+    list_display = ['resume', 'skills', ]
 
 
 class CertificateAdmin(admin.ModelAdmin):
     search_fields = ['resume', ]
-    list_display = ['resume', 'name', ]
+    list_display = ['resume', 'certificate', ]
 
 
 
 class AchievementsAdmin(admin.ModelAdmin):
     search_fields = ['resume', ]
-    list_display = ['resume', 'name', ]
+    list_display = ['resume', 'achievements', ]
 
 
 admin.site.register(Resume)

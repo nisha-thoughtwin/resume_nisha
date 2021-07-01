@@ -25,7 +25,7 @@ class UserExtraFields(models.Model):
 
 class Education(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    degree_class = models.CharField(max_length=100)
     year_of_passing = models.CharField(max_length=100)
     percentage_or_grade = models.CharField(max_length=100)
     university = models.CharField(max_length=100)
@@ -48,7 +48,7 @@ class Experience(models.Model):
 
 class Hobbies(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    hobbies = models.CharField(max_length=100)
 
     def __str__(self):
         return str(self.resume)
@@ -56,7 +56,7 @@ class Hobbies(models.Model):
 
 class Skills(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
-    name = models.CharField(max_length=30)
+    skills = models.CharField(max_length=100)
 
     def __str__(self):
         return str(self.resume)
@@ -64,7 +64,7 @@ class Skills(models.Model):
 
 class Certificate(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    certificate = models.CharField(max_length=100)
 
     def __str__(self):
         return str(self.resume)
@@ -72,7 +72,7 @@ class Certificate(models.Model):
 
 class Achievements(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
-    name = models.CharField(max_length=200)
+    achievements = models.CharField(max_length=200)
 
     def __str__(self):
         return str(self.resume)

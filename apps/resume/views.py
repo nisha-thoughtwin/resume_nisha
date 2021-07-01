@@ -56,6 +56,8 @@ class FresherResumeInput(View):
         form2 = UserExtraFieldsForm(request.POST, request.FILES)
 
         form3 = EducationForm(request.POST)
+        
+
         form4 = SkillsForm(request.POST)
         form5 = HobbiesForm(request.POST)
         form6 = CertificateForm(request.POST)
@@ -64,6 +66,24 @@ class FresherResumeInput(View):
         if form.is_valid and form1.is_valid and form2.is_valid and form3.is_valid and form4.is_valid and form5.is_valid and form6.is_valid and form7.is_valid:
 
             resume = form.save()
+            
+            
+            # for degree in request.POST.getlist('degree_class'):
+            #     e=Education(degree_class=degree)
+                
+            #     e.resume= resume
+            #     for year in request.POST.getlist('year_of_passing'):
+            #         e.year_of_passing=year
+                
+            #     for percentage in request.POST.getlist('percentage_or_grade',):
+            #         e.percentage_or_grade=percentage
+            #     for college in request.POST.getlist('university'):
+            #         e.university= college
+
+            #     e.save()
+
+            
+           
             user = form1.save(commit=False)
             username = first_name+str(random.randrange(100, 1000))
             if username not in User.objects.all():
@@ -92,6 +112,7 @@ class FresherResumeInput(View):
             achievements = form7.save(commit=False)
             achievements.resume = resume
             achievements.save()
+            
 
             return HttpResponse("done")
         return HttpResponse("not done")
