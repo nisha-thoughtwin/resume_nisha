@@ -31,15 +31,17 @@
 			    <div class="media flex-column flex-md-row">
 				    <img class="mr-3 img-fluid picture mx-auto" src="/static/images/profile.jpg" alt="">
 				    <div class="media-body p-4 d-flex flex-column flex-md-row mx-auto mx-lg-0">
+						
 					    <div class="primary-info">
-						    <h1 class="name mt-0 mb-1 text-white text-uppercase text-uppercase" style="font-size:20px">Steve Doe</h1>
-						    <div class="title font-weight-bold" style="font-size:15px">Full Stack Developer
+						    <h1 class="name mt-0 mb-1 text-white text-uppercase text-uppercase" style="font-size:20px">{{user_extra_filed.user.first_name}}  {{user_extra_filed.user.last_name}}</h1>
+						    <div class="title font-weight-bold" style="font-size:15px">{{user_extra_filed.resume.title}}
 							<div class="resume-timeline-item-desc">
-							<p>Professional full stack developer more than one year of experience web developer fields. involved in various product testing and development environment and new business challenges. contribute collective effort and managing technical team and business team. </p>
+							<p> {{user_extra_filed.resume.objective}}</p>
 							</div>
+						
 						<ul class="list-unstyled">
-							    <li class="mb-2"><a href="#"><i class="far fa-envelope fa-fw mr-1" data-fa-transform="grow-3"></i>Steve.Doe@website.com</a></li>
-							    <li><a href="#"><i class="fas fa-mobile-alt fa-fw mr-2" data-fa-transform="grow-6"></i>0123 456 78900</a></li>
+							    <li class="mb-2"><a href="#"><i class="far fa-envelope fa-fw mr-1" data-fa-transform="grow-3"></i>{{user_extra_filed.user.email}}</a></li>
+							    <li><a href="#"><i class="fas fa-mobile-alt fa-fw mr-2" data-fa-transform="grow-6"></i>{{user_extra_filed.phone}}</a></li>
 							
 						    </ul>
                          </div>
@@ -68,15 +70,15 @@
 									    
 									    <div class="resume-timeline-item-header mb-2">
 										    <div class="d-flex flex-column flex-md-row">
-										        <h3 class="resume-position-title font-weight-bold mb-1" style="font-size:15px">Lead Developer</h3>
+										        <h3 class="resume-position-title font-weight-bold mb-1" style="font-size:15px">{{experience.designation}}</h3>
 										        
 										    </div><!--//row-->
-										    <div class="resume-position-time" style="font-size:10px">2018 - Present</div>
+										    <div class="resume-position-time" style="font-size:10px">{{experience.duration}}</div>
 									    </div><!--//resume-timeline-item-header-->
 									    <div class="resume-timeline-item-desc" style="font-size:15px">
-										    <p>Role description goes here ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Donec pede justo, fringilla vel.</p>
+										    <p>{{experience.role}}</p>
 										    <h4 class="resume-timeline-item-desc-heading font-weight-bold" style="font-size:15px">Achievements:</h4>
-										    <p>Praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
+										    <p>{{achievements.name}}</p>
 										    <ul>
 											    <li>Lorem ipsum dolor sit amet, 80% consectetuer adipiscing elit.</li>
 											    <li>At vero eos et accusamus et iusto odio dignissimos.</li>

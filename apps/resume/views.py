@@ -79,18 +79,24 @@ class FresherResumeInput(View):
             userextra.save()
             eductation = form3.save(commit=False)
             eductation.resume = resume
+            eductation.user = user
             eductation.save()
             skills = form4.save(commit=False)
             skills.resume = resume
+            skills.user = user
+
             skills.save()
             hobbies = form5.save(commit=False)
             hobbies.resume = resume
+            hobbies.user = user
             hobbies.save()
             certificate = form6.save(commit=False)
             certificate.resume = resume
+            certificate.user = user
             certificate.save()
             achievements = form7.save(commit=False)
             achievements.resume = resume
+            achievements.user = user
             achievements.save()
 
             return HttpResponse("done")
@@ -129,3 +135,36 @@ class GenratePdf(View):
 class Template2(View):
     def get(self, request):
         return render(request, 'resume/template2.html')
+
+class Template3(View):
+    def get(self,request):
+        context={}
+        user_extra_filed=UserExtraFields.objects.get(user__pk=4)
+        education=Education.objects.get(user__pk=4)
+        experience=Experience.objects.get(user__pk=4)
+        skills=Skills.objects.get(user__pk=4)
+        certification=Certificate.objects.get(user__pk=4)
+        achievements=Achievements.objects.get(user__pk=4)
+        context['user_extra_filed']=user_extra_filed
+        context['education']=education
+        context['experience']=experience
+        context['skills']=skills
+        context['certification']=certification
+        context['achievements']=achievements
+        
+        return render(request,'resume/template3.html',context=context)
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+        

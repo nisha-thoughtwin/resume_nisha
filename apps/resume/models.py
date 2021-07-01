@@ -25,6 +25,8 @@ class UserExtraFields(models.Model):
 
 class Education(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
     name = models.CharField(max_length=100)
     year_of_passing = models.CharField(max_length=100)
     percentage_or_grade = models.CharField(max_length=100)
@@ -36,10 +38,12 @@ class Education(models.Model):
 
 class Experience(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
     company_name = models.CharField(max_length=100)
     duration = models.CharField(max_length=30)
     designation = models.CharField(max_length=100)
-    role = models.CharField(max_length=100)
+    role = models.CharField(max_length=1000)
     place = models.CharField(max_length=100)
 
     def __str__(self):
@@ -48,6 +52,8 @@ class Experience(models.Model):
 
 class Hobbies(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
     name = models.CharField(max_length=100)
 
     def __str__(self):
@@ -56,6 +62,8 @@ class Hobbies(models.Model):
 
 class Skills(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
     name = models.CharField(max_length=30)
 
     def __str__(self):
@@ -64,6 +72,8 @@ class Skills(models.Model):
 
 class Certificate(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
     name = models.CharField(max_length=100)
 
     def __str__(self):
@@ -72,6 +82,8 @@ class Certificate(models.Model):
 
 class Achievements(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
     name = models.CharField(max_length=200)
 
     def __str__(self):
