@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 class Resume(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE,blank=True,null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE,blank=True,null=True) #change
     title = models.CharField(max_length=50)
     objective = models.TextField(max_length=400)
 
