@@ -19,9 +19,10 @@
       <div class="left_side">
         <div class="profileText">
           <div class="imgBx">
-            <img src="/static/img.jpg" />
+            <!-- <img src="/static/img.jpg" /> -->
+            <img src="{{resume.userextrafields_set.all.first.photo.url}}">
           </div>
-          <h2>Nisha Chouhan<br /><span>Web Developer</span></h2>
+          <h2>Nisha Chouhan<br /><span>{{resume.title}}</span></h2>
         </div>
         <div class="contactInfo">
           <h3 class="title">Contact Info</h3>
@@ -30,15 +31,18 @@
               <span class="icon"
                 ><i class="fa fa-phone" aria-hidden="true"></i
               ></span>
-              <span class="text">+91 1234567890</span>
+              <span class="text"
+                >{{resume.userextrafields_set.all.first.phone}}</span
+              >
             </li>
             <li>
               <span class="icon"
-                ><i class="fa fa-envelope" aria-hidden="true"></i
-              ></span>
-              <span class="text">nis@gmail.com</span>
+                ><i class="fa fa-birthday-cake" aria-hidden="true"></i></span>
+              <span class="text"
+                >{{resume.userextrafields_set.all.first.date_of_birth}}</span
+              >
             </li>
-            <li>
+            <!-- <li>
               <span class="icon"
                 ><i class="fa fa-globe" aria-hidden="true"></i
               ></span>
@@ -49,12 +53,14 @@
                 ><i class="fa fa-linkedin" aria-hidden="true"></i
               ></span>
               <span class="text">www.linkdin.com</span>
-            </li>
+            </li> -->
             <li>
               <span class="icon"
                 ><i class="fa fa-map-marker" aria-hidden="true"></i
               ></span>
-              <span class="text">Indore</span>
+              <span class="text"
+                >{{resume.userextrafields_set.all.first.address}}</span
+              >
             </li>
           </ul>
         </div>
@@ -64,17 +70,18 @@
           <ul>
             <li>
               <h5>2010 - 2013</h5>
-              <h4>Master Degree in Computer science</h4>
-              <h4>University Name</h4>
+              <h4>{{resume.education_set.all.first.degree_class}}</h4>
+              <h4>{{resume.education_set.all.first.percentage_or_grade}}</h4>
+              <h4>{{resume.education_set.all.first.university}}</h4>
             </li>
-            <li>
+            <!-- <li>
               <h5>2007 - 2010</h5>
               <h4>Bachelor Degree in Computer science</h4>
               <h4>University Name</h4>
-            </li>
+            </li> -->
           </ul>
         </div>
-        <div class="contactInfo language">
+        <!-- <div class="contactInfo language">
           <h3 class="title">Languages</h3>
           <ul>
             <li>
@@ -90,17 +97,18 @@
               </span>
             </li>
           </ul>
-        </div>
+        </div> -->
       </div>
 
       <div class="right_side">
         <div class="about">
           <h2 class="title2">Profile</h2>
           <p>
-            have moved to this city three months ago. I love the street food
+            {{resume.objective}}
+            <!-- have moved to this city three months ago. I love the street food
             here. On weekends, I explore new eating joints. This way, I get to
             learn the routes of this city and prepare myself professionally.
-            Being a sales professional, my profile requires a lot of traveling.
+            Being a sales professional, my profile requires a lot of traveling. -->
           </p>
         </div>
 
@@ -108,20 +116,22 @@
           <h2 class="title2">Experience</h2>
           <div class="box">
             <div class="year_company">
-              <h5>2020 - preasent</h5>
-              <h5>Company Name</h5>
+              <h5>{{resume.experience_set.all.first.duration}}</h5>
+              <h5>{{resume.experience_set.all.first.company_name}}</h5>
+              <h5>{{resume.experience_set.all.first.designation}}</h5>
             </div>
             <div class="text">
-              <h4>Python Developer</h4>
+              <h4>{{resume.experience_set.all.first.role}}</h4>
               <p>
-                used to code with Java, but I’ve been using Python for the last
+                {{resume.experience_set.all.first.place}}
+                <!-- used to code with Java, but I’ve been using Python for the last
                 one years. It’s just more efficient, and I think it’s appealing
                 that it can operate on different systems. I can get more code
-                written, and it’s so much easier to read.”
+                written, and it’s so much easier to read.” -->
               </p>
             </div>
           </div>
-          <div class="box">
+          <!-- <div class="box">
             <div class="year_company">
               <h5>2016-2020</h5>
               <h5>Company Name</h5>
@@ -135,13 +145,13 @@
                 written, and it’s so much easier to read.”
               </p>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <div class="about skills">
           <h2 class="title2">Professional Skills</h2>
           <div class="box">
-            <h4>HTML</h4>
+            <h4>{{resume.skills_set.all.first.skills}}</h4>
             <div class="percent">
               <div style="width: 90%"></div>
             </div>
@@ -169,10 +179,35 @@
         <div class="about hobby">
           <h2 class="title2">Hobby</h2>
           <ul>
-            <li><i class="fa fa-gamepad" aria-hidden="true"></i>Gamming</li>
+            <li>
+              <i class="fa fa-gamepad" aria-hidden="true"></i
+              >{{resume.hobbies_set.all.first.hobbies}}
+            </li>
             <li><i class="fa fa-microphone" aria-hidden="true"></i>Sining</li>
             <li><i class="fa fa-book" aria-hidden="true"></i>Reading</li>
           </ul>
+        </div>
+
+        <div class="about">
+          <h2 class="title2">Certificate</h2>
+          <p>
+            {{resume.certificate_set.all.first.certificate}}
+            <!-- have moved to this city three months ago. I love the street food
+            here. On weekends, I explore new eating joints. This way, I get to
+            learn the routes of this city and prepare myself professionally.
+            Being a sales professional, my profile requires a lot of traveling. -->
+          </p>
+        </div>
+
+        <div class="about">
+          <h2 class="title2">Achievements</h2>
+          <p>
+            {{resume.achievements_set.all.first.achievements}}
+            <!-- have moved to this city three months ago. I love the street food
+            here. On weekends, I explore new eating joints. This way, I get to
+            learn the routes of this city and prepare myself professionally.
+            Being a sales professional, my profile requires a lot of traveling. -->
+          </p>
         </div>
       </div>
     </div>

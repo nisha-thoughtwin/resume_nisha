@@ -38,7 +38,7 @@ class UserForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'email', 'name': 'email', 'id': 'email'}),
 
         }
-        fields = ('first_name', 'last_name', 'email')
+        fields = ('first_name', 'last_name', 'email','password1', 'password2')
 
 
 class ResumeForm(forms.ModelForm):
