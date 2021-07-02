@@ -49,7 +49,7 @@ class ResumeForm(forms.ModelForm):
             'objective': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'objective', 'name': 'objective', 'id': 'objective'}),
 
         }
-        fields = "__all__" 
+        fields = ("title", "objective")
 
 
 class UserExtraFieldsForm(forms.ModelForm):

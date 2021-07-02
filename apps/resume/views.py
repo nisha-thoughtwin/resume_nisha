@@ -12,7 +12,9 @@ import random
 from datetime import date
 import string
 from django.contrib.auth.models import User
-
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 date = date.strftime
 
@@ -22,6 +24,13 @@ class Home(View):
     def get(self, request):
         return render(request, 'index.html')
 
+
+class Dashboard(View):
+    
+   
+    def get(self, request):
+
+        return render(request, 'resume/dashboard.html')
 
 class FresherResumeInput(View):
 
@@ -49,6 +58,8 @@ class FresherResumeInput(View):
         res = ''.join(random.choices(string.ascii_uppercase +
                                      string.digits, k=8))
         random_password = str(res)
+        print(random_password)
+        # D70LOX2Y
 
         form = ResumeForm(request.POST)
         form1 = UserForm(request.POST)
@@ -88,7 +99,7 @@ class FresherResumeInput(View):
             username = first_name+str(random.randrange(100, 1000))
             if username not in User.objects.all():
                 user.username = username
-            user.password = random_password
+            user.set_password(random_password)
 
             user.save()
 
@@ -112,9 +123,12 @@ class FresherResumeInput(View):
             achievements = form7.save(commit=False)
             achievements.resume = resume
             achievements.save()
-            
 
-            return HttpResponse("done")
+            
+            user = authenticate(username=username, password=random_password)
+            login(request, user)
+            return redirect('dashboard')
+          
         return HttpResponse("not done")
 
 
@@ -150,3 +164,15 @@ class GenratePdf(View):
 class Template2(View):
     def get(self, request):
         return render(request, 'resume/template2.html')
+
+class Template4(View):
+    def get(self, request):
+        context ={}
+        user = request.user
+        resume = Resume.objects.get(user=user)
+        context['resume']= resume
+        print(resume.education_set.all().first().degree_class) 
+        # for i in resume.education_set.all():
+        #    print(i.degree_class)
+
+        return render(request,'resume/template4.html', context)
