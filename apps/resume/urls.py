@@ -10,6 +10,9 @@ urlpatterns =[
     path('generate',GenratePdf.as_view(),name='generate_pdf'),
 
     path('resume2/',Template2.as_view(),name='resume2'),
+    path('resume4/',Template4.as_view(),name='resume4'),
+
+    path('dashboard',Dashboard.as_view(),name='dashboard'),
 
 
 ]
