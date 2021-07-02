@@ -15,8 +15,28 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+#from resume_maker.settings import MAIL
+from django.core import mail
 
 date = date.strftime
+
+
+
+from django.http import HttpResponse  
+from resume_maker import settings  
+from django.core.mail import send_mail  
+  
+
+def mail(user,password):  
+    subject = "Greetings"  
+    msg     = f"Congratulations for your successfull ResumeForm username {user} ,passowrd {password}"  
+    to      = "nisha.thoughtwin@gmail.com"  
+    res     = send_mail(subject, msg, settings.EMAIL_HOST_USER, [to])  
+    if(res == 1):  
+        msg = "Mail Sent Successfuly"  
+    else:  
+        msg = "Mail could not sent"  
+    return HttpResponse(msg)  
 
 
 class Home(View):
@@ -104,6 +124,7 @@ class FresherResumeInput(View):
             user.save()
             resume = form.save(commit=False)
             resume.user = user
+            resume.save()
 
             userextra = form2.save(commit=False)
             userextra.resume = resume
@@ -128,7 +149,11 @@ class FresherResumeInput(View):
 
             
             user = authenticate(username=username, password=random_password)
+            mail(user,random_password)
+
             login(request, user)
+           
+
             return redirect('dashboard')
           
         return HttpResponse("not done")
@@ -179,7 +204,7 @@ class Template4(View):
 
         return render(request,'resume/template4.html', context)
 
-#poornima
+# poornima....................................................................
 class Template5(View):
     def get(self, request):
         context ={}
@@ -187,7 +212,14 @@ class Template5(View):
         resume = Resume.objects.get(user=user)
         context['resume']= resume
         print(resume.education_set.all().first().degree_class) 
-        # for i in resume.education_set.all():
-        #    print(i.degree_class)
-
+        #mail(resume)
         return render(request,'resume/template5.html', context)
+
+
+
+  
+
+#..........................................................................................
+
+
+
