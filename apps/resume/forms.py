@@ -49,7 +49,7 @@ class ResumeForm(forms.ModelForm):
             'objective': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'objective', 'name': 'objective', 'id': 'objective'}),
 
         }
-        fields = "__all__" 
+        fields = ("title", "objective")
 
 
 class UserExtraFieldsForm(forms.ModelForm):
@@ -68,12 +68,12 @@ class UserExtraFieldsForm(forms.ModelForm):
 class EducationForm(forms.ModelForm):
     class Meta:
         model = Education
-        fields = ['name', 'year_of_passing',
+        fields = ['degree_class', 'year_of_passing',
                   'percentage_or_grade', 'university']
 
         widgets = {
     
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter your degree or class name', 'name': 'Name', 'id': 'Name'}),
+            'degree_class': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter your degree or class name', 'name': 'Name', 'id': 'Name'}),
             'year of passing': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'year of passing', 'name': 'year of passing', 'id': 'year of passing'}),
             'grade/percentage': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'grade/percentage', 'name': 'grade/percentage', 'id': 'grade/percentage'}),
             'university': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'university', 'name': 'university', 'id': 'university'}),
@@ -87,10 +87,10 @@ class SkillsForm(forms.ModelForm):
         model = Skills
 
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your skills ', 'name': 'Name', 'id': 'Name'}),
+            'skills': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your skills ', 'name': 'Name', 'id': 'Name'}),
 
         }
-        fields = ['name']
+        fields = ['skills']
 
 
 class ExperienceForm(forms.ModelForm):
@@ -113,9 +113,9 @@ class HobbiesForm(forms.ModelForm):
         model = Hobbies
 
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Hobbies', 'name': 'Name', 'id': 'Name'}),
+            'hobbies': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Hobbies', 'name': 'Name', 'id': 'Name'}),
         }
-        fields = ['name']
+        fields = ['hobbies']
 
 
 class CertificateForm(forms.ModelForm):
@@ -123,9 +123,9 @@ class CertificateForm(forms.ModelForm):
         model = Certificate
 
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Certificate', 'name': 'Name', 'id': 'Name'}),
+            'certificate': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Certificate', 'name': 'Name', 'id': 'Name'}),
         }
-        fields = ['name']
+        fields = ['certificate']
 
 
 class AchievementsForm(forms.ModelForm):
@@ -133,8 +133,8 @@ class AchievementsForm(forms.ModelForm):
         model = Achievements
 
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Achievements', 'name': 'achievements_name', 'id': 'achievements_name'}),
+            'achievements': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Achievements', 'name': 'achievements_name', 'id': 'achievements_name'}),
 
 
         }
-        fields = ['name']
+        fields = ['achievements']

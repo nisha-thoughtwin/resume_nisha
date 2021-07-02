@@ -24,50 +24,38 @@
    {{form.as_p}}
     
   </div>
-
-  <div class="tab"><h4>Enter general Information:</h4>
+  <div class="tab">
+   
     {{form1.as_p}}
+     
+   </div>
+  <div class="tab"><h4>Enter general Information:</h4>
    {{ form2.as_p}}
   </div>
   <div class="tab"><h4>Enter About Your Education:</h4>
-    <ul id="fieldListedu">
+    <ul id="fieldList">
       <li>
         {{ form3.as_p}}
       </li>
-
       <hr>
      
     </ul>
-    <div id ="more-education"></div>
-    <button id="addMore-edu">Add another Education</button>
+    <!-- <button id="addMore">Add more fields</button> -->
 
   </div>
   <div class="tab"><h4>Enter  Your Skills and Hobbies:</h4>
-    <ul id="fieldListskills">
-      <li>
-        {{ form4.as_p}}
-        {{ form5.as_p}}
-      </li>
-
-<<<<<<< HEAD
-  </div>
-  <div class="tab"><h4>Enter  Your Certificate Details:</h4>  
-    {{ form6.as_p}}
-=======
-      <hr>
-     
-    </ul>
-
-    <div id ="more-skills-hobbies"></div>
-    <button id="addMore-skills">Add another Skills and Hobbies</button>
->>>>>>> 8e8a3643b2297465c0388c15fe013db41f69f0dc
+    {{ form4.as_p}}
+    {{ form5.as_p}}
 
   </div>
-  <div class="tab"><h4>Enter  Your Certificate and Achievements Details:</h4>
+  <div class="tab"><h4>Enter  Your Certificate Details:</h4>
     {{ form6.as_p}}
+
+  </div>
+  <div class="tab"><h4>Enter  Your  Achievements:</h4>
     {{ form7.as_p}}
+
   </div>
- 
   <div style="overflow:auto;">
     <div style="float:right;">
       <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
@@ -76,6 +64,8 @@
   </div>
   <!-- Circles which indicates the steps of the form: -->
   <div style="text-align:center;margin-top:40px;">
+    <span class="step"></span>
+    <span class="step"></span>
     <span class="step"></span>
     <span class="step"></span>
     <span class="step"></span>
@@ -166,21 +156,10 @@ function fixStepIndicator(n) {
 }
 
 $(function() {
-  $("#addMore-edu").click(function(e) {
+  $("#addMore").click(function(e) {
     e.preventDefault();
-    $("#fieldListedu").append("<li>&nbsp;</li>");
-    var newform=$("#fieldListedu").clone();
-    $("#more-education").html(newform);
-  
-  });
-});
-
-$(function() {
-  $("#addMore-skills").click(function(e) {
-    e.preventDefault();
-    $("#fieldListskills").append("<li>&nbsp;</li>");
-    var newform=$("#fieldListskills").clone();
-    $("#more-skills-hobbies").html(newform);
+    $("#fieldList").append("<li>&nbsp;</li>");
+    $("#fieldList").append("<li></li>");
   
   });
 });
