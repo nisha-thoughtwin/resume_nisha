@@ -13,6 +13,9 @@ urlpatterns =[
     path('resume4/',Template4.as_view(),name='resume4'),
 
     path('dashboard',Dashboard.as_view(),name='dashboard'),
+    path('resume',Template5.as_view(),name='Template5'),##poornima
+
+
 
 
 ]

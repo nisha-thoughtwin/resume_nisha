@@ -178,3 +178,16 @@ class Template4(View):
         #    print(i.degree_class)
 
         return render(request,'resume/template4.html', context)
+
+#poornima
+class Template5(View):
+    def get(self, request):
+        context ={}
+        user = request.user
+        resume = Resume.objects.get(user=user)
+        context['resume']= resume
+        print(resume.education_set.all().first().degree_class) 
+        # for i in resume.education_set.all():
+        #    print(i.degree_class)
+
+        return render(request,'resume/template5.html', context)
