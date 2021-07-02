@@ -76,7 +76,7 @@ class FresherResumeInput(View):
 
         if form.is_valid and form1.is_valid and form2.is_valid and form3.is_valid and form4.is_valid and form5.is_valid and form6.is_valid and form7.is_valid:
 
-            resume = form.save()
+            
             
             
             # for degree in request.POST.getlist('degree_class'):
@@ -102,6 +102,8 @@ class FresherResumeInput(View):
             user.set_password(random_password)
 
             user.save()
+            resume = form.save(commit=False)
+            resume.user = user
 
             userextra = form2.save(commit=False)
             userextra.resume = resume
