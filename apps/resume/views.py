@@ -26,11 +26,11 @@ class Home(View):
 
 
 class Dashboard(View):
-    
-   
+
     def get(self, request):
 
         return render(request, 'resume/dashboard.html')
+
 
 class FresherResumeInput(View):
 
@@ -39,7 +39,7 @@ class FresherResumeInput(View):
         form = ResumeForm
         form1 = UserForm
         form2 = UserExtraFieldsForm
-        form3 = EducationForm
+        form3 = EducationFormSet()
         form4 = SkillsForm
 
         form5 = HobbiesForm
@@ -66,8 +66,7 @@ class FresherResumeInput(View):
 
         form2 = UserExtraFieldsForm(request.POST, request.FILES)
 
-        form3 = EducationForm(request.POST)
-        
+        form3 = EducationFormSet(request.POST,None)
 
         form4 = SkillsForm(request.POST)
         form5 = HobbiesForm(request.POST)
@@ -76,16 +75,13 @@ class FresherResumeInput(View):
 
         if form.is_valid and form1.is_valid and form2.is_valid and form3.is_valid and form4.is_valid and form5.is_valid and form6.is_valid and form7.is_valid:
 
-            
-            
-            
             # for degree in request.POST.getlist('degree_class'):
             #     e=Education(degree_class=degree)
-                
+
             #     e.resume= resume
             #     for year in request.POST.getlist('year_of_passing'):
             #         e.year_of_passing=year
-                
+
             #     for percentage in request.POST.getlist('percentage_or_grade',):
             #         e.percentage_or_grade=percentage
             #     for college in request.POST.getlist('university'):
@@ -93,8 +89,6 @@ class FresherResumeInput(View):
 
             #     e.save()
 
-            
-           
             user = form1.save(commit=False)
             username = first_name+str(random.randrange(100, 1000))
             if username not in User.objects.all():
@@ -104,15 +98,17 @@ class FresherResumeInput(View):
             user.save()
             resume = form.save(commit=False)
             resume.user = user
+            resume.save()
 
             userextra = form2.save(commit=False)
             userextra.resume = resume
-            userextra.user = user
+            # userextra.user = user
 
             userextra.save()
-            eductation = form3.save(commit=False)
-            eductation.resume = resume
-            eductation.save()
+            for f in form3:
+                eductation = f.save(commit=False)
+                eductation.resume = resume
+                eductation.save()
             skills = form4.save(commit=False)
             skills.resume = resume
             skills.save()
@@ -126,11 +122,11 @@ class FresherResumeInput(View):
             achievements.resume = resume
             achievements.save()
 
-            
+
             user = authenticate(username=username, password=random_password)
             login(request, user)
             return redirect('dashboard')
-          
+
         return HttpResponse("not done")
 
 
@@ -167,14 +163,15 @@ class Template2(View):
     def get(self, request):
         return render(request, 'resume/template2.html')
 
+
 class Template4(View):
     def get(self, request):
-        context ={}
+        context = {}
         user = request.user
         resume = Resume.objects.get(user=user)
-        context['resume']= resume
-        print(resume.education_set.all().first().degree_class) 
+        context['resume'] = resume
+        # print(resume.education_set.all().first().degree_class)
         # for i in resume.education_set.all():
         #    print(i.degree_class)
 
-        return render(request,'resume/template4.html', context)
+        return render(request, 'resume/template4.html', context)

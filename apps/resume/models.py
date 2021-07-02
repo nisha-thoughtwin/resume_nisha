@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 class Resume(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE,blank=True,null=True) #change
+    user = models.ForeignKey(User, on_delete=models.CASCADE,blank=True,null=True) #change
     title = models.CharField(max_length=50)
     objective = models.TextField(max_length=400)
 
@@ -13,7 +13,7 @@ class Resume(models.Model):
 
 class UserExtraFields(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE,blank=True,null=True)
     date_of_birth = models.DateField()
     phone = models.IntegerField()
     address = models.CharField(max_length=100)

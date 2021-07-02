@@ -30,16 +30,23 @@
    {{ form2.as_p}}
   </div>
   <div class="tab"><h4>Enter About Your Education:</h4>
-    <ul id="fieldListedu">
-      <li>
-        {{ form3.as_p}}
-      </li>
-
-      <hr>
      
-    </ul>
-    <div id ="more-education"></div>
-    <button id="addMore-edu">Add another Education</button>
+    <div id="form_set">
+      {{ form3.management_form }}
+      {% for form_set in form3 %}
+          <table class='no_error'>
+              {{ form_set.as_p }}
+          </table>
+      {% endfor %}
+  </div>
+  <input type="button" value="Add More" id="add_more">
+  <!-- <div id="empty_form" style="display:none">
+      <table class='no_error'>
+          {{ form3.empty_form.as_p }}
+      </table>
+  </div>
+
+   -->
 
   </div>
   <div class="tab"><h4>Enter  Your Skills and Hobbies:</h4>
@@ -160,25 +167,18 @@ function fixStepIndicator(n) {
   x[n].className += " active";
 }
 
-$(function() {
-  $("#addMore-edu").click(function(e) {
-    e.preventDefault();
-    $("#fieldListedu").append("<li>&nbsp;</li>");
-    var newform=$("#fieldListedu").clone();
-    $("#more-education").html(newform);
-  
-  });
+$(document).on('click', '.add-form-row', function(e){
+  e.preventDefault();
+  cloneMore('.form-row:last', 'form');
+  return false;
 });
+</script>
 
-$(function() {
-  $("#addMore-skills").click(function(e) {
-    e.preventDefault();
-    $("#fieldListskills").append("<li>&nbsp;</li>");
-    var newform=$("#fieldListskills").clone();
-    $("#more-skills-hobbies").html(newform);
-  
+<script>
+  $('#add_more').click(function() {
+      var form_idx = $('#id_form-TOTAL_FORMS').val();
+      $('#form_set').append($('#empty_form').html().replace(/__prefix__/g, form_idx));
+      $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) + 1);
   });
-});
-
 </script>
 {% endblock js %}
