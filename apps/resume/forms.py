@@ -67,14 +67,16 @@ class UserExtraFieldsForm(forms.ModelForm):
 
 
 class EducationForm(forms.ModelForm):
+
     class Meta:
         model = Education
+
         fields = ['degree_class', 'year_of_passing',
                   'percentage_or_grade', 'university']
 
         widgets = {
 
-            'degree_class': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter your degree or class name', 'name': 'Name', 'id': 'Name'}),
+            'degree_class': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter your degree or class name', 'name': 'Name', 'id': 'Name',}),
             'year of passing': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'year of passing', 'name': 'year of passing', 'id': 'year of passing'}),
             'percentage_or_grade': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'grade/percentage', 'name': 'grade/percentage', 'id': 'grade/percentage'}),
             'university': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'university', 'name': 'university', 'id': 'university'}),
@@ -83,7 +85,7 @@ class EducationForm(forms.ModelForm):
         }
 
 
-EducationFormSet = formset_factory(EducationForm,extra=2)
+EducationFormSet = formset_factory(EducationForm,extra=1,max_num=None,  )
 
 
 class SkillsForm(forms.ModelForm):
