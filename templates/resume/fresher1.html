@@ -24,71 +24,38 @@
    {{form.as_p}}
     
   </div>
-
-  <div class="tab"><h4>Enter About Your Education:</h4>
-
-    {{ form3.management_form }}
-<div id="form_set">
-    {% for form in form3.forms %}
-	    {{form.non_field_errors}}
-		{{form.errors}}
-        
-            {{ form }}
-        
-    {% endfor %}
-</div>
-<hr>
-<div id="empty_form" style="display:none">
-    
-        {{ form3.empty_form }}
-
-</div>
-<input type="button" value="Add More" id="add_more">
-
-     
-    <!-- <div class="form_set">
-      {{ form3.management_form }}
-      {% for form_set in form3 %}
-      <div class="link-formset">
-        {{ form_set.as_p }}
-      </div>
-      {% endfor %}
-  </div> -->
-  <!-- <div id="empty_form" style="display:none">
-      <table class='no_error'>
-          {{ form3.empty_form.as_p }}
-      </table>
-  </div>
-
-   -->
-
-  </div>
-
-  <div class="tab"><h4>Enter general Information:</h4>
+  <div class="tab">
+   
     {{form1.as_p}}
+     
+   </div>
+  <div class="tab"><h4>Enter general Information:</h4>
    {{ form2.as_p}}
   </div>
-
-  <div class="tab"><h4>Enter  Your Skills and Hobbies:</h4>
-    <ul id="fieldListskills">
+  <div class="tab"><h4>Enter About Your Education:</h4>
+    <ul id="fieldList">
       <li>
-        {{ form4.as_p}}
-        {{ form5.as_p}}
+        {{ form3.as_p}}
       </li>
-
       <hr>
      
     </ul>
-
-    <div id ="more-skills-hobbies"></div>
-    <button id="addMore-skills">Add another Skills and Hobbies</button>
+    <!-- <button id="addMore">Add more fields</button> -->
 
   </div>
-  <div class="tab"><h4>Enter  Your Certificate and Achievements Details:</h4>
+  <div class="tab"><h4>Enter  Your Skills and Hobbies:</h4>
+    {{ form4.as_p}}
+    {{ form5.as_p}}
+
+  </div>
+  <div class="tab"><h4>Enter  Your Certificate Details:</h4>
     {{ form6.as_p}}
-    {{ form7.as_p}}
+
   </div>
- 
+  <div class="tab"><h4>Enter  Your  Achievements:</h4>
+    {{ form7.as_p}}
+
+  </div>
   <div style="overflow:auto;">
     <div style="float:right;">
       <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
@@ -102,7 +69,8 @@
     <span class="step"></span>
     <span class="step"></span>
     <span class="step"></span>
-
+    <span class="step"></span>
+    <span class="step"></span>
 
 
 
@@ -162,7 +130,13 @@ function validateForm() {
   y = x[currentTab].getElementsByTagName("input");
   // A loop that checks every input field in the current tab:
   for (i = 0; i < y.length; i++) {
-    
+    // If a field is empty...
+    if (y[i].value == "") {
+      // add an "invalid" class to the field:
+      y[i].className += " invalid";
+      // and set the current valid status to false
+      valid = false;
+    }
   }
   // If the valid status is true, mark the step as finished and valid:
   if (valid) {
@@ -181,18 +155,14 @@ function fixStepIndicator(n) {
   x[n].className += " active";
 }
 
-$(document).on('click', '.add-form-row', function(e){
-  e.preventDefault();
-  cloneMore('.form-row:last', 'form');
-  return false;
-});
-
-$('#add_more').click(function() {
-	var form_idx = $('#id_form-TOTAL_FORMS').val();
-	$('#form_set').append($('#empty_form').html().replace(/__prefix__/g, form_idx));
-	$('#id_form-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+$(function() {
+  $("#addMore").click(function(e) {
+    e.preventDefault();
+    $("#fieldList").append("<li>&nbsp;</li>");
+    $("#fieldList").append("<li></li>");
+  
+  });
 });
 
 </script>
-
 {% endblock js %}

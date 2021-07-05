@@ -12,15 +12,44 @@ import random
 from datetime import date
 import string
 from django.contrib.auth.models import User
-
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+#from resume_maker.settings import MAIL
+from django.core import mail
 
 date = date.strftime
+
+
+
+from django.http import HttpResponse  
+from resume_maker import settings  
+from django.core.mail import send_mail  
+  
+
+def mail(user,password):  
+    subject = "Greetings"  
+    msg     = f"Congratulations for your successfull ResumeForm username {user} ,passowrd {password}"  
+    to      = "nisha.thoughtwin@gmail.com"  
+    res     = send_mail(subject, msg, settings.EMAIL_HOST_USER, [to])  
+    if(res == 1):  
+        msg = "Mail Sent Successfuly"  
+    else:  
+        msg = "Mail could not sent"  
+    return HttpResponse(msg)  
 
 
 class Home(View):
 
     def get(self, request):
         return render(request, 'index.html')
+
+
+class Dashboard(View):
+
+    def get(self, request):
+
+        return render(request, 'resume/dashboard.html')
 
 
 class FresherResumeInput(View):
@@ -30,7 +59,7 @@ class FresherResumeInput(View):
         form = ResumeForm
         form1 = UserForm
         form2 = UserExtraFieldsForm
-        form3 = EducationForm
+        form3 = EducationFormSet()
         form4 = SkillsForm
 
         form5 = HobbiesForm
@@ -49,13 +78,16 @@ class FresherResumeInput(View):
         res = ''.join(random.choices(string.ascii_uppercase +
                                      string.digits, k=8))
         random_password = str(res)
+        print(random_password)
+        # D70LOX2Y
 
         form = ResumeForm(request.POST)
         form1 = UserForm(request.POST)
 
         form2 = UserExtraFieldsForm(request.POST, request.FILES)
 
-        form3 = EducationForm(request.POST)
+        form3 = EducationFormSet(request.POST,None)
+
         form4 = SkillsForm(request.POST)
         form5 = HobbiesForm(request.POST)
         form6 = CertificateForm(request.POST)
@@ -63,24 +95,40 @@ class FresherResumeInput(View):
 
         if form.is_valid and form1.is_valid and form2.is_valid and form3.is_valid and form4.is_valid and form5.is_valid and form6.is_valid and form7.is_valid:
 
-            resume = form.save()
+            # for degree in request.POST.getlist('degree_class'):
+            #     e=Education(degree_class=degree)
+
+            #     e.resume= resume
+            #     for year in request.POST.getlist('year_of_passing'):
+            #         e.year_of_passing=year
+
+            #     for percentage in request.POST.getlist('percentage_or_grade',):
+            #         e.percentage_or_grade=percentage
+            #     for college in request.POST.getlist('university'):
+            #         e.university= college
+
+            #     e.save()
+
             user = form1.save(commit=False)
             username = first_name+str(random.randrange(100, 1000))
             if username not in User.objects.all():
                 user.username = username
-            user.password = random_password
+            user.set_password(random_password)
 
             user.save()
+            resume = form.save(commit=False)
+            resume.user = user
+            resume.save()
 
             userextra = form2.save(commit=False)
             userextra.resume = resume
-            userextra.user = user
+            # userextra.user = user
 
             userextra.save()
-            eductation = form3.save(commit=False)
-            eductation.resume = resume
-            eductation.user = user
-            eductation.save()
+            for f in form3:
+                eductation = f.save(commit=False)
+                eductation.resume = resume
+                eductation.save()
             skills = form4.save(commit=False)
             skills.resume = resume
             skills.user = user
@@ -99,7 +147,15 @@ class FresherResumeInput(View):
             achievements.user = user
             achievements.save()
 
-            return HttpResponse("done")
+
+            user = authenticate(username=username, password=random_password)
+            mail(user,random_password)
+
+            login(request, user)
+           
+
+            return redirect('dashboard')
+
         return HttpResponse("not done")
 
 
@@ -136,35 +192,83 @@ class Template2(View):
     def get(self, request):
         return render(request, 'resume/template2.html')
 
+# class Template3(View):
+#     def get(self,request):
+#         context={}
+#         user_extra_filed=UserExtraFields.objects.get(user__pk=4)
+#         education=Education.objects.get(user__pk=4)
+#         experience=Experience.objects.get(user__pk=4)
+#         skills=Skills.objects.get(user__pk=4)
+#         certification=Certificate.objects.get(user__pk=4)
+#         achievements=Achievements.objects.get(user__pk=4)
+#         context['user_extra_filed']=user_extra_filed
+#         context['education']=education
+#         context['experience']=experience
+#         context['skills']=skills
+#         context['certification']=certification
+#         context['achievements']=achievements
+        
+#         return render(request,'resume/template3.html',context=context)
+
+
+
+# class Template4(View):
+#     def get(self, request):
+#         context = {}
+#         user = request.user
+#         resume = Resume.objects.get(user=user)
+#         context['resume'] = resume
+#         # print(resume.education_set.all().first().degree_class)
+#         # for i in resume.education_set.all():
+#         #    print(i.degree_class)
+
+
+#         return render(request, 'resume/template4.html', context)
+
 class Template3(View):
-    def get(self,request):
-        context={}
-        user_extra_filed=UserExtraFields.objects.get(user__pk=4)
-        education=Education.objects.get(user__pk=4)
-        experience=Experience.objects.get(user__pk=4)
-        skills=Skills.objects.get(user__pk=4)
-        certification=Certificate.objects.get(user__pk=4)
-        achievements=Achievements.objects.get(user__pk=4)
-        context['user_extra_filed']=user_extra_filed
-        context['education']=education
-        context['experience']=experience
-        context['skills']=skills
-        context['certification']=certification
-        context['achievements']=achievements
-        
-        return render(request,'resume/template3.html',context=context)
+    def get(self, request):
+        context = {}
+        user = request.user
+        resume = Resume.objects.get(user=user)
+        context['resume'] = resume
+        # print(resume.education_set.all()) 
+
+        # print(resume.education_set.all().first().degree_class)
+        # for i in resume.education_set.all():
+        #    print(i.degree_class)
+
+
+        return render(request, 'resume/template3.html', context)
+
+class Template4(View):
+    def get(self, request):
+        context = {}
+        user = request.user
+        resume = Resume.objects.get(user=user)
+        context['resume'] = resume
+        # print(resume.education_set.all().first().degree_class)
+        # for i in resume.education_set.all():
+        #    print(i.degree_class)
+
+
+        return render(request, 'resume/template4.html', context)
+
+
+# poornima....................................................................
+class Template5(View):
+    def get(self, request):
+        context ={}
+        user = request.user
+        resume = Resume.objects.get(user=user)
+        context['resume']= resume
+        print(resume.education_set.all()) 
+        #mail(resume)
+        return render(request,'resume/template5.html', context)
 
 
 
+  
+
+#..........................................................................................
 
 
-
-
-
-
-
-
-
-        
-
-        
