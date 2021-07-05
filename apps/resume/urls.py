@@ -1,7 +1,11 @@
 from django.urls import path
+from . import views
+
 #from .views import FresherResumeInput,ExperienceResumeInput,GenratePdf
 from .views import *
-    
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns =[
     path('',Home.as_view(),name='home'),
     path('dashboard',Dashboard.as_view(),name='dashboard'),
@@ -14,8 +18,16 @@ urlpatterns =[
     path('resume4/',Template4.as_view(),name='resume4'),
 
     path('dashboard',Dashboard.as_view(),name='dashboard'),
+    path('resume',Template5.as_view(),name='Template5'),##poornima
+    path('mail',views.mail,name='mail')  
+
+
+
 
     path('logout', logout_request, name='logout'),
 
 
 ]
+if settings.DEBUG:
+        urlpatterns += static(settings.MEDIA_URL,
+                              document_root=settings.MEDIA_ROOT)

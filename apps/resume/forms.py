@@ -3,7 +3,7 @@ from .models import Resume, UserExtraFields, Education, Skills, Experience, Hobb
 from django.contrib.auth.forms import UserCreationForm
 from .models import User
 from django.contrib.auth.password_validation import validate_password
-
+from django.forms import formset_factory
 
 # class CustomUserCreationForm(UserCreationForm):
 #     def clean_username(self):
@@ -27,6 +27,7 @@ from django.contrib.auth.password_validation import validate_password
 #     if password1 != password2:
 #         raise forms.ValidationError("Your passwords do not match. Please try again")
 #     return super(UserCreationForm, self).clean(*args, **kwargs)
+
 
 class UserForm(forms.ModelForm):
 
@@ -66,20 +67,25 @@ class UserExtraFieldsForm(forms.ModelForm):
 
 
 class EducationForm(forms.ModelForm):
+
     class Meta:
         model = Education
+
         fields = ['degree_class', 'year_of_passing',
                   'percentage_or_grade', 'university']
 
         widgets = {
-    
-            'degree_class': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter your degree or class name', 'name': 'Name', 'id': 'Name'}),
+
+            'degree_class': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter your degree or class name', 'name': 'Name', 'id': 'Name',}),
             'year of passing': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'year of passing', 'name': 'year of passing', 'id': 'year of passing'}),
-            'grade/percentage': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'grade/percentage', 'name': 'grade/percentage', 'id': 'grade/percentage'}),
+            'percentage_or_grade': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'grade/percentage', 'name': 'grade/percentage', 'id': 'grade/percentage'}),
             'university': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'university', 'name': 'university', 'id': 'university'}),
 
 
         }
+
+
+EducationFormSet = formset_factory(EducationForm,extra=1,max_num=None,  )
 
 
 class SkillsForm(forms.ModelForm):

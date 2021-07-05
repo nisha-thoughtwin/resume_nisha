@@ -33,7 +33,7 @@
         </div>
         
         <div class="row center">
-            <u><h5>Address</h5></u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <u><h5> {{resume.userextrafieldss.address}}</h5></u>
+            <u><h5>Address</h5></u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <u><h5> {{resume.userextrafields_set.all.first.address}}</h5></u>
         </div>
         <hr>
         
@@ -62,20 +62,20 @@
               <tbody>
                   <tr>
                       <td scope="row">Board/School /College</td>
-                      <td>{{resume.education_set.all.first.degree_class}}</td>
+                      <td>{{resume.education_set.all.first.degree_class}} &nbsp {{resume.education_set.all.first.university}} </td>
                       <td>12th from mp board</td>
                       <td>BE from SVCE</td>
                   </tr>
                   <tr>
                       <td scope="row">Percent</td>
-                      <td>55%</td>
+                      <td>{{resume.education_set.all.first.percentage_or_grade}}%  </td>
                       <td>53%</td>
                       <td>56%</td>
 
                   </tr>
                   <tr>
                     <td scope="row">Year</td>
-                    <td>2011</td>
+                    <td>{{resume.education_set.all.first.year_of_passing}}</td>
                     <td>2013</td>
                     <td>2018</td>
 
@@ -88,7 +88,7 @@
       <div class="row">
         <br>
         <ul style=" margin-left: 150px;">
-            <li>Playing cricket</li>
+            <li>{{resume.hobbies_set.all.first.hobbies}}</li>
             <li>Playing football</li>
             <li>Reading blogs</li>
             <li>listening music</li>
