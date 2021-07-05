@@ -131,15 +131,20 @@ class FresherResumeInput(View):
                 eductation.save()
             skills = form4.save(commit=False)
             skills.resume = resume
+            skills.user = user
+
             skills.save()
             hobbies = form5.save(commit=False)
             hobbies.resume = resume
+            hobbies.user = user
             hobbies.save()
             certificate = form6.save(commit=False)
             certificate.resume = resume
+            certificate.user = user
             certificate.save()
             achievements = form7.save(commit=False)
             achievements.resume = resume
+            achievements.user = user
             achievements.save()
 
 
@@ -187,6 +192,53 @@ class Template2(View):
     def get(self, request):
         return render(request, 'resume/template2.html')
 
+# class Template3(View):
+#     def get(self,request):
+#         context={}
+#         user_extra_filed=UserExtraFields.objects.get(user__pk=4)
+#         education=Education.objects.get(user__pk=4)
+#         experience=Experience.objects.get(user__pk=4)
+#         skills=Skills.objects.get(user__pk=4)
+#         certification=Certificate.objects.get(user__pk=4)
+#         achievements=Achievements.objects.get(user__pk=4)
+#         context['user_extra_filed']=user_extra_filed
+#         context['education']=education
+#         context['experience']=experience
+#         context['skills']=skills
+#         context['certification']=certification
+#         context['achievements']=achievements
+        
+#         return render(request,'resume/template3.html',context=context)
+
+
+
+# class Template4(View):
+#     def get(self, request):
+#         context = {}
+#         user = request.user
+#         resume = Resume.objects.get(user=user)
+#         context['resume'] = resume
+#         # print(resume.education_set.all().first().degree_class)
+#         # for i in resume.education_set.all():
+#         #    print(i.degree_class)
+
+
+#         return render(request, 'resume/template4.html', context)
+
+class Template3(View):
+    def get(self, request):
+        context = {}
+        user = request.user
+        resume = Resume.objects.get(user=user)
+        context['resume'] = resume
+        # print(resume.education_set.all()) 
+
+        # print(resume.education_set.all().first().degree_class)
+        # for i in resume.education_set.all():
+        #    print(i.degree_class)
+
+
+        return render(request, 'resume/template3.html', context)
 
 class Template4(View):
     def get(self, request):
@@ -198,10 +250,9 @@ class Template4(View):
         # for i in resume.education_set.all():
         #    print(i.degree_class)
 
-<<<<<<< HEAD
+
         return render(request, 'resume/template4.html', context)
-=======
-        return render(request,'resume/template4.html', context)
+
 
 # poornima....................................................................
 class Template5(View):
@@ -210,7 +261,7 @@ class Template5(View):
         user = request.user
         resume = Resume.objects.get(user=user)
         context['resume']= resume
-        print(resume.education_set.all().first().degree_class) 
+        print(resume.education_set.all()) 
         #mail(resume)
         return render(request,'resume/template5.html', context)
 
@@ -221,5 +272,3 @@ class Template5(View):
 #..........................................................................................
 
 
-
->>>>>>> origin/main

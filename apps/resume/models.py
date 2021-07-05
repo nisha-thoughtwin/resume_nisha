@@ -36,10 +36,11 @@ class Education(models.Model):
 
 class Experience(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     company_name = models.CharField(max_length=100)
     duration = models.CharField(max_length=30)
     designation = models.CharField(max_length=100)
-    role = models.CharField(max_length=100)
+    role = models.CharField(max_length=1000)
     place = models.CharField(max_length=100)
 
     def __str__(self):
