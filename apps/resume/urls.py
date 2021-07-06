@@ -6,7 +6,10 @@ from .views import *
     
 urlpatterns =[
     path('home',Home.as_view(),name='home'),
-    path("",signin,name="signin"),
+    path("",sign_in,name="sign_in"),
+    path("sign_up/",sign_up,name="sign_up"),
+    # path('pdf/', GeneratePdf.as_view()), 
+    
     path('fresher',FresherResumeInput.as_view(),name='fresher_input'),
     path('experience',ExperienceResumeInput.as_view(),name='experience_input'),
 
@@ -14,6 +17,7 @@ urlpatterns =[
 
     path('resume2/',Template2.as_view(),name='resume2'),
     path('resume3/<int:pk>',Template3.as_view(),name='resume3'),
+    path('generate/pdf/', generate_pdf, name='generate_pdf'),
 
 
 ]

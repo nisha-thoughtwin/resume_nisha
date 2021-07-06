@@ -1,6 +1,6 @@
 from collections import UserString
 from django.http.response import HttpResponse, HttpResponseRedirect
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
 from .forms import UserForm
 from django.shortcuts import redirect, render
 from django.views import View
@@ -9,50 +9,37 @@ from django.contrib import messages
 import pdfkit
 from .models import *
 from .forms import *
-#from .models import Resume, Education,skills,experience,hobbies,certifications,acheivments
-#from .forms import Resume, Education,skills,experience,hobbies,certifications,acheivments
 import random
 from datetime import date
 import string
 from django.contrib.auth.models import User
 date = date.strftime
+from django.db import IntegrityError
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+#importing get_template from loader
+from django.template.loader import get_template
+ 
+#import render_to_pdf from util.py 
+from .utils import render_to_pdf 
 
-# def signin(request):
-#     if request.method=="POST":
-#         un = request.POST["username"]
-#         pwd = request.POST["password"]
 
-#         user = authenticate(username=un,password=pwd)
-#         if user:
-#             login(request,user)
-#             if user.is_superuser:
-#             #     return HttpResponseRedirect("/admin")
-#             # else:
-#                 messages.success(request," Successfully Logged in ")
-#                 res = HttpResponseRedirect("/home")
-#                 # if "rememberme" in request.POST:
-#                 #     res.set_cookie("user_id",user.id)
-#                 #     res.set_cookie("date_login",datetime.now())
-#                 # return res
-#         else:
-#             messages.success(request,"Incorrect username or Password")
-#             return render(request,"resume/singin.html")
 
-#     return render(request,"resume/singin.html")
-def register(request):
-    if request.method == 'POST':
-        form = UserForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            email = form.cleaned_data.get('email')
-            messages.success(request, f'Your account has been created ! You are now able to log in')
-            return redirect('login')
-    else:
-        form = UserForm()
-    return render(request, 'user/register.html', {'form': form, 'title':'reqister here'})
+def sign_up(request):
+    if request.method=="POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        email = request.POST["email"]
+        try:
+            user = User.objects.create_user(username=username,email=email,password=password)
+            return render(request,"resume/sign_up.html",{"status":"Mr/Miss. {} your Account created Successfully".format(username)})
+        except IntegrityError as e:
+            return render(request,"resume/sign_up.html", {"status":"Mr/Miss. {} your Account Already  Exist".format(username)})
+    return render(request,"resume/sign_up.html")
 
-def signin(request):
+
+
+def sign_in(request):
     if request.method == 'POST':
   
         # AuthenticationForm_can_also_be_used__
@@ -62,18 +49,19 @@ def signin(request):
         user = authenticate(request, username = username, password = password)
         if user is not None:
             form = login(request, user)
-            messages.success(request, f' wecome {username} !!')
+            messages.success(request, f' welcome {username} !!')
             return redirect('home')
         else:
             messages.info(request, f'account done not exit plz sign in')
     form = AuthenticationForm()
-    return render(request, 'resume/singin.html')
+    return render(request, 'resume/sign_in.html')
 
+@method_decorator(login_required,name='dispatch')
 class Home(View):
     def get(self, request):
         return render(request, 'index.html')
 
-
+@method_decorator(login_required,name='dispatch')
 class FresherResumeInput(View):
     def get(self, request):
         form = ResumeForm
@@ -137,7 +125,8 @@ class FresherResumeInput(View):
             achievements.save()
             return HttpResponse("done")
         return HttpResponse("not done")
-
+    
+@method_decorator(login_required,name='dispatch')
 class ExperienceResumeInput(View):
     def get(self, request):
         form = ResumeForm
@@ -152,7 +141,8 @@ class ExperienceResumeInput(View):
         context = {'form': form, 'form1': form1, 'form2': form2,
                    'form3': form3, 'form4': form4, 'form5': form5, 'form6': form6, 'form7': form7, 'form8': form8}
         return render(request, 'resume/experience.html', context)
-
+    
+@method_decorator(login_required,name='dispatch')
 class GenratePdf(View):
     def post(self, request):
         if request.method == 'POST':
@@ -161,25 +151,8 @@ class GenratePdf(View):
             # resume = Resume.objects.create(resume=pdf)
             return HttpResponse('download success')
 
-# class Template2(View):
-#     def get(self,request,pk):
-#         context={}
-#         user_extra_filed=UserExtraFields.objects.get(user__pk=1)
-#         education=Education.objects.get(user__pk=1)
-#         experience=Experience.objects.get(user__pk=1)
-#         skills=Skills.objects.get(user__pk=1)
-#         hobbies=Hobbies.objects.get(user__pk=1)
-#         certification=Certificate.objects.get(user__pk=1)
-#         achievements=Achievements.objects.get(user__pk=1)
-#         context['user_extra_filed']=user_extra_filed
-#         context['education']=education
-#         context['experience']=experience
-#         context['skills']=skills
-#         context['hobbies']=hobbies
-#         context['certification']=certification
-#         context['achievements']=achievements
-#         return render(request,'resume/template2.html',context=context)
 
+@method_decorator(login_required,name='dispatch')
 class Template2(View):
     def get(self, request):
         context ={}
@@ -192,6 +165,7 @@ class Template2(View):
         #    print(i.degree_class)
         return render(request,'resume/template2.html', context)
 
+@method_decorator(login_required,name='dispatch')
 class Template3(View):
     def get(self,request):
         context={}
@@ -210,3 +184,110 @@ class Template3(View):
         context['certification']=certification
         context['achievements']=achievements
         return render(request,'resume/template3.html',context=context)
+
+
+  # ---------------------------
+
+# #importing get_template from loader
+# from django.template.loader import get_template
+ 
+# #import render_to_pdf from util.py 
+# from .utils import render_to_pdf 
+ 
+# #Creating our view, it is a class based view
+# class GeneratePdf(View):
+#      def get(self, request, *args, **kwargs):
+        
+#         #getting the template
+#         pdf = render_to_pdf('resume/template2.html')
+         
+#          #rendering the template
+#         return HttpResponse(pdf, content_type='application/pdf')        
+
+
+#------------------------------
+
+# -*- coding: utf-8 -*-
+# from .models import Person
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from weasyprint import HTML
+import tempfile
+
+
+# def generate_pdf(request):
+#     """Generate pdf."""
+#     # Model data
+#     # people = Person.objects.all().order_by('last_name')
+#     context ={}
+#     user = request.user
+#     resume = Resume.objects.get(user=user)
+#     context['resume']= resume
+#     print(resume.education_set.all()) 
+#     # Rendered
+#     html_string = render_to_string('resume/template2.html',context)
+#     html = HTML(string=html_string)
+#     result = html.write_pdf()
+
+#     # Creating http response
+#     response = HttpResponse(content_type='application/pdf;')
+#     response['Content-Disposition'] = 'inline; filename=list_people.pdf'
+#     response['Content-Transfer-Encoding'] = 'binary'
+#     with tempfile.NamedTemporaryFile(delete=True) as output:
+#         output.write(result)
+#         output.flush()
+#         output = open(output.name, 'rb')
+#         response.write(output.read())
+
+#     return response
+
+#----------------------------------------------------------------
+# install Pdfcrowd: "pip install pdfcrowd", more...
+
+import sys
+import logging
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from django.shortcuts import render
+from django import forms
+import pdfcrowd
+import logging
+
+
+
+def generate_pdf(request):
+    # form = TestForm(request.POST)
+    if request.method != 'POST':
+        return render(request, 'resume/template2.html')
+
+    try:
+        # enter your Pdfcrowd credentials to the converter's constructor
+        client = pdfcrowd.HtmlToPdfClient('resume', 'ce544b6ea52a5621fb9d55f8b542d14d')
+
+        part = request.POST.get('part_for_conversion')
+        if part != None and part != 'all':
+            # convert just selected part of the page
+            client.setElementToConvert(part)
+
+        # convert a web page and store the generated PDF to a variable
+        logger.info('running Pdfcrowd HTML to PDF conversion')
+
+        # set HTTP response headers
+        response = HttpResponse(content_type='application/pdf')
+        response['Cache-Control'] = 'max-age=0'
+        response['Accept-Ranges'] = 'none'
+        content_disp = 'attachment' if 'asAttachment' in request.POST else 'inline'
+        response['Content-Disposition'] = content_disp + '; filename=demo_django.pdf'
+
+        html = render_to_string(
+            'resume/template2.html', {
+                'form': form,
+                'pdfcrowd_remove': 'pdfcrowd-remove' if form.data.get('remove_convert_button') else ''
+                })
+        client.convertStringToStream(html, response)
+
+        # send the generated PDF
+        return response
+    except pdfcrowd.Error as why:
+        logger.error('Pdfcrowd Error: %s', why)
+        return HttpResponse(why)
