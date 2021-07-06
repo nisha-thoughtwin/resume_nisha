@@ -29,17 +29,23 @@
 	    <div class="resume-wrapper-inner mx-auto text-left bg-white shadow-lg">
 		    <header class="resume-header pt-4 pt-md-0">
 			    <div class="media flex-column flex-md-row">
-				    <img class="mr-3 img-fluid picture mx-auto" src="/static/images/profile.jpg" alt="">
-				    <div class="media-body p-4 d-flex flex-column flex-md-row mx-auto mx-lg-0">
+				    {% comment %} <img class="mr-3 img-fluid picture mx-auto" src="/static/images/profile.jpg" alt=""> {% endcomment %}
+					<img class="mr-3 img-fluid picture mx-auto" src="{{resume.userextrafields_set.all.first.photo.url}}">
+					<div class="media-body p-4 d-flex flex-column flex-md-row mx-auto mx-lg-0">
+						
 					    <div class="primary-info">
-						    <h1 class="name mt-0 mb-1 text-white text-uppercase text-uppercase" style="font-size:20px">Steve Doe</h1>
-						    <div class="title font-weight-bold" style="font-size:15px">Full Stack Developer
+						    <h1 class="name mt-0 mb-1 text-white text-uppercase text-uppercase" style="font-size:20px">{{resume.user.first_name}} {{resume.user.last_name}}</h1>
+						    <div class="title font-weight-bold" style="font-size:15px">{{resume.title}}
 							<div class="resume-timeline-item-desc">
-							<p>Professional full stack developer more than one year of experience web developer fields. involved in various product testing and development environment and new business challenges. contribute collective effort and managing technical team and business team. </p>
+							<p> {{resume.objective}}</p>
 							</div>
+						
 						<ul class="list-unstyled">
-							    <li class="mb-2"><a href="#"><i class="far fa-envelope fa-fw mr-1" data-fa-transform="grow-3"></i>Steve.Doe@website.com</a></li>
-							    <li><a href="#"><i class="fas fa-mobile-alt fa-fw mr-2" data-fa-transform="grow-6"></i>0123 456 78900</a></li>
+							    <li class="mb-2"><a href="#"><i class="far fa-envelope fa-fw mr-1" data-fa-transform="grow-3"></i>{{resume.user.email}}</a></li>
+							    <li class="mb-2"><a href="#"><i class="fas fa-phone fa-fw mr-2" data-fa-transform="grow-6"></i>{{resume.userextrafields_set.all.first.phone}}</a></li>
+							    <li class="mb-2"><a href="#"><i class="far fa fa-map-marker fa-fw mr-2" data-fa-transform="grow-6"></i>{{resume.userextrafields_set.all.first.address}}</a></li>
+								
+
 							
 						    </ul>
                          </div>
@@ -68,15 +74,15 @@
 									    
 									    <div class="resume-timeline-item-header mb-2">
 										    <div class="d-flex flex-column flex-md-row">
-										        <h3 class="resume-position-title font-weight-bold mb-1" style="font-size:15px">Lead Developer</h3>
+										        <h3 class="resume-position-title font-weight-bold mb-1" style="font-size:15px">{{resume.experience_set.all.first.designation}}</h3>
 										        
 										    </div><!--//row-->
-										    <div class="resume-position-time" style="font-size:10px">2018 - Present</div>
+										    <div class="resume-position-time" style="font-size:10px">{{experience.duration}}</div>
 									    </div><!--//resume-timeline-item-header-->
 									    <div class="resume-timeline-item-desc" style="font-size:15px">
-										    <p>Role description goes here ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Donec pede justo, fringilla vel.</p>
+										    <p>{{experience.role}}</p>
 										    <h4 class="resume-timeline-item-desc-heading font-weight-bold" style="font-size:15px">Achievements:</h4>
-										    <p>Praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
+										    <p>{{achievements.name}}</p>
 										    <ul>
 											    <li>Lorem ipsum dolor sit amet, 80% consectetuer adipiscing elit.</li>
 											    <li>At vero eos et accusamus et iusto odio dignissimos.</li>
@@ -184,14 +190,17 @@
 						    <h2 class="resume-section-title text-uppercase font-weight-bold pb-3 mb-3" style="font-size:15px" >Skills </h2>
 						    <div class="resume-section-content">
 						        <div class="resume-skill-item">
-							        <h4 class="resume-skills-cat font-weight-bold" style="font-size:15px">Frontend</h4>
+							        <h4 class="resume-skills-cat font-weight-bold" style="font-size:15px">TECHNICAL SKILLS</h4>
 							        <ul class="list-unstyled mb-4">
+									{% for skill in resume.skills_set.all %}
+
 								        <li class="mb-2">
-								            <div class="resume-skill-name" >Angular</div>
+								            <div class="resume-skill-name" >{{skill.skills}}</div>
 									        <div class="progress resume-progress">
 											    <div class="progress-bar theme-progress-bar-dark" role="progressbar" style="width: 98%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
 											</div>
 								        </li>
+                                       {% endfor %}
 								        <li class="mb-2">
 								            <div class="resume-skill-name">React</div>
 									        <div class="progress resume-progress">
@@ -221,20 +230,24 @@
 						        </div><!--//resume-skill-item-->
 						        
 						        <div class="resume-skill-item">
-						            <h4 class="resume-skills-cat font-weight-bold" style="font-size:15px">Backend</h4>
+						            <h4 class="resume-skills-cat font-weight-bold" style="font-size:15px">CERTIFICATIONS</h4>
 							        <ul class="list-unstyled">
+									{% for certificate in resume.certificate_set.all %}
 								        <li class="mb-2">
-								            <div class="resume-skill-name">Python/Django</div>
+								            <div class="resume-name">{{certificate.certificate}}</div>
 									        <div class="progress resume-progress">
 											    <div class="progress-bar theme-progress-bar-dark" role="progressbar" style="width: 95%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
 											</div>
+										
 								        </li>
+										{%endfor%}
 								        <li class="mb-2">
 								            <div class="resume-skill-name">Ruby/Rails</div>
 									        <div class="progress resume-progress">
 											    <div class="progress-bar theme-progress-bar-dark" role="progressbar" style="width: 92%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
 											</div>
 								        </li>
+										
 								        <li class="mb-2">
 								            <div class="resume-skill-name">PHP</div>
 									        <div class="progress resume-progress">
@@ -270,37 +283,38 @@
 						    <h2 class="resume-section-title text-uppercase font-weight-bold pb-3 mb-3" style="font-size:15px">Education</h2>
 						    <div class="resume-section-content">
 							    <ul class="list-unstyled">
+									{% for education in resume.education_set.all %}
 								    <li class="mb-2">
-								        <div class="resume-degree font-weight-bold" >MSc in Computer Science</div>
-								        <div class="resume-degree-org">University College London</div>
-								        <div class="resume-degree-time">2010 - 2011</div>
-								    </li>
-								    <li>
-								        <div class="resume-degree font-weight-bold">BSc Maths and Physics</div>
-								        <div class="resume-degree-org">Imperial College London</div>
-								        <div class="resume-degree-time">2007 - 2010</div>
-								    </li>
+								        {% comment %} <div class="resume-degree font-weight-bold" >MSc in Computer Science</div> {% endcomment %}
+								        <div class="resume-degree font-weight-bold" >{{education.degree_class}}  {{education.percentage_or_grade}}</div>
+								        <div class="resume-degree-org">{{education.university}}</div>
+								        <div class="resume-degree-time">{{education.year_of_passing}}</div>
+										</li>
+									{%endfor%}
 							    </ul>
 						    </div>
 					    </section><!--//education-section-->
 					    <section class="resume-section reference-section mb-5">
-						    <h2 class="resume-section-title text-uppercase font-weight-bold pb-3 mb-3" style="font-size:15px">Awards</h2>
+						    <h2 class="resume-section-title text-uppercase font-weight-bold pb-3 mb-3" style="font-size:15px">Achievements</h2>
 						    <div class="resume-section-content">
 							    <ul class="list-unstyled resume-awards-list">
+								{% for achievement in resume.achievements_set.all %}
 								    <li class="mb-2 pl-4 position-relative">
 								        <i class="resume-award-icon fas fa-trophy position-absolute" data-fa-transform="shrink-2"></i>
-								        <div class="resume-award-name">Award Name Lorem</div>
+								        <div class="resume-award-name">{{achievement.achievements}}</div>
 								        <div class="resume-award-desc">Award desc goes here, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo.</div>
 								    </li>
+									{% endfor %}
 								    <li class="mb-0 pl-4 position-relative">
 								        <i class="resume-award-icon fas fa-trophy position-absolute" data-fa-transform="shrink-2"></i>
 								        <div class="resume-award-name">Award Name Ipsum</div>
 								        <div class="resume-award-desc">Award desc goes here, ultricies nec, pellentesque.</div>
 								    </li>
+									
 							    </ul>
 						    </div>
 					    </section><!--//interests-section-->
-					    <section class="resume-section language-section mb-5">
+					    {% comment %} <section class="resume-section language-section mb-5">
 						    <h2 class="resume-section-title text-uppercase font-weight-bold pb-3 mb-3" style="font-size:15px">Language</h2>
 						    <div class="resume-section-content">
 							    <ul class="list-unstyled resume-lang-list">
@@ -309,15 +323,16 @@
 								    <li><span class="resume-lang-name font-weight-bold">Spanish</span> <small class="text-muted font-weight-normal">(Professional)</small></li>
 							    </ul>
 						    </div>
-					    </section><!--//language-section-->
+					    </section><!--//language-section--> {% endcomment %}
 					    <section class="resume-section interests-section mb-5">
-						    <h2 class="resume-section-title text-uppercase font-weight-bold pb-3 mb-3" style="font-size:15px">Interests</h2>
+						    <h2 class="resume-section-title text-uppercase font-weight-bold pb-3 mb-3" style="font-size:15px">Hobbies</h2>
 						    <div class="resume-section-content">
 							    <ul class="list-unstyled">
-								    <li class="mb-1">Climbing</li>
-								    <li class="mb-1">Snowboarding</li>
-								    <li class="mb-1">Cooking</li>
+								{% for hobbies in resume.hobbies_set.all %}
+								    <li class="mb-1">{{hobbies.hobbies}}</li>
+								    
 							    </ul>
+								{% endfor %}
 						    </div>
 					    </section><!--//interests-section-->
 					    

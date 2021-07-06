@@ -113,7 +113,7 @@ class ExperienceForm(forms.ModelForm):
             'company name ': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'company name', 'name': 'company name', 'id': 'company name'}),
             'duration': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'duration', 'name': 'duration', 'id': 'duration'}),
             'designation': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'designation', 'name': 'designation', 'id': 'designation'}),
-            'role': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'role', 'name': 'role', 'id': 'role'}),
+            'role': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'role', 'name': 'role', 'id': 'role'}),
             'place': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'place', 'name': 'place', 'id': 'place'}),
 
         }
