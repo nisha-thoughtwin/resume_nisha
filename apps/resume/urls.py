@@ -14,7 +14,7 @@ urlpatterns =[
     path('experience',ExperienceResumeInput.as_view(),name='experience_input'),
 
     path('generate',GenratePdf.as_view(),name='generate_pdf'),
-
+    path('resume1/',Template1.as_view(),name='resume1'),
     path('resume2/',Template2.as_view(),name='resume2'),
     path('resume3/<int:pk>',Template3.as_view(),name='resume3'),
     path('generate/pdf/', generate_pdf, name='generate_pdf'),

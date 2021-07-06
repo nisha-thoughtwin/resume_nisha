@@ -151,6 +151,18 @@ class GenratePdf(View):
             # resume = Resume.objects.create(resume=pdf)
             return HttpResponse('download success')
 
+@method_decorator(login_required,name='dispatch')
+class Template1(View):
+    def get(self, request):
+        context ={}
+        user = request.user
+        print(user)
+        resume = Resume.objects.get(user=user)
+        context['resume']= resume
+        print(resume.education_set.all().first().degree_class)
+        #mail(resume)
+        return render(request,'resume/template1.html', context)
+
 
 @method_decorator(login_required,name='dispatch')
 class Template2(View):
@@ -215,79 +227,79 @@ from weasyprint import HTML
 import tempfile
 
 
-# def generate_pdf(request):
-#     """Generate pdf."""
-#     # Model data
-#     # people = Person.objects.all().order_by('last_name')
-#     context ={}
-#     user = request.user
-#     resume = Resume.objects.get(user=user)
-#     context['resume']= resume
-#     print(resume.education_set.all()) 
-#     # Rendered
-#     html_string = render_to_string('resume/template2.html',context)
-#     html = HTML(string=html_string)
-#     result = html.write_pdf()
+def generate_pdf(request):
+    """Generate pdf."""
+    # Model data
+    # people = Person.objects.all().order_by('last_name')
+    context ={}
+    user = request.user
+    resume = Resume.objects.get(user=user)
+    context['resume']= resume
+    print(resume.education_set.all()) 
+    # Rendered
+    html_string = render_to_string('resume/template2.html',context)
+    html = HTML(string=html_string)
+    result = html.write_pdf()
 
-#     # Creating http response
-#     response = HttpResponse(content_type='application/pdf;')
-#     response['Content-Disposition'] = 'inline; filename=list_people.pdf'
-#     response['Content-Transfer-Encoding'] = 'binary'
-#     with tempfile.NamedTemporaryFile(delete=True) as output:
-#         output.write(result)
-#         output.flush()
-#         output = open(output.name, 'rb')
-#         response.write(output.read())
+    # Creating http response
+    response = HttpResponse(content_type='application/pdf;')
+    response['Content-Disposition'] = 'inline; filename=list_people.pdf'
+    response['Content-Transfer-Encoding'] = 'binary'
+    with tempfile.NamedTemporaryFile(delete=True) as output:
+        output.write(result)
+        output.flush()
+        output = open(output.name, 'rb')
+        response.write(output.read())
 
-#     return response
+    return response
 
 #----------------------------------------------------------------
-# install Pdfcrowd: "pip install pdfcrowd", more...
+# # install Pdfcrowd: "pip install pdfcrowd", more...
 
-import sys
-import logging
-from django.http import HttpResponse
-from django.template.loader import render_to_string
-from django.shortcuts import render
-from django import forms
-import pdfcrowd
-import logging
+# import sys
+# import logging
+# from django.http import HttpResponse
+# from django.template.loader import render_to_string
+# from django.shortcuts import render
+# from django import forms
+# import pdfcrowd
+# # import logging
 
 
 
-def generate_pdf(request):
-    # form = TestForm(request.POST)
-    if request.method != 'POST':
-        return render(request, 'resume/template2.html')
+# def generate_pdf(request):
+#     # form = TestForm(request.POST)
+#     if request.method != 'POST':
+#         return render(request, 'resume/template2.html')
 
-    try:
-        # enter your Pdfcrowd credentials to the converter's constructor
-        client = pdfcrowd.HtmlToPdfClient('resume', 'ce544b6ea52a5621fb9d55f8b542d14d')
+#     try:
+#         # enter your Pdfcrowd credentials to the converter's constructor
+#         client = pdfcrowd.HtmlToPdfClient('resume', 'ce544b6ea52a5621fb9d55f8b542d14d')
 
-        part = request.POST.get('part_for_conversion')
-        if part != None and part != 'all':
-            # convert just selected part of the page
-            client.setElementToConvert(part)
+#         part = request.POST.get('part_for_conversion')
+#         if part != None and part != 'all':
+#             # convert just selected part of the page
+#             client.setElementToConvert(part)
 
-        # convert a web page and store the generated PDF to a variable
-        logger.info('running Pdfcrowd HTML to PDF conversion')
+#         # convert a web page and store the generated PDF to a variable
+#         logging.info('running Pdfcrowd HTML to PDF conversion')
 
-        # set HTTP response headers
-        response = HttpResponse(content_type='application/pdf')
-        response['Cache-Control'] = 'max-age=0'
-        response['Accept-Ranges'] = 'none'
-        content_disp = 'attachment' if 'asAttachment' in request.POST else 'inline'
-        response['Content-Disposition'] = content_disp + '; filename=demo_django.pdf'
+#         # set HTTP response headers
+#         response = HttpResponse(content_type='application/pdf')
+#         response['Cache-Control'] = 'max-age=0'
+#         response['Accept-Ranges'] = 'none'
+#         content_disp = 'attachment' if 'asAttachment' in request.POST else 'inline'
+#         response['Content-Disposition'] = content_disp + '; filename=demo_django.pdf'
 
-        html = render_to_string(
-            'resume/template2.html', {
-                'form': form,
-                'pdfcrowd_remove': 'pdfcrowd-remove' if form.data.get('remove_convert_button') else ''
-                })
-        client.convertStringToStream(html, response)
+#         html = render_to_string(
+#             'resume/template2.html', {
+                
+#                 'pdfcrowd_remove': 'pdfcrowd-remove'
+#                 })
+#         client.convertStringToStream(html, response)
 
-        # send the generated PDF
-        return response
-    except pdfcrowd.Error as why:
-        logger.error('Pdfcrowd Error: %s', why)
-        return HttpResponse(why)
+#         # send the generated PDF
+#         return response
+#     except pdfcrowd.Error as why:
+#         logging.error('Pdfcrowd Error: %s', why)
+#         return HttpResponse(why)

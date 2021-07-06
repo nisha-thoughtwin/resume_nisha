@@ -17,7 +17,9 @@
   </head>
   <style type="text/css">
 
-/* @page { size:420mm 594mm; margin: 2cm } */
+@page { size:420mm 594mm; margin: 7cm }
+
+
 /* @page {
   size: A4;
   margin: 0 0 0 0;
@@ -462,14 +464,14 @@ p
           </p>
         </div>
       </div>
-      <form action='#' method='post'>
+      <!-- <form action='#' method='post'>
         {% if csrf_token %}{% csrf_token %}{% endif %}
         
         <center class='{{ pdfcrowd_remove }}'>
             <input type='submit' value='Convert to PDF' name='asAttachment'>
             <input type='submit' value='Convert to PDF and open' name='asInline'>
         </center>
-    </form>
+    </form> -->
     </div>
   </body>
 </html>
