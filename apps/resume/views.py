@@ -59,8 +59,8 @@ class FresherResumeInput(View):
         form = ResumeForm
         form1 = UserForm
         form2 = UserExtraFieldsForm
-        form3 = EducationFormSet()
-        form4 = SkillsForm
+        form3 = EducationFormSet(queryset=Education.objects.none())
+        form4 = SkillsFormSet(queryset=Skills.objects.none())
 
         form5 = HobbiesForm
         form6 = CertificateForm
@@ -86,9 +86,10 @@ class FresherResumeInput(View):
 
         form2 = UserExtraFieldsForm(request.POST, request.FILES)
 
-        form3 = EducationFormSet(request.POST,None)
+        form3 = EducationFormSet(data=request.POST)
+        # print(form3)
 
-        form4 = SkillsForm(request.POST)
+        form4 = SkillsFormSet(request.POST,None)
         form5 = HobbiesForm(request.POST)
         form6 = CertificateForm(request.POST)
         form7 = AchievementsForm(request.POST)
@@ -126,12 +127,19 @@ class FresherResumeInput(View):
 
             userextra.save()
             for f in form3:
+                # print(f)
+
                 eductation = f.save(commit=False)
                 eductation.resume = resume
                 eductation.save()
-            skills = form4.save(commit=False)
-            skills.resume = resume
-            skills.save()
+            
+            for s in form4: 
+           
+                skills = s.save(commit=False)
+                skills.resume = resume
+                skills.save()
+
+
             hobbies = form5.save(commit=False)
             hobbies.resume = resume
             hobbies.save()
@@ -144,7 +152,7 @@ class FresherResumeInput(View):
 
 
             user = authenticate(username=username, password=random_password)
-            mail(user,random_password)
+            # mail(username,random_password)
 
             login(request, user)
            
@@ -198,9 +206,6 @@ class Template4(View):
         # for i in resume.education_set.all():
         #    print(i.degree_class)
 
-<<<<<<< HEAD
-        return render(request, 'resume/template4.html', context)
-=======
         return render(request,'resume/template4.html', context)
 
 # poornima....................................................................
@@ -217,9 +222,3 @@ class Template5(View):
 
 
   
-
-#..........................................................................................
-
-
-
->>>>>>> origin/main

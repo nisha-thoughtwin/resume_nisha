@@ -3,7 +3,7 @@ from .models import Resume, UserExtraFields, Education, Skills, Experience, Hobb
 from django.contrib.auth.forms import UserCreationForm
 from .models import User
 from django.contrib.auth.password_validation import validate_password
-from django.forms import formset_factory
+from django.forms import formset_factory,modelformset_factory
 
 # class CustomUserCreationForm(UserCreationForm):
 #     def clean_username(self):
@@ -85,7 +85,9 @@ class EducationForm(forms.ModelForm):
         }
 
 
-EducationFormSet = formset_factory(EducationForm,extra=1,max_num=None,  )
+# EducationFormSet = formset_factory(EducationForm,extra=1,max_num=None,  )
+
+EducationFormSet = modelformset_factory(Education,fields=("degree_class","year_of_passing","percentage_or_grade","university"),extra=1)
 
 
 class SkillsForm(forms.ModelForm):
@@ -96,7 +98,11 @@ class SkillsForm(forms.ModelForm):
             'skills': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your skills ', 'name': 'Name', 'id': 'Name'}),
 
         }
-        fields = ['skills']
+        fields = ['skills'] 
+
+# SkillsFormSet = formset_factory(SkillsForm,extra=1,max_num=None)
+SkillsFormSet = modelformset_factory(Skills,fields=("skills",),extra=1 )
+
 
 
 class ExperienceForm(forms.ModelForm):
@@ -113,6 +119,10 @@ class ExperienceForm(forms.ModelForm):
         }
         fields = ['company_name', 'duration', 'designation', 'role', 'place']
 
+ExperienceFormSet = formset_factory(ExperienceForm,extra=1,max_num=None)
+
+        
+
 
 class HobbiesForm(forms.ModelForm):
     class Meta:
@@ -123,6 +133,9 @@ class HobbiesForm(forms.ModelForm):
         }
         fields = ['hobbies']
 
+HobbiesFormSet = formset_factory(HobbiesForm,extra=1,max_num=None)
+
+
 
 class CertificateForm(forms.ModelForm):
     class Meta:
@@ -132,6 +145,9 @@ class CertificateForm(forms.ModelForm):
             'certificate': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Certificate', 'name': 'Name', 'id': 'Name'}),
         }
         fields = ['certificate']
+
+CertificateFormSet = formset_factory(CertificateForm,extra=1,max_num=None)
+
 
 
 class AchievementsForm(forms.ModelForm):
@@ -144,3 +160,4 @@ class AchievementsForm(forms.ModelForm):
 
         }
         fields = ['achievements']
+AchievementsFormSet = formset_factory(AchievementsForm,extra=1,max_num=None)
