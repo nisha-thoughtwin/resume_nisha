@@ -204,13 +204,8 @@ class Template2(View):
 
 
 def logout_request(request):
-<<<<<<< HEAD
-    logout(request)
-    return redirect("/")
-=======
 	logout(request)
 	return redirect("/")
->>>>>>> 3e5ec6557b4be0ad0d1db6ed6267967f03286488
 
 # class Template3(View):
 #     def get(self,request):
