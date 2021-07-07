@@ -65,7 +65,6 @@
                                     <td>{{education.year_of_passing}}</td>
                                     <td>{{education.percentage_or_grade}}</td>
                                     <td>{{education.university}}</td>
-<<<<<<< HEAD
                                     <td><button type="button" class="btn btn-warning" data-id={{education.id}} data-toggle="modal" data-target="#modelId{{education.id}}">
                                         update
                                       </button>
@@ -75,35 +74,11 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title">update</h5>
-=======
-                                    <td><button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modelId">
-                                        update
-                                      </button></td>
-                                    <td><button type="button" class="btn btn-danger">Delete</button></td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                        {% endfor %}
-                        {% if educate %}
-                        <a href="{% url 'deleteEdu' %}" class="nav-link text-decoration-none"  style="position:absolute;left:720px;" class="d-inline " ><span>
-                            <i class="fas fa-trash-alt"></i></span></a>
-                        {% endif %}
-                       
-                        <!-- Button trigger modal -->
-
-                        <!-- Modal -->
-                        <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Modal title</h5>
->>>>>>> 3e5ec6557b4be0ad0d1db6ed6267967f03286488
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                     </div>
                                     <div class="modal-body">
-<<<<<<< HEAD
                                         <form action="{% url 'update_edu' %}" method="post" enctype="multipart/form-data">
                                             {% csrf_token %}
                                         
@@ -112,14 +87,6 @@
                                                 <input type="hidden" value="{{education.id}}" name="id">
                                     
                                               {{form.as_p}}             
-=======
-                                        <form action="" method="post" enctype="multipart/form-data">
-                                            {% csrf_token %}
-                                        
-                                            <div class="modal-body">
-                                    
-                                               {{ form.as_p }}                 
->>>>>>> 3e5ec6557b4be0ad0d1db6ed6267967f03286488
                                         
                                                 <button type="submit" value="Submit" class="btn btn-success">Update</button>
                                             </div>
@@ -128,7 +95,6 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-<<<<<<< HEAD
                                         </div>
                                 </div>
                             </div>
@@ -149,13 +115,6 @@
                         <!-- Button trigger modal -->
 
                        
-=======
-                                        <button type="button" class="btn btn-primary">Save</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
->>>>>>> 3e5ec6557b4be0ad0d1db6ed6267967f03286488
 
                         <a href="http://" class="addMoreItemContainer" data-toggle="modal" data-dismiss="modal"
                             data-target="#add-education-modal" id="education">+ Add Education</a>
@@ -334,7 +293,6 @@
                     <div class="modal-body">
                         <h4 class="modal-title d-inline">Education :</h4>
                         <button type="button" class="close d-inline" data-dismiss="modal">&times;</button>
-<<<<<<< HEAD
                         <form  method="post">
                         {%csrf_token%}
                         {{eduform}}
@@ -342,11 +300,6 @@
 
                     </form>
                         <hr>
-=======
-                        {{eduform}}
-                        <hr>
-                        <button type="submit" class="btn btn-primary">Submit</button>
->>>>>>> 3e5ec6557b4be0ad0d1db6ed6267967f03286488
                     </div>
                 </div>
             </div>
