@@ -64,8 +64,8 @@ class FresherResumeInput(View):
         form = ResumeForm
         form1 = UserForm
         form2 = UserExtraFieldsForm
-        form3 = EducationFormSet()
-        form4 = SkillsForm
+        form3 = EducationFormSet(queryset=Education.objects.none())
+        form4 = SkillsFormSet(queryset=Skills.objects.none())
 
         form5 = HobbiesForm
         form6 = CertificateForm
@@ -92,9 +92,10 @@ class FresherResumeInput(View):
 
         form2 = UserExtraFieldsForm(request.POST, request.FILES)
 
-        form3 = EducationFormSet(request.POST,None)
+        form3 = EducationFormSet(data=request.POST)
+        # print(form3)
 
-        form4 = SkillsForm(request.POST)
+        form4 = SkillsFormSet(request.POST,None)
         form5 = HobbiesForm(request.POST)
         form6 = CertificateForm(request.POST)
         form7 = AchievementsForm(request.POST)
@@ -134,25 +135,39 @@ class FresherResumeInput(View):
 
             userextra.save()
             for f in form3:
+                # print(f)
+
                 eductation = f.save(commit=False)
                 eductation.resume = resume
                 eductation.save()
-            skills = form4.save(commit=False)
-            skills.resume = resume
-            skills.save()
+
+            
+            for s in form4: 
+           
+                skills = s.save(commit=False)
+                skills.resume = resume
+                skills.save()
+
             hobbies = form5.save(commit=False)
             hobbies.resume = resume
+            hobbies.user = user
             hobbies.save()
             certificate = form6.save(commit=False)
             certificate.resume = resume
+            certificate.user = user
             certificate.save()
             achievements = form7.save(commit=False)
             achievements.resume = resume
+            achievements.user = user
             achievements.save()
 
             username = username
             raw_password = random_password
             user = authenticate(username=username, password=raw_password)
+
+            # mail(username,random_password)
+
+
             login(request, user)
             return redirect('dashboard')
 
@@ -193,9 +208,59 @@ class Template2(View):
     def get(self, request):
         return render(request, 'resume/template2.html')
 
+
 def logout_request(request):
 	logout(request)
 	return redirect("/")
+=======
+# class Template3(View):
+#     def get(self,request):
+#         context={}
+#         user_extra_filed=UserExtraFields.objects.get(user__pk=4)
+#         education=Education.objects.get(user__pk=4)
+#         experience=Experience.objects.get(user__pk=4)
+#         skills=Skills.objects.get(user__pk=4)
+#         certification=Certificate.objects.get(user__pk=4)
+#         achievements=Achievements.objects.get(user__pk=4)
+#         context['user_extra_filed']=user_extra_filed
+#         context['education']=education
+#         context['experience']=experience
+#         context['skills']=skills
+#         context['certification']=certification
+#         context['achievements']=achievements
+        
+#         return render(request,'resume/template3.html',context=context)
+
+
+
+# class Template4(View):
+#     def get(self, request):
+#         context = {}
+#         user = request.user
+#         resume = Resume.objects.get(user=user)
+#         context['resume'] = resume
+#         # print(resume.education_set.all().first().degree_class)
+#         # for i in resume.education_set.all():
+#         #    print(i.degree_class)
+
+
+#         return render(request, 'resume/template4.html', context)
+
+class Template3(View):
+    def get(self, request):
+        context = {}
+        user = request.user
+        resume = Resume.objects.get(user=user)
+        context['resume'] = resume
+        # print(resume.education_set.all()) 
+
+        # print(resume.education_set.all().first().degree_class)
+        # for i in resume.education_set.all():
+        #    print(i.degree_class)
+
+
+        return render(request, 'resume/template3.html', context)
+
 
 class Template4(View):
     def get(self, request):
@@ -208,6 +273,7 @@ class Template4(View):
         #    print(i.degree_class)
 
 
+
         return render(request, 'resume/template4.html', context)
         
 
@@ -218,7 +284,7 @@ class Template5(View):
         user = request.user
         resume = Resume.objects.get(user=user)
         context['resume']= resume
-        print(resume.education_set.all().first().degree_class) 
+        print(resume.education_set.all()) 
         #mail(resume)
         return render(request,'resume/template5.html', context)
 
@@ -273,5 +339,3 @@ class UpdateFresherData(View):
             form3.save()
             form4.save()
             return render(request, 'resume/updatedata.html')
-
-

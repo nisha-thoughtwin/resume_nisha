@@ -62,6 +62,25 @@
 
    -->
 
+
+   {{ form4.management_form }}
+   <div id="form_set4">
+       {% for form in form4.forms %}
+         {{form.non_field_errors}}
+       {{form.errors}}
+           
+               {{ form }}
+           
+       {% endfor %}
+   </div>
+   <hr>
+   <div id="empty_form4" style="display:none">
+       
+           {{ form4.empty_form }}
+   
+   </div>
+   <input type="button" value="Add More" id="add_more4">
+   
   </div>
 
   <div class="tab"><h4>Enter general Information:</h4>
@@ -71,9 +90,11 @@
   </div>
 
   <div class="tab"><h4>Enter  Your Skills and Hobbies:</h4>
+
+
     <ul id="fieldListskills">
       <li>
-        {{ form4.as_p}}
+        <!-- {{ form4.as_p}} -->
         {{ form5.as_p}}
       </li>
 
@@ -187,11 +208,46 @@ $(document).on('click', '.add-form-row', function(e){
   return false;
 });
 
-$('#add_more').click(function() {
-	var form_idx = $('#id_form-TOTAL_FORMS').val();
-	$('#form_set').append($('#empty_form').html().replace(/__prefix__/g, form_idx));
-	$('#id_form-TOTAL_FORMS').val(parseInt(form_idx) + 1);
-});
+
+  
+  $('#add_more').click(function() {
+    var form_idx = $('#id_form-TOTAL_FORMS').val();
+    console.log('Element', $('#id_form-TOTAL_FORMS'), 'Num of forms', form_idx);
+
+    $('#form_set').append($('#empty_form').html().replace(/__prefix__/g, form_idx));
+    $('#id_form-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+    console.log('Element', $('#id_form-TOTAL_FORMS'));
+
+    if ($("#form_set input").length === 0){
+      $("#add_more").trigger("click");
+  }
+
+  
+
+  });
+  
+  
+  
+
+  $('#add_more4').click(function() {
+    var form_idx = $('#id_skills-TOTAL_FORMS').val();
+    console.log('Element', $('#id_skills-TOTAL_FORMS'), 'Num of forms', form_idx);
+
+    $('#form_set4').append($('#empty_form4').html().replace(/__prefix__/g, form_idx));
+    $('#id_skills-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+    console.log('Element', $('#id_skills-TOTAL_FORMS'));
+
+    if ($("#form_set4 input").length === 0){
+      $("#add_more4").trigger("click");
+  }
+
+
+  });
+  
+
+
+
+  
 
 </script>
 
