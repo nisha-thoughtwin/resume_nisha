@@ -3,18 +3,63 @@ from resume_maker import settings
 from django.http import HttpResponse
 from collections import UserString
 from django.http.response import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
+from .forms import UserForm
 from django.shortcuts import redirect, render
 from django.views import View
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
 import pdfkit
 from .models import *
 from .forms import *
-#from .models import Resume, Education,skills,experience,hobbies,certifications,acheivments
-#from .forms import Resume, Education,skills,experience,hobbies,certifications,acheivments
-
 import random
 from datetime import date
 import string
 from django.contrib.auth.models import User
+date = date.strftime
+from django.db import IntegrityError
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+#importing get_template from loader
+from django.template.loader import get_template
+ 
+#import render_to_pdf from util.py 
+from .utils import render_to_pdf 
+
+
+
+def sign_up(request):
+    if request.method=="POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        email = request.POST["email"]
+        try:
+            user = User.objects.create_user(username=username,email=email,password=password)
+            return render(request,"resume/sign_up.html",{"status":"Mr/Miss. {} your Account created Successfully".format(username)})
+        except IntegrityError as e:
+            return render(request,"resume/sign_up.html", {"status":"Mr/Miss. {} your Account Already  Exist".format(username)})
+    return render(request,"resume/sign_up.html")
+
+
+
+def sign_in(request):
+    if request.method == 'POST':
+  
+        # AuthenticationForm_can_also_be_used__
+  
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username = username, password = password)
+        if user is not None:
+            form = login(request, user)
+            messages.success(request, f' welcome {username} !!')
+            return redirect('home')
+        else:
+            messages.info(request, f'account done not exit plz sign in')
+    form = AuthenticationForm()
+    return render(request, 'resume/sign_in.html')
+
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -38,7 +83,6 @@ def mail(user, password):
 
 
 class Home(View):
-
     def get(self, request):
         return render(request, 'index.html')
 
@@ -55,9 +99,7 @@ class Dashboard(View):
 
 
 class FresherResumeInput(View):
-
     def get(self, request):
-
         form = ResumeForm
         form1 = UserForm
         form2 = UserExtraFieldsForm
@@ -70,9 +112,7 @@ class FresherResumeInput(View):
 
         context = {'form': form, 'form1': form1, 'form2': form2,
                    'form3': form3, 'form4': form4, 'form5': form5, 'form7': form7, 'form6': form6}
-
         return render(request, 'resume/fresher.html', context)
-
     def post(self, request):
         print(request.POST)
         first_name = request.POST.get('first_name')
@@ -86,7 +126,6 @@ class FresherResumeInput(View):
 
         form = ResumeForm(request.POST)
         form1 = UserForm(request.POST)
-
         form2 = UserExtraFieldsForm(request.POST, request.FILES)
 
         form3 = EducationFormSet(data=request.POST)
@@ -167,10 +206,9 @@ class FresherResumeInput(View):
             return redirect('dashboard')
 
         return HttpResponse("not done")
-
-
+    
+@method_decorator(login_required,name='dispatch')
 class ExperienceResumeInput(View):
-
     def get(self, request):
         form = ResumeForm
         form1 = UserForm
@@ -183,21 +221,31 @@ class ExperienceResumeInput(View):
         form8 = AchievementsForm
         context = {'form': form, 'form1': form1, 'form2': form2,
                    'form3': form3, 'form4': form4, 'form5': form5, 'form6': form6, 'form7': form7, 'form8': form8}
-
         return render(request, 'resume/experience.html', context)
-
-
+    
+@method_decorator(login_required,name='dispatch')
 class GenratePdf(View):
-
     def post(self, request):
-
         if request.method == 'POST':
             url = request.POST.get('temp_url')
             pdf = pdfkit.from_url(url, 'file1.pdf')
             # resume = Resume.objects.create(resume=pdf)
             return HttpResponse('download success')
 
+@method_decorator(login_required,name='dispatch')
+class Template1(View):
+    def get(self, request):
+        context ={}
+        user = request.user
+        print(user)
+        resume = Resume.objects.get(user=user)
+        context['resume']= resume
+        print(resume.education_set.all().first().degree_class)
+        #mail(resume)
+        return render(request,'resume/template1.html', context)
 
+
+@method_decorator(login_required,name='dispatch')
 class Template2(View):
     def get(self, request):
         return render(request, 'resume/template2.html')
