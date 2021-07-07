@@ -212,7 +212,7 @@ class Template2(View):
 def logout_request(request):
 	logout(request)
 	return redirect("/")
-=======
+
 # class Template3(View):
 #     def get(self,request):
 #         context={}
