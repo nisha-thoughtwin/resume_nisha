@@ -15,6 +15,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+
 #from resume_maker.settings import MAIL
 from django.core import mail
 
@@ -47,10 +48,14 @@ class Home(View):
 
 class Dashboard(View):
 
+    @method_decorator(login_required)
     def get(self, request):
-
-        return render(request, 'resume/dashboard.html')
-
+        # import pdb
+        # pdb.set_trace()
+        user = request.user
+        resume = Resume.objects.filter(user = user)
+        return render(request, 'resume/dashboard.html', {'resume': resume, })
+       
 
 class FresherResumeInput(View):
 
@@ -65,6 +70,7 @@ class FresherResumeInput(View):
         form5 = HobbiesForm
         form6 = CertificateForm
         form7 = AchievementsForm
+        
         context = {'form': form, 'form1': form1, 'form2': form2,
                    'form3': form3, 'form4': form4, 'form5': form5, 'form7': form7, 'form6': form6}
 
@@ -93,6 +99,8 @@ class FresherResumeInput(View):
         form5 = HobbiesForm(request.POST)
         form6 = CertificateForm(request.POST)
         form7 = AchievementsForm(request.POST)
+
+        # user_data = User.objects.all(request.user)
 
         if form.is_valid and form1.is_valid and form2.is_valid and form3.is_valid and form4.is_valid and form5.is_valid and form6.is_valid and form7.is_valid:
 
@@ -132,7 +140,7 @@ class FresherResumeInput(View):
                 eductation = f.save(commit=False)
                 eductation.resume = resume
                 eductation.save()
-<<<<<<< HEAD
+
             
             for s in form4: 
            
@@ -140,14 +148,6 @@ class FresherResumeInput(View):
                 skills.resume = resume
                 skills.save()
 
-
-=======
-            skills = form4.save(commit=False)
-            skills.resume = resume
-            skills.user = user
-
-            skills.save()
->>>>>>> 6c1a8e13badd67b6ab76a4a94ce8cc5502794246
             hobbies = form5.save(commit=False)
             hobbies.resume = resume
             hobbies.user = user
@@ -161,14 +161,16 @@ class FresherResumeInput(View):
             achievements.user = user
             achievements.save()
 
+            username = username
+            raw_password = random_password
+            user = authenticate(username=username, password=raw_password)
 
-            user = authenticate(username=username, password=random_password)
             # mail(username,random_password)
 
-            login(request, user)
-           
 
+            login(request, user)
             return redirect('dashboard')
+
 
         return HttpResponse("not done")
 
@@ -206,6 +208,11 @@ class Template2(View):
     def get(self, request):
         return render(request, 'resume/template2.html')
 
+
+def logout_request(request):
+	logout(request)
+	return redirect("/")
+=======
 # class Template3(View):
 #     def get(self,request):
 #         context={}
@@ -254,6 +261,7 @@ class Template3(View):
 
         return render(request, 'resume/template3.html', context)
 
+
 class Template4(View):
     def get(self, request):
         context = {}
@@ -264,13 +272,10 @@ class Template4(View):
         # for i in resume.education_set.all():
         #    print(i.degree_class)
 
-<<<<<<< HEAD
-        return render(request,'resume/template4.html', context)
-=======
+
 
         return render(request, 'resume/template4.html', context)
-
->>>>>>> 6c1a8e13badd67b6ab76a4a94ce8cc5502794246
+        
 
 # poornima....................................................................
 class Template5(View):
@@ -284,12 +289,53 @@ class Template5(View):
         return render(request,'resume/template5.html', context)
 
 
+class UpdateFresherData(View):
 
-  
-<<<<<<< HEAD
-=======
+    @method_decorator(login_required)
+    def get(self, request, id):
+        resume =  Resume.objects.get(pk=id)
 
-#..........................................................................................
+        modeleducation = Education.objects.filter(pk=id).first()
+        modelHobbies = Hobbies.objects.filter(pk=id ).first()
+        modelSkills = Skills.objects.filter(pk=id).first()
+        modelcertificate = Certificate.objects.filter(pk=id).first()
+        modelachievements = Achievements.objects.filter(pk=id).first()
+
+        form = EducationForm(instance=modeleducation)
+        form1 = HobbiesForm(instance=modelHobbies)
+        form2 = SkillsForm(instance=modelSkills)
+        form3 = CertificateForm(instance=modelcertificate)
+        form4 = AchievementsForm(instance=modelachievements)
+
+        eduform = EducationForm()
+        education = Education.objects.filter(resume=resume)
+    
+
+        context = {'form': form,'form1': form1,'form2': form2,'form3': form3,'form4': form4,
+        'eduform':eduform,'education':education}
 
 
->>>>>>> 6c1a8e13badd67b6ab76a4a94ce8cc5502794246
+        return render(request, 'resume/updatedata.html',context)
+
+    @method_decorator(login_required)
+    def post(self, request, id):
+        modeleducation = Education.objects.get(pk=id)   
+        modelHobbies = Hobbies.objects.get(pk=id)
+        modelSkills = Skills.objects.get(pk=id)
+        modelcertificate = Certificate.objects.get(pk=id)
+        modelachievements = Achievements.objects.get(pk=id)
+
+        form = EducationForm(request.POST ,instance=modeleducation)
+        form1 = HobbiesForm(request.POST ,instance=modelHobbies)
+        form2 = SkillsForm(request.POST ,instance=modelSkills)
+        form3 = CertificateForm(request.POST ,instance=modelcertificate)
+        form4 = AchievementsForm(request.POST ,instance=modelachievements)
+
+
+        if form.is_valid and form1.is_valid and form2.is_valid and form3.is_valid and form4.is_valid:
+            form.save()
+            form1.save()
+            form2.save()
+            form3.save()
+            form4.save()
+            return render(request, 'resume/updatedata.html')

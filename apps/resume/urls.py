@@ -8,6 +8,7 @@ from django.conf.urls.static import static
 
 urlpatterns =[
     path('',Home.as_view(),name='home'),
+    path('dashboard',Dashboard.as_view(),name='dashboard'),
     path('fresher',FresherResumeInput.as_view(),name='fresher_input'),
     path('experience',ExperienceResumeInput.as_view(),name='experience_input'),
 
@@ -19,12 +20,12 @@ urlpatterns =[
     path('resume4/',Template4.as_view(),name='resume4'),
 
     path('dashboard',Dashboard.as_view(),name='dashboard'),
-    path('resume',Template5.as_view(),name='Template5'),##poornima
-    path('mail',views.mail,name='mail')  
+    path('resume',Template5.as_view(),name='Template5'),
+    path('mail',views.mail,name='mail'),  
+    
+    path('logout', logout_request, name='logout'),
 
-
-
-
+    path('updatedata/<int:id>/', views.UpdateFresherData.as_view(), name='updatedata'),
 
 ]
 if settings.DEBUG:
