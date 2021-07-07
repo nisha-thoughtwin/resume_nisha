@@ -28,7 +28,8 @@
 
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="{% static 'resume/css/style.css' %}">
-<link rel="stylesheet" href="{% static 'resume/css/forminput.css' %}"
+    <link rel="stylesheet" href="{% static 'resume/css/forminput.css' %}">
+  
 
 
   {% block css %}
@@ -38,7 +39,7 @@
 
 
 <body id="top-header">
-{% include 'navbar.html' %}
+
 
   {% block main %}
     
@@ -141,7 +142,7 @@
     <script src="{% static 'resume/plugins/google-map/gmap3.min.js' %}"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwIQh7LGryQdDDi-A603lR8NqiF3R_ycA"></script>
     <script src="{% static 'resume/js/theme.js' %}"></script>
-
+  
     {% block js %}
       
     {% endblock js %}

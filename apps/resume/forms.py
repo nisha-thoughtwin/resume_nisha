@@ -3,7 +3,7 @@ from .models import Resume, UserExtraFields, Education, Skills, Experience, Hobb
 from django.contrib.auth.forms import UserCreationForm
 from .models import User
 from django.contrib.auth.password_validation import validate_password
-
+from django.forms import formset_factory,modelformset_factory
 
 # class CustomUserCreationForm(UserCreationForm):
 #     def clean_username(self):
@@ -28,6 +28,7 @@ from django.contrib.auth.password_validation import validate_password
 #         raise forms.ValidationError("Your passwords do not match. Please try again")
 #     return super(UserCreationForm, self).clean(*args, **kwargs)
 
+
 class UserForm(forms.ModelForm):
 
     class Meta:
@@ -49,7 +50,7 @@ class ResumeForm(forms.ModelForm):
             'objective': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'objective', 'name': 'objective', 'id': 'objective'}),
 
         }
-        fields = "__all__" 
+        fields = ("title", "objective")
 
 
 class UserExtraFieldsForm(forms.ModelForm):
@@ -66,20 +67,27 @@ class UserExtraFieldsForm(forms.ModelForm):
 
 
 class EducationForm(forms.ModelForm):
+
     class Meta:
         model = Education
+
         fields = ['degree_class', 'year_of_passing',
                   'percentage_or_grade', 'university']
 
         widgets = {
-    
-            'degree_class': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter your degree or class name', 'name': 'Name', 'id': 'Name'}),
+
+            'degree_class': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter your degree or class name', 'name': 'Name', 'id': 'Name',}),
             'year of passing': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'year of passing', 'name': 'year of passing', 'id': 'year of passing'}),
-            'grade/percentage': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'grade/percentage', 'name': 'grade/percentage', 'id': 'grade/percentage'}),
+            'percentage_or_grade': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'grade/percentage', 'name': 'grade/percentage', 'id': 'grade/percentage'}),
             'university': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'university', 'name': 'university', 'id': 'university'}),
 
 
         }
+
+
+# EducationFormSet = formset_factory(EducationForm,extra=1,max_num=None,  )
+
+EducationFormSet = modelformset_factory(Education,fields=("degree_class","year_of_passing","percentage_or_grade","university"),extra=1)
 
 
 class SkillsForm(forms.ModelForm):
@@ -90,7 +98,11 @@ class SkillsForm(forms.ModelForm):
             'skills': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your skills ', 'name': 'Name', 'id': 'Name'}),
 
         }
-        fields = ['skills']
+        fields = ['skills'] 
+
+# SkillsFormSet = formset_factory(SkillsForm,extra=1,max_num=None)
+SkillsFormSet = modelformset_factory(Skills,fields=("skills",),extra=1 )
+
 
 
 class ExperienceForm(forms.ModelForm):
@@ -101,11 +113,15 @@ class ExperienceForm(forms.ModelForm):
             'company name ': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'company name', 'name': 'company name', 'id': 'company name'}),
             'duration': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'duration', 'name': 'duration', 'id': 'duration'}),
             'designation': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'designation', 'name': 'designation', 'id': 'designation'}),
-            'role': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'role', 'name': 'role', 'id': 'role'}),
+            'role': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'role', 'name': 'role', 'id': 'role'}),
             'place': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'place', 'name': 'place', 'id': 'place'}),
 
         }
         fields = ['company_name', 'duration', 'designation', 'role', 'place']
+
+ExperienceFormSet = formset_factory(ExperienceForm,extra=1,max_num=None)
+
+        
 
 
 class HobbiesForm(forms.ModelForm):
@@ -117,6 +133,9 @@ class HobbiesForm(forms.ModelForm):
         }
         fields = ['hobbies']
 
+HobbiesFormSet = formset_factory(HobbiesForm,extra=1,max_num=None)
+
+
 
 class CertificateForm(forms.ModelForm):
     class Meta:
@@ -126,6 +145,9 @@ class CertificateForm(forms.ModelForm):
             'certificate': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Certificate', 'name': 'Name', 'id': 'Name'}),
         }
         fields = ['certificate']
+
+CertificateFormSet = formset_factory(CertificateForm,extra=1,max_num=None)
+
 
 
 class AchievementsForm(forms.ModelForm):
@@ -138,3 +160,4 @@ class AchievementsForm(forms.ModelForm):
 
         }
         fields = ['achievements']
+AchievementsFormSet = formset_factory(AchievementsForm,extra=1,max_num=None)

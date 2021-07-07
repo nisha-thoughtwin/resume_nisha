@@ -57,6 +57,34 @@ def sign_in(request):
     return render(request, 'resume/sign_in.html')
 
 @method_decorator(login_required,name='dispatch')
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
+#from resume_maker.settings import MAIL
+from django.core import mail
+
+date = date.strftime
+
+
+
+from django.http import HttpResponse  
+from resume_maker import settings  
+from django.core.mail import send_mail  
+  
+
+def mail(user,password):  
+    subject = "Greetings"  
+    msg     = f"Congratulations for your successfull ResumeForm username {user} ,passowrd {password}"  
+    to      = "nisha.thoughtwin@gmail.com"  
+    res     = send_mail(subject, msg, settings.EMAIL_HOST_USER, [to])  
+    if(res == 1):  
+        msg = "Mail Sent Successfuly"  
+    else:  
+        msg = "Mail could not sent"  
+    return HttpResponse(msg)  
+
+
 class Home(View):
     def get(self, request):
         return render(request, 'index.html')
@@ -67,11 +95,13 @@ class FresherResumeInput(View):
         form = ResumeForm
         form1 = UserForm
         form2 = UserExtraFieldsForm
-        form3 = EducationForm
-        form4 = SkillsForm
+        form3 = EducationFormSet(queryset=Education.objects.none())
+        form4 = SkillsFormSet(queryset=Skills.objects.none())
+
         form5 = HobbiesForm
         form6 = CertificateForm
         form7 = AchievementsForm
+        
         context = {'form': form, 'form1': form1, 'form2': form2,
                    'form3': form3, 'form4': form4, 'form5': form5, 'form7': form7, 'form6': form6}
         return render(request, 'resume/fresher.html', context)
@@ -83,34 +113,69 @@ class FresherResumeInput(View):
         res = ''.join(random.choices(string.ascii_uppercase +
                                      string.digits, k=8))
         random_password = str(res)
+        print(random_password)
+        # D70LOX2Y
+
         form = ResumeForm(request.POST)
         form1 = UserForm(request.POST)
         form2 = UserExtraFieldsForm(request.POST, request.FILES)
-        form3 = EducationForm(request.POST)
-        form4 = SkillsForm(request.POST)
+
+        form3 = EducationFormSet(data=request.POST)
+        # print(form3)
+
+        form4 = SkillsFormSet(request.POST,None)
         form5 = HobbiesForm(request.POST)
         form6 = CertificateForm(request.POST)
         form7 = AchievementsForm(request.POST)
+
+        # user_data = User.objects.all(request.user)
+
         if form.is_valid and form1.is_valid and form2.is_valid and form3.is_valid and form4.is_valid and form5.is_valid and form6.is_valid and form7.is_valid:
-            resume = form.save()
+
+            # for degree in request.POST.getlist('degree_class'):
+            #     e=Education(degree_class=degree)
+
+            #     e.resume= resume
+            #     for year in request.POST.getlist('year_of_passing'):
+            #         e.year_of_passing=year
+
+            #     for percentage in request.POST.getlist('percentage_or_grade',):
+            #         e.percentage_or_grade=percentage
+            #     for college in request.POST.getlist('university'):
+            #         e.university= college
+
+            #     e.save()
+
             user = form1.save(commit=False)
             username = first_name+str(random.randrange(100, 1000))
             if username not in User.objects.all():
                 user.username = username
-            user.password = random_password
+            user.set_password(random_password)
+
             user.save()
+            resume = form.save(commit=False)
+            resume.user = user
+            resume.save()
+
             userextra = form2.save(commit=False)
             userextra.resume = resume
-            userextra.user = user
+            # userextra.user = user
+
             userextra.save()
-            eductation = form3.save(commit=False)
-            eductation.resume = resume
-            eductation.user = user
-            eductation.save()
-            skills = form4.save(commit=False)
-            skills.resume = resume
-            skills.user = user
-            skills.save()
+            for f in form3:
+                # print(f)
+
+                eductation = f.save(commit=False)
+                eductation.resume = resume
+                eductation.save()
+
+            
+            for s in form4: 
+           
+                skills = s.save(commit=False)
+                skills.resume = resume
+                skills.save()
+
             hobbies = form5.save(commit=False)
             hobbies.resume = resume
             hobbies.user = user
@@ -123,7 +188,18 @@ class FresherResumeInput(View):
             achievements.resume = resume
             achievements.user = user
             achievements.save()
-            return HttpResponse("done")
+
+            username = username
+            raw_password = random_password
+            user = authenticate(username=username, password=raw_password)
+
+            # mail(username,random_password)
+
+
+            login(request, user)
+            return redirect('dashboard')
+
+
         return HttpResponse("not done")
     
 @method_decorator(login_required,name='dispatch')
@@ -167,139 +243,136 @@ class Template1(View):
 @method_decorator(login_required,name='dispatch')
 class Template2(View):
     def get(self, request):
+        return render(request, 'resume/template2.html')
+
+
+def logout_request(request):
+	logout(request)
+	return redirect("/")
+
+# class Template3(View):
+#     def get(self,request):
+#         context={}
+#         user_extra_filed=UserExtraFields.objects.get(user__pk=4)
+#         education=Education.objects.get(user__pk=4)
+#         experience=Experience.objects.get(user__pk=4)
+#         skills=Skills.objects.get(user__pk=4)
+#         certification=Certificate.objects.get(user__pk=4)
+#         achievements=Achievements.objects.get(user__pk=4)
+#         context['user_extra_filed']=user_extra_filed
+#         context['education']=education
+#         context['experience']=experience
+#         context['skills']=skills
+#         context['certification']=certification
+#         context['achievements']=achievements
+        
+#         return render(request,'resume/template3.html',context=context)
+
+
+
+# class Template4(View):
+#     def get(self, request):
+#         context = {}
+#         user = request.user
+#         resume = Resume.objects.get(user=user)
+#         context['resume'] = resume
+#         # print(resume.education_set.all().first().degree_class)
+#         # for i in resume.education_set.all():
+#         #    print(i.degree_class)
+
+
+#         return render(request, 'resume/template4.html', context)
+
+class Template3(View):
+    def get(self, request):
+        context = {}
+        user = request.user
+        resume = Resume.objects.get(user=user)
+        context['resume'] = resume
+        # print(resume.education_set.all()) 
+
+        # print(resume.education_set.all().first().degree_class)
+        # for i in resume.education_set.all():
+        #    print(i.degree_class)
+
+
+        return render(request, 'resume/template3.html', context)
+
+
+class Template4(View):
+    def get(self, request):
+        context = {}
+        user = request.user
+        resume = Resume.objects.get(user=user)
+        context['resume'] = resume
+        # print(resume.education_set.all().first().degree_class)
+        # for i in resume.education_set.all():
+        #    print(i.degree_class)
+
+
+
+        return render(request, 'resume/template4.html', context)
+        
+
+# poornima....................................................................
+class Template5(View):
+    def get(self, request):
         context ={}
         user = request.user
         resume = Resume.objects.get(user=user)
         context['resume']= resume
-        # print(resume.education_set.all().first().degree_class)    
-        # print(resume._set.all().first().phone)  
-        # for i in resume.education_set.all():
-        #    print(i.degree_class)
-        return render(request,'resume/template2.html', context)
-
-@method_decorator(login_required,name='dispatch')
-class Template3(View):
-    def get(self,request):
-        context={}
-        user_extra_filed=UserExtraFields.objects.get(user__pk=4)
-        education=Education.objects.get(user__pk=4)
-        experience=Experience.objects.get(user__pk=4)
-        skills=Skills.objects.get(user__pk=4)
-        hobbies=Hobbies.objects.get(user__pk=4)
-        certification=Certificate.objects.get(user__pk=4)
-        achievements=Achievements.objects.get(user__pk=4)
-        context['user_extra_filed']=user_extra_filed
-        context['education']=education
-        context['experience']=experience
-        context['skills']=skills
-        context['hobbies']=hobbies
-        context['certification']=certification
-        context['achievements']=achievements
-        return render(request,'resume/template3.html',context=context)
+        print(resume.education_set.all()) 
+        #mail(resume)
+        return render(request,'resume/template5.html', context)
 
 
-  # ---------------------------
+class UpdateFresherData(View):
 
-# #importing get_template from loader
-# from django.template.loader import get_template
- 
-# #import render_to_pdf from util.py 
-# from .utils import render_to_pdf 
- 
-# #Creating our view, it is a class based view
-# class GeneratePdf(View):
-#      def get(self, request, *args, **kwargs):
-        
-#         #getting the template
-#         pdf = render_to_pdf('resume/template2.html')
-         
-#          #rendering the template
-#         return HttpResponse(pdf, content_type='application/pdf')        
+    @method_decorator(login_required)
+    def get(self, request, id):
+        resume =  Resume.objects.get(pk=id)
 
+        modeleducation = Education.objects.filter(pk=id).first()
+        modelHobbies = Hobbies.objects.filter(pk=id ).first()
+        modelSkills = Skills.objects.filter(pk=id).first()
+        modelcertificate = Certificate.objects.filter(pk=id).first()
+        modelachievements = Achievements.objects.filter(pk=id).first()
 
-#------------------------------
+        form = EducationForm(instance=modeleducation)
+        form1 = HobbiesForm(instance=modelHobbies)
+        form2 = SkillsForm(instance=modelSkills)
+        form3 = CertificateForm(instance=modelcertificate)
+        form4 = AchievementsForm(instance=modelachievements)
 
-# -*- coding: utf-8 -*-
-# from .models import Person
-from django.http import HttpResponse
-from django.template.loader import render_to_string
-from weasyprint import HTML
-import tempfile
+        eduform = EducationForm()
+        education = Education.objects.filter(resume=resume)
+    
+
+        context = {'form': form,'form1': form1,'form2': form2,'form3': form3,'form4': form4,
+        'eduform':eduform,'education':education}
 
 
-def generate_pdf(request):
-    """Generate pdf."""
-    # Model data
-    # people = Person.objects.all().order_by('last_name')
-    context ={}
-    user = request.user
-    resume = Resume.objects.get(user=user)
-    context['resume']= resume
-    print(resume.education_set.all()) 
-    # Rendered
-    html_string = render_to_string('resume/template2.html',context)
-    html = HTML(string=html_string)
-    result = html.write_pdf()
+        return render(request, 'resume/updatedata.html',context)
 
-    # Creating http response
-    response = HttpResponse(content_type='application/pdf;')
-    response['Content-Disposition'] = 'inline; filename=list_people.pdf'
-    response['Content-Transfer-Encoding'] = 'binary'
-    with tempfile.NamedTemporaryFile(delete=True) as output:
-        output.write(result)
-        output.flush()
-        output = open(output.name, 'rb')
-        response.write(output.read())
+    @method_decorator(login_required)
+    def post(self, request, id):
+        modeleducation = Education.objects.get(pk=id)   
+        modelHobbies = Hobbies.objects.get(pk=id)
+        modelSkills = Skills.objects.get(pk=id)
+        modelcertificate = Certificate.objects.get(pk=id)
+        modelachievements = Achievements.objects.get(pk=id)
 
-    return response
-
-#----------------------------------------------------------------
-# # install Pdfcrowd: "pip install pdfcrowd", more...
-
-# import sys
-# import logging
-# from django.http import HttpResponse
-# from django.template.loader import render_to_string
-# from django.shortcuts import render
-# from django import forms
-# import pdfcrowd
-# # import logging
+        form = EducationForm(request.POST ,instance=modeleducation)
+        form1 = HobbiesForm(request.POST ,instance=modelHobbies)
+        form2 = SkillsForm(request.POST ,instance=modelSkills)
+        form3 = CertificateForm(request.POST ,instance=modelcertificate)
+        form4 = AchievementsForm(request.POST ,instance=modelachievements)
 
 
-
-# def generate_pdf(request):
-#     # form = TestForm(request.POST)
-#     if request.method != 'POST':
-#         return render(request, 'resume/template2.html')
-
-#     try:
-#         # enter your Pdfcrowd credentials to the converter's constructor
-#         client = pdfcrowd.HtmlToPdfClient('resume', 'ce544b6ea52a5621fb9d55f8b542d14d')
-
-#         part = request.POST.get('part_for_conversion')
-#         if part != None and part != 'all':
-#             # convert just selected part of the page
-#             client.setElementToConvert(part)
-
-#         # convert a web page and store the generated PDF to a variable
-#         logging.info('running Pdfcrowd HTML to PDF conversion')
-
-#         # set HTTP response headers
-#         response = HttpResponse(content_type='application/pdf')
-#         response['Cache-Control'] = 'max-age=0'
-#         response['Accept-Ranges'] = 'none'
-#         content_disp = 'attachment' if 'asAttachment' in request.POST else 'inline'
-#         response['Content-Disposition'] = content_disp + '; filename=demo_django.pdf'
-
-#         html = render_to_string(
-#             'resume/template2.html', {
-                
-#                 'pdfcrowd_remove': 'pdfcrowd-remove'
-#                 })
-#         client.convertStringToStream(html, response)
-
-#         # send the generated PDF
-#         return response
-#     except pdfcrowd.Error as why:
-#         logging.error('Pdfcrowd Error: %s', why)
-#         return HttpResponse(why)
+        if form.is_valid and form1.is_valid and form2.is_valid and form3.is_valid and form4.is_valid:
+            form.save()
+            form1.save()
+            form2.save()
+            form3.save()
+            form4.save()
+            return render(request, 'resume/updatedata.html')

@@ -42,7 +42,10 @@
                     </ul>
 
                     <ul class="ml-lg-auto list-unstyled m-0">
-                        <li><a href="#" class="btn btn-white btn-circled" data-toggle="modal" data-target="#exampleModalCenter" >Create Resume Now</a></li>
+                        <li> {% if user.is_authenticated %}
+                                <h3>{{request.user.username}}</h3> 
+                            {% endif %}
+                        </li>
                     </ul>
                 </div> <!-- / .navbar-collapse -->
             </nav>

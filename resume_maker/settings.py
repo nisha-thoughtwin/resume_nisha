@@ -140,3 +140,25 @@ LOGIN_REDIRECT_URL = '/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER ='nisha.thoughtwin@gmail.com'
+EMAIL_HOST_PASSWORD ='nisha1234567890'
+EMAIL_USE_TLS = True
+
+PROTOCOL = "http"
+DOMAIN = "127.0.0.1:8001"
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': '/password/reset/confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': '/username/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'auth/user/activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
+    'SEND_CONFRIMATION_EMAIL':True,
+    'SERIALIZERS': {},
+    'EMAIL':{
+        'activation': 'djoser.email.ActivationEmail',
+    },
+}

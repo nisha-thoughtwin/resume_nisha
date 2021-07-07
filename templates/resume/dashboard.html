@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+{% endblock css %}
+
+{% block main %}
+
+
+  <div class="todo">
+
+  <nav>
+    <div class="logo">
+      <div><img src="" alt=""></div>
+    </div>
+    <ul>
+      <h2><b><li>{{ user.get_full_name }}</li></b></h2>  
+      <li>Dashboard</li>
+      <li>Components</li>
+      <li>Widgets<i class="fas fa-chevron-right flecha"></i></li>
+        <ul class="subboton">
+          <li>Desk</li>
+        </ul>
+      <li>Metrics</li>
+      <li>Tables<i class="fas fa-chevron-right flecha"></i></li>
+        <ul class="subboton">
+          <li>Sales</li>
+        </ul>
+      <li>Timeline</li>
+      <li><a class="nav-link" href="/logout">Logout</a></li>
+    </ul>
+  </nav>
+
+
+
+<main class="panelD">
+
+  <header>
+    <img src="img/man.svg" alt="" class="perfil">
+    <img src="img/noti.svg" alt="">
+    <img src="img/chat.svg" alt="">
+  </header>
+
+  <h1 class="tituloD">Dashboard</h1>
+
+  <h2>Your Resume's<i class="fas fa-arrow-down"></i></h2>
+  <div class="tabla">
+    <table cellpadding="0" cellspacing="0" >
+      <tr class="negrita">
+        <th>Resume Name</th>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+        <th>Action</th>
+      </tr>
+      <tr>
+        {% for resumes in resume %}
+        <th>{{ resumes.title }}</th>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+        <th><a href="{% url 'updatedata' resumes.id %}"
+        class="btn btn-warning btn-sm">Update</a></th>
+
+        {% endfor %}
+      </tr>
+      
+    </table>
+  </div>
+
+  
+</main>
+
+</div>
+
+
+   
+{% endblock main %}
+
