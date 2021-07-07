@@ -26,7 +26,12 @@ from django.template.loader import get_template
 #import render_to_pdf from util.py 
 from .utils import render_to_pdf 
 
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
+#from resume_maker.settings import MAIL
+from django.core import mail
 
 def sign_up(request):
     if request.method=="POST":
@@ -60,14 +65,9 @@ def sign_in(request):
     return render(request, 'resume/sign_in.html')
 
 
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 
-#from resume_maker.settings import MAIL
-from django.core import mail
 
-date = date.strftime
+
 
 
 def mail(user, password):
@@ -102,7 +102,7 @@ class FresherResumeInput(View):
     def get(self, request):
         form = ResumeForm
         form1 = UserForm
-        form2 = UserExtraFieldsForm
+        form2 = ResumeUserDetails
         form3 = EducationFormSet(queryset=Education.objects.none())
         form4 = SkillsFormSet(queryset=Skills.objects.none())
 
@@ -126,7 +126,7 @@ class FresherResumeInput(View):
 
         form = ResumeForm(request.POST)
         form1 = UserForm(request.POST)
-        form2 = UserExtraFieldsForm(request.POST, request.FILES)
+        form2 = ResumeUserDetails(request.POST, request.FILES)
 
         form3 = EducationFormSet(data=request.POST)
         # print(form3)

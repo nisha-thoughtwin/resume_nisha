@@ -1,5 +1,5 @@
 from django import forms
-from .models import Resume, UserExtraFields, Education, Skills, Experience, Hobbies, Certificate, Achievements
+from .models import Resume, ResumeUserDetails, Education, Skills, Experience, Hobbies, Certificate, Achievements
 from django.contrib.auth.forms import UserCreationForm
 from .models import User
 from django.contrib.auth.password_validation import validate_password
@@ -55,15 +55,15 @@ class ResumeForm(forms.ModelForm):
 
 class UserExtraFieldsForm(forms.ModelForm):
     class Meta:
-        model = UserExtraFields
+        model = ResumeUserDetails
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'name': 'date_of_birth', 'id': 'date_of_birth'}),
-            'phone': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'phone', 'name': 'phone', 'id': 'phone'}),
+            'mobile': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'phone', 'name': 'phone', 'id': 'phone'}),
             'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'address', 'name': 'address', 'id': 'address'}),
 
 
         }
-        fields = ['date_of_birth', 'address', 'phone', 'photo']
+        fields = ['date_of_birth', 'address', 'mobile', 'photo']
 
 
 class EducationForm(forms.ModelForm):
@@ -71,12 +71,12 @@ class EducationForm(forms.ModelForm):
     class Meta:
         model = Education
 
-        fields = ['degree_class', 'year_of_passing',
+        fields = ['qualification_name', 'year_of_passing',
                   'percentage_or_grade', 'university']
 
         widgets = {
 
-            'degree_class': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter your degree or class name', 'name': 'Name', 'id': 'Name',}),
+            'qualification_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter your degree or class name', 'name': 'Name', 'id': 'Name',}),
             'year of passing': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'year of passing', 'name': 'year of passing', 'id': 'year of passing'}),
             'percentage_or_grade': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'grade/percentage', 'name': 'grade/percentage', 'id': 'grade/percentage'}),
             'university': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'university', 'name': 'university', 'id': 'university'}),
@@ -87,7 +87,7 @@ class EducationForm(forms.ModelForm):
 
 # EducationFormSet = formset_factory(EducationForm,extra=1,max_num=None,  )
 
-EducationFormSet = modelformset_factory(Education,fields=("degree_class","year_of_passing","percentage_or_grade","university"),extra=1)
+EducationFormSet = modelformset_factory(Education,fields=("qualification_name","year_of_passing","percentage_or_grade","university"),extra=1)
 
 
 class SkillsForm(forms.ModelForm):
@@ -111,13 +111,12 @@ class ExperienceForm(forms.ModelForm):
 
         widgets = {
             'company name ': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'company name', 'name': 'company name', 'id': 'company name'}),
-            'duration': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'duration', 'name': 'duration', 'id': 'duration'}),
-            'designation': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'designation', 'name': 'designation', 'id': 'designation'}),
+             'designation': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'designation', 'name': 'designation', 'id': 'designation'}),
             'role': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'role', 'name': 'role', 'id': 'role'}),
             'place': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'place', 'name': 'place', 'id': 'place'}),
 
         }
-        fields = ['company_name', 'duration', 'designation', 'role', 'place']
+        fields = ['company_name', 'designation', 'role', 'place']
 
 ExperienceFormSet = formset_factory(ExperienceForm,extra=1,max_num=None)
 

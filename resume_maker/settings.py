@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'apps.resume.apps.ResumeConfig',
 
 ]
-
+DATE_INPUT_FORMATS = ['%d/%m/%Y', ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

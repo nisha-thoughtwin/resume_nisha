@@ -9,12 +9,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns =[
-    path('home',Home.as_view(),name='home'),
-    path("",sign_in,name="sign_in"),
+    path('',Home.as_view(),name='home'),
+    path("login",sign_in,name="sign_in"),
     path("sign_up/",sign_up,name="sign_up"),
     # path('pdf/', GeneratePdf.as_view()), 
     
-    path('',Home.as_view(),name='home'),
+
     path('dashboard',Dashboard.as_view(),name='dashboard'),
     path('fresher',FresherResumeInput.as_view(),name='fresher_input'),
     path('experience',ExperienceResumeInput.as_view(),name='experience_input'),
