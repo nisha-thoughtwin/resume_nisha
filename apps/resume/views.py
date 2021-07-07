@@ -1,3 +1,6 @@
+from django.core.mail import send_mail
+from resume_maker import settings
+from django.http import HttpResponse
 from collections import UserString
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
@@ -22,22 +25,16 @@ from django.core import mail
 date = date.strftime
 
 
-
-from django.http import HttpResponse  
-from resume_maker import settings  
-from django.core.mail import send_mail  
-  
-
-def mail(user,password):  
-    subject = "Greetings"  
-    msg     = f"Congratulations for your successfull ResumeForm username {user} ,passowrd {password}"  
-    to      = "nisha.thoughtwin@gmail.com"  
-    res     = send_mail(subject, msg, settings.EMAIL_HOST_USER, [to])  
-    if(res == 1):  
-        msg = "Mail Sent Successfuly"  
-    else:  
-        msg = "Mail could not sent"  
-    return HttpResponse(msg)  
+def mail(user, password):
+    subject = "Greetings"
+    msg = f"Congratulations for your successfull ResumeForm username {user} ,passowrd {password}"
+    to = "nisha.thoughtwin@gmail.com"
+    res = send_mail(subject, msg, settings.EMAIL_HOST_USER, [to])
+    if(res == 1):
+        msg = "Mail Sent Successfuly"
+    else:
+        msg = "Mail could not sent"
+    return HttpResponse(msg)
 
 
 class Home(View):
@@ -53,9 +50,9 @@ class Dashboard(View):
         # import pdb
         # pdb.set_trace()
         user = request.user
-        resume = Resume.objects.filter(user = user)
+        resume = Resume.objects.filter(user=user)
         return render(request, 'resume/dashboard.html', {'resume': resume, })
-       
+
 
 class FresherResumeInput(View):
 
@@ -70,7 +67,7 @@ class FresherResumeInput(View):
         form5 = HobbiesForm
         form6 = CertificateForm
         form7 = AchievementsForm
-        
+
         context = {'form': form, 'form1': form1, 'form2': form2,
                    'form3': form3, 'form4': form4, 'form5': form5, 'form7': form7, 'form6': form6}
 
@@ -95,7 +92,7 @@ class FresherResumeInput(View):
         form3 = EducationFormSet(data=request.POST)
         # print(form3)
 
-        form4 = SkillsFormSet(request.POST,None)
+        form4 = SkillsFormSet(request.POST, None)
         form5 = HobbiesForm(request.POST)
         form6 = CertificateForm(request.POST)
         form7 = AchievementsForm(request.POST)
@@ -141,9 +138,8 @@ class FresherResumeInput(View):
                 eductation.resume = resume
                 eductation.save()
 
-            
-            for s in form4: 
-           
+            for s in form4:
+
                 skills = s.save(commit=False)
                 skills.resume = resume
                 skills.save()
@@ -167,10 +163,8 @@ class FresherResumeInput(View):
 
             # mail(username,random_password)
 
-
             login(request, user)
             return redirect('dashboard')
-
 
         return HttpResponse("not done")
 
@@ -210,9 +204,9 @@ class Template2(View):
 
 
 def logout_request(request):
-	logout(request)
-	return redirect("/")
-=======
+    logout(request)
+    return redirect("/")
+
 # class Template3(View):
 #     def get(self,request):
 #         context={}
@@ -228,9 +222,8 @@ def logout_request(request):
 #         context['skills']=skills
 #         context['certification']=certification
 #         context['achievements']=achievements
-        
-#         return render(request,'resume/template3.html',context=context)
 
+#         return render(request,'resume/template3.html',context=context)
 
 
 # class Template4(View):
@@ -252,12 +245,11 @@ class Template3(View):
         user = request.user
         resume = Resume.objects.get(user=user)
         context['resume'] = resume
-        # print(resume.education_set.all()) 
+        # print(resume.education_set.all())
 
         # print(resume.education_set.all().first().degree_class)
         # for i in resume.education_set.all():
         #    print(i.degree_class)
-
 
         return render(request, 'resume/template3.html', context)
 
@@ -272,70 +264,95 @@ class Template4(View):
         # for i in resume.education_set.all():
         #    print(i.degree_class)
 
-
-
         return render(request, 'resume/template4.html', context)
-        
+
 
 # poornima....................................................................
 class Template5(View):
     def get(self, request):
-        context ={}
+        context = {}
         user = request.user
         resume = Resume.objects.get(user=user)
-        context['resume']= resume
-        print(resume.education_set.all()) 
-        #mail(resume)
-        return render(request,'resume/template5.html', context)
+        context['resume'] = resume
+        print(resume.education_set.all())
+        # mail(resume)
+        return render(request, 'resume/template5.html', context)
 
 
 class UpdateFresherData(View):
 
     @method_decorator(login_required)
     def get(self, request, id):
-        resume =  Resume.objects.get(pk=id)
+        resume = Resume.objects.get(pk=id)
 
         modeleducation = Education.objects.filter(pk=id).first()
-        modelHobbies = Hobbies.objects.filter(pk=id ).first()
-        modelSkills = Skills.objects.filter(pk=id).first()
-        modelcertificate = Certificate.objects.filter(pk=id).first()
-        modelachievements = Achievements.objects.filter(pk=id).first()
 
         form = EducationForm(instance=modeleducation)
-        form1 = HobbiesForm(instance=modelHobbies)
-        form2 = SkillsForm(instance=modelSkills)
-        form3 = CertificateForm(instance=modelcertificate)
-        form4 = AchievementsForm(instance=modelachievements)
+  
 
         eduform = EducationForm()
         education = Education.objects.filter(resume=resume)
-    
-
-        context = {'form': form,'form1': form1,'form2': form2,'form3': form3,'form4': form4,
-        'eduform':eduform,'education':education}
 
 
-        return render(request, 'resume/updatedata.html',context)
+        context = {'form': form, 'eduform': eduform, 'education': education}
+
+        return render(request, 'resume/updatedata.html', context)
 
     @method_decorator(login_required)
     def post(self, request, id):
-        modeleducation = Education.objects.get(pk=id)   
-        modelHobbies = Hobbies.objects.get(pk=id)
-        modelSkills = Skills.objects.get(pk=id)
-        modelcertificate = Certificate.objects.get(pk=id)
-        modelachievements = Achievements.objects.get(pk=id)
 
-        form = EducationForm(request.POST ,instance=modeleducation)
-        form1 = HobbiesForm(request.POST ,instance=modelHobbies)
-        form2 = SkillsForm(request.POST ,instance=modelSkills)
-        form3 = CertificateForm(request.POST ,instance=modelcertificate)
-        form4 = AchievementsForm(request.POST ,instance=modelachievements)
+        resume = Resume.objects.get(id=id)
+
+        degree = request.POST.get("degree_class")
+        year = request.POST.get("year_of_passing")
+        percentage = request.POST.get("percentage_or_grade")
+        university = request.POST.get("university")
+        addeducation = Education(resume=resume,degree_class=degree,year_of_passing=year,percentage_or_grade=percentage,university=university)
+        addeducation.save()
+        print(request.POST)
+        print(resume)
+        return redirect("dashboard")
+
+     
 
 
-        if form.is_valid and form1.is_valid and form2.is_valid and form3.is_valid and form4.is_valid:
-            form.save()
-            form1.save()
-            form2.save()
-            form3.save()
-            form4.save()
-            return render(request, 'resume/updatedata.html')
+class UpdateEducation(View):
+
+    # @method_decorator(login_required)
+    # def get(self, request, id):
+    #     resume = Resume.objects.get(pk=id)
+
+    #     modeleducation = Education.objects.filter(pk=id).first()
+
+    #     form = EducationForm(instance=modeleducation)
+  
+
+    #     eduform = EducationForm()
+    #     education = Education.objects.filter(resume=resume)
+
+
+    #     context = {'form': form, 'eduform': eduform, 'education': education}
+
+    #     return render(request, 'resume/updatedata.html', context)
+
+    @method_decorator(login_required)
+    def post(self, request):
+
+        
+
+        degree = request.POST.get("degree_class")
+        year = request.POST.get("year_of_passing")
+        percentage = request.POST.get("percentage_or_grade")
+        university = request.POST.get("university")
+        print(request.POST)
+
+        updateedu = Education.objects.get(id= request.POST.get('id'))
+        updateedu.degree_class=degree
+        updateedu.year_of_passing=year
+        updateedu.percentage_or_grade=percentage
+        updateedu.university=university
+        updateedu.save()
+        
+        return redirect("dashboard")
+
+     

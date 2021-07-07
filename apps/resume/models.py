@@ -24,7 +24,7 @@ class UserExtraFields(models.Model):
 
 
 class Education(models.Model):
-    resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE,null=True)
     degree_class = models.CharField(max_length=100)
     year_of_passing = models.CharField(max_length=100)
     percentage_or_grade = models.CharField(max_length=100)

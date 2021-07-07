@@ -21,11 +21,15 @@ urlpatterns =[
 
     path('dashboard',Dashboard.as_view(),name='dashboard'),
     path('resume',Template5.as_view(),name='Template5'),
-    path('mail',views.mail,name='mail'),  
+    # path('mail',views.mail,name='mail'),  
     
     path('logout', logout_request, name='logout'),
 
     path('updatedata/<int:id>/', views.UpdateFresherData.as_view(), name='updatedata'),
+    path('update-edu/', views.UpdateEducation.as_view(), name='update_edu'),
+
+ 
+
 
 ]
 if settings.DEBUG:

@@ -56,11 +56,11 @@
       </tr>
       <tr>
         {% for resumes in resume %}
-        <th>{{ resumes.title }}</th>
+        <th><h4>{{ resumes.title }}</h4></th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
         <th><a href="{% url 'updatedata' resumes.id %}"
-        class="btn btn-warning btn-sm">Update</a></th>
+        class="btn btn-warning btn-sm">edit and add more</a></th>
 
         {% endfor %}
       </tr>
