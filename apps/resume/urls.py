@@ -36,10 +36,10 @@ urlpatterns =[
     path('updatedata/<int:id>/', views.UpdateFresherData.as_view(), name='updatedata'),
     path('update-edu/', views.UpdateEducation.as_view(), name='update_edu'),
     path('template1', choose_template1, name='template1'),
-    path('template2', choose_template1, name='template2'),
+    path('template2', choose_template2, name='template2'),
+    path('template3', choose_template3, name='template3'),
+    path('template4', choose_template4, name='template4'),
 
-
- 
 
 
 ]

@@ -7,6 +7,9 @@ from .choice import COMPETENCY_CHOICES
 class ChooseTemplate(models.Model):
     name = models.CharField(max_length=100, null=True,blank=True)
 
+    def __str__(self):
+        return str(self.name)
+
 
 class Resume(models.Model):
     template = models.ForeignKey(ChooseTemplate, on_delete=models.CASCADE,blank=True,null=True,related_name='template') #change

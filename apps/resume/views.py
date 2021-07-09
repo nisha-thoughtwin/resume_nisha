@@ -338,8 +338,50 @@ def choose_template2(request):
     form8 = CertificateForm
     form9 = AchievementsForm
    
-    template2 ="resume_templates/template1.html"
+    template2 ="resume_templates/template2.html"
     choose_template = ChooseTemplate.objects.create(name=template2)
+    context = {'form1': form1, 'form2': form2,'template':choose_template,
+                'form3': form3, 'form4': form4, 'form5': form5, 'form6': form6, 'form7': form7, 'form8': form8, 'form9': form9, }
+
+
+    return render(request,'resume/fresher.html',context)
+
+
+def choose_template3(request):
+
+    form1 = ResumeForm
+    form2 = ResumeUserDetailsForm
+    form3 = EducationFormSet(queryset=Education.objects.none())
+    form4 = ExperienceForm
+    form5 = WorkSamplesForms
+    form6 = SkillsFormSet(queryset=Skills.objects.none())
+    form7 = HobbiesForm
+    form8 = CertificateForm
+    form9 = AchievementsForm
+   
+    template3 ="resume_templates/template3.html"
+    choose_template = ChooseTemplate.objects.create(name=template3)
+    context = {'form1': form1, 'form2': form2,'template':choose_template,
+                'form3': form3, 'form4': form4, 'form5': form5, 'form6': form6, 'form7': form7, 'form8': form8, 'form9': form9, }
+
+
+    return render(request,'resume/fresher.html',context)
+
+
+def choose_template4(request):
+
+    form1 = ResumeForm
+    form2 = ResumeUserDetailsForm
+    form3 = EducationFormSet(queryset=Education.objects.none())
+    form4 = ExperienceForm
+    form5 = WorkSamplesForms
+    form6 = SkillsFormSet(queryset=Skills.objects.none())
+    form7 = HobbiesForm
+    form8 = CertificateForm
+    form9 = AchievementsForm
+   
+    template4 ="resume_templates/template4.html"
+    choose_template = ChooseTemplate.objects.create(name=template4)
     context = {'form1': form1, 'form2': form2,'template':choose_template,
                 'form3': form3, 'form4': form4, 'form5': form5, 'form6': form6, 'form7': form7, 'form8': form8, 'form9': form9, }
 
