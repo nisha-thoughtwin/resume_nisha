@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from .models import *
 
 COMPETENCY_CHOICES = (
@@ -15,8 +16,3 @@ RESUME_CHOICES = (
 
 
 
-# def choose_template1(self, request):
-
-#     template_name ="resume_templates/template1.html"
-#     choose_template = ChooseTemplate.objects.create(name=template_name)
-#     return None

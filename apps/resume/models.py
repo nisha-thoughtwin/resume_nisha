@@ -9,7 +9,7 @@ class ChooseTemplate(models.Model):
 
 
 class Resume(models.Model):
-    template = models.ForeignKey(ChooseTemplate, on_delete=models.CASCADE,blank=True,null=True) #change
+    template = models.ForeignKey(ChooseTemplate, on_delete=models.CASCADE,blank=True,null=True,related_name='template') #change
     user = models.ForeignKey(User, on_delete=models.CASCADE,blank=True,null=True) #change
     title = models.CharField(max_length=50)
     objective = models.TextField(max_length=400)

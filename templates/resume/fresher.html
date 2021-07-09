@@ -15,11 +15,13 @@
     min-width: 300px;
 }  
 </style>
-<form id="regForm" method="post" enctype="multipart/form-data">
+<form id="regForm" method="post" enctype="multipart/form-data" action="{% url 'fresher_input' %}">
   {% csrf_token %}
   <h1>Resume Form</h1>
   <!-- One "tab" for each step in the form: -->
   <div class="tab">
+
+    <input type="hidden" name="template1_id" value="{{ template.id }}">
    
    {{form1.as_p}}
     

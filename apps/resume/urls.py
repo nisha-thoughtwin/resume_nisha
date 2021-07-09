@@ -5,6 +5,7 @@ from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 from .views import *
+from .choice import *
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -34,6 +35,9 @@ urlpatterns =[
 
     path('updatedata/<int:id>/', views.UpdateFresherData.as_view(), name='updatedata'),
     path('update-edu/', views.UpdateEducation.as_view(), name='update_edu'),
+    path('template1', choose_template1, name='template1'),
+    path('template2', choose_template1, name='template2'),
+
 
  
 

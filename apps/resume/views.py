@@ -87,29 +87,32 @@ class Dashboard(View):
 
 
 class FresherResumeInput(View):
-    def get(self, request):
-        form1 = ResumeForm
-        form2 = ResumeUserDetailsForm
-        form3 = EducationFormSet(queryset=Education.objects.none())
-        form4 = ExperienceForm
-        form5 = WorkSamplesForms
-        form6 = SkillsFormSet(queryset=Skills.objects.none())
-        form7 = HobbiesForm
-        form8 = CertificateForm
-        form9 = AchievementsForm
-        context = {'form1': form1, 'form2': form2,
-                   'form3': form3, 'form4': form4, 'form5': form5, 'form6': form6, 'form7': form7, 'form8': form8, 'form9': form9, }
-        return render(request, 'resume/fresher.html', context)
+    # def get(self, request):
+    #     form1 = ResumeForm
+    #     form2 = ResumeUserDetailsForm
+    #     form3 = EducationFormSet(queryset=Education.objects.none())
+    #     form4 = ExperienceForm
+    #     form5 = WorkSamplesForms
+    #     form6 = SkillsFormSet(queryset=Skills.objects.none())
+    #     form7 = HobbiesForm
+    #     form8 = CertificateForm
+    #     form9 = AchievementsForm
+    #     context = {'form1': form1, 'form2': form2,
+    #                'form3': form3, 'form4': form4, 'form5': form5, 'form6': form6, 'form7': form7, 'form8': form8, 'form9': form9, }
+    #     return render(request, 'resume/fresher.html', context)
 
     def post(self, request):
-        print(request.POST)
+        # print(request.POST)
+        print(request.POST.get('template1_id'))
+        template_id=request.POST.get('template1_id')
+        template =ChooseTemplate.objects.get(id=template_id)
 
         form1 = ResumeForm(request.POST)
 
         form2 = ResumeUserDetailsForm(request.POST, request.FILES)
 
         form3 = EducationFormSet(data=request.POST)
-        print(form3)
+        # print(form3)
 
         form4 = SkillsFormSet(request.POST, None)
         form5 = HobbiesForm(request.POST)
@@ -119,7 +122,10 @@ class FresherResumeInput(View):
         if form1.is_valid and form2.is_valid and form3.is_valid and form4.is_valid and form5.is_valid and form6.is_valid and form7.is_valid:
 
             resume = form1.save(commit=False)
+            resume.template=template
+
             resume.user = request.user
+
             resume.save()
 
             resumeUserDetails = form2.save(commit=False)
@@ -299,3 +305,43 @@ class UpdateEducation(View):
 
 
    
+def choose_template1(request):
+
+    form1 = ResumeForm
+    form2 = ResumeUserDetailsForm
+    form3 = EducationFormSet(queryset=Education.objects.none())
+    form4 = ExperienceForm
+    form5 = WorkSamplesForms
+    form6 = SkillsFormSet(queryset=Skills.objects.none())
+    form7 = HobbiesForm
+    form8 = CertificateForm
+    form9 = AchievementsForm
+   
+    template1 ="resume_templates/template1.html"
+    choose_template = ChooseTemplate.objects.create(name=template1)
+    context = {'form1': form1, 'form2': form2,'template':choose_template,
+                'form3': form3, 'form4': form4, 'form5': form5, 'form6': form6, 'form7': form7, 'form8': form8, 'form9': form9, }
+
+
+    return render(request,'resume/fresher.html',context)
+
+
+def choose_template2(request):
+
+    form1 = ResumeForm
+    form2 = ResumeUserDetailsForm
+    form3 = EducationFormSet(queryset=Education.objects.none())
+    form4 = ExperienceForm
+    form5 = WorkSamplesForms
+    form6 = SkillsFormSet(queryset=Skills.objects.none())
+    form7 = HobbiesForm
+    form8 = CertificateForm
+    form9 = AchievementsForm
+   
+    template2 ="resume_templates/template1.html"
+    choose_template = ChooseTemplate.objects.create(name=template2)
+    context = {'form1': form1, 'form2': form2,'template':choose_template,
+                'form3': form3, 'form4': form4, 'form5': form5, 'form6': form6, 'form7': form7, 'form8': form8, 'form9': form9, }
+
+
+    return render(request,'resume/fresher.html',context)

@@ -50,6 +50,8 @@ admin.site.register(Hobbies, HobbiesAdmin)
 admin.site.register(Skills, SkillAdmin)
 admin.site.register(Certificate, CertificateAdmin)
 admin.site.register(Achievements, AchievementsAdmin)
+admin.site.register(ChooseTemplate)
+
 
 
 
