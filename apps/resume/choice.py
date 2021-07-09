@@ -1,3 +1,5 @@
+from .models import *
+
 COMPETENCY_CHOICES = (
     ('', '-----'),
     (1, 'Below Average'),
@@ -10,3 +12,11 @@ RESUME_CHOICES = (
     ('template2', 'Template2'),
     ('template3', 'Template3'),
     ('template4', 'Template4'), )
+
+
+
+# def choose_template1(self, request):
+
+#     template_name ="resume_templates/template1.html"
+#     choose_template = ChooseTemplate.objects.create(name=template_name)
+#     return None

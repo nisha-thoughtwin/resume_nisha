@@ -1,32 +1,10 @@
 from django import forms
-from .models import Resume, ResumeUserDetails, Education, Skills, Experience, Hobbies, Certificate, Achievements
+from .models import *
 from django.contrib.auth.forms import UserCreationForm
 from .models import User
 from django.contrib.auth.password_validation import validate_password
 from django.forms import formset_factory,modelformset_factory
 
-# class CustomUserCreationForm(UserCreationForm):
-#     def clean_username(self):
-#         username = self.cleaned_data['username']
-#         if len(username) < 5:
-#             raise forms.ValidationError("Your username is too short. A username must be at least 8 characters long")
-#         if User.objects.filter(username=username).exists():
-#             raise forms.ValidationError("Your username is already taken")
-#         return username
-
-# def clean_password1(self):
-#     password1 = self.cleaned_data['password1']
-#     if validate_password(password1):
-#         raise forms.ValidationError('This password is not valid')
-#     return password1
-
-# def clean(self, *args, **kwargs):
-#     password1 = self.cleaned_data.get("password1")
-#     password2 = self.cleaned_data.get("password2")
-
-#     if password1 != password2:
-#         raise forms.ValidationError("Your passwords do not match. Please try again")
-#     return super(UserCreationForm, self).clean(*args, **kwargs)
 
 
 class UserForm(forms.ModelForm):
@@ -39,7 +17,7 @@ class UserForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'email', 'name': 'email', 'id': 'email'}),
 
         }
-        fields = ('first_name', 'last_name', 'email')
+        fields = ('first_name', 'last_name', 'email','username','password')
 
 
 class ResumeForm(forms.ModelForm):
@@ -53,17 +31,20 @@ class ResumeForm(forms.ModelForm):
         fields = ("title", "objective")
 
 
-class UserExtraFieldsForm(forms.ModelForm):
+class ResumeUserDetailsForm(forms.ModelForm):
     class Meta:
         model = ResumeUserDetails
         widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'first_name', 'name': 'first_name', 'id': 'first_name'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'last_name', 'name': 'last_name', 'id': 'last_name'}),
+            'email': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'email', 'name': 'email', 'id': 'email'}),
+            'mobile': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'mobile', 'name': 'mobile', 'id': 'mobile'}),
             'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'name': 'date_of_birth', 'id': 'date_of_birth'}),
-            'mobile': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'phone', 'name': 'phone', 'id': 'phone'}),
             'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'address', 'name': 'address', 'id': 'address'}),
 
 
         }
-        fields = ['date_of_birth', 'address', 'mobile', 'photo']
+        fields = ['first_name', 'last_name','email', 'mobile','date_of_birth', 'address', 'photo']
 
 
 class EducationForm(forms.ModelForm):
@@ -76,9 +57,9 @@ class EducationForm(forms.ModelForm):
 
         widgets = {
 
-            'qualification_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter your degree or class name', 'name': 'Name', 'id': 'Name',}),
-            'year of passing': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'year of passing', 'name': 'year of passing', 'id': 'year of passing'}),
-            'percentage_or_grade': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'grade/percentage', 'name': 'grade/percentage', 'id': 'grade/percentage'}),
+            'qualification_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'enter your qualification name', 'name': 'qualification', 'id': 'qualification',}),
+            'year of passing': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'year of passing', 'name': 'year_of_passing', 'id': 'year_of_passing'}),
+            'percentage_or_grade': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'grade/percentage', 'name': 'percentage', 'id': 'percentage'}),
             'university': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'university', 'name': 'university', 'id': 'university'}),
 
 
@@ -90,12 +71,51 @@ class EducationForm(forms.ModelForm):
 EducationFormSet = modelformset_factory(Education,fields=("qualification_name","year_of_passing","percentage_or_grade","university"),extra=1)
 
 
+class ExperienceForm(forms.ModelForm):
+    class Meta:
+        model = Experience
+
+        widgets = {
+            'company name ': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'company name', 'name': 'company_name', 'id': 'company_name'}),
+            'designation': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'designation', 'name': 'designation', 'id': 'designation'}),
+            'role': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'role', 'name': 'role', 'id': 'role'}),
+            'place': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'place', 'name': 'place', 'id': 'place'}),
+            'start_date': forms.DateInput(attrs={'class': 'form-control', 'name': 'start_date', 'id': 'start_date'}),
+            'end_date': forms.DateInput(attrs={'class': 'form-control', 'name': 'end_date', 'id': 'end_date'}),
+
+        }
+        fields = ['company_name', 'designation','start_date','end_date', 'role', 'place']
+
+ExperienceFormSet = formset_factory(ExperienceForm,extra=1,max_num=None)
+
+
+class WorkSamplesForms(forms.ModelForm):
+
+     class Meta:
+        model = WorkSamples
+
+        widgets = {
+            'project_name ': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'project name', 'name': 'project_name', 'id': 'project_name'}),
+            'project_link': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'project link', 'name': 'project_link', 'id': 'project_link'}),
+            'technology': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'technology use', 'name': 'technology', 'id': 'technology'}),
+            'description': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'description', 'name': 'description', 'id': 'description'}),
+            'responsibilities': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'responsibilities', 'name': 'responsibilities', 'id': 'responsibilities'}),
+            'date': forms.DateInput(attrs={'class': 'form-control', 'name': 'date', 'id': 'date'}),
+
+        }
+
+        fields = ['project_name','project_link','technology','description','responsibilities','date']
+        
+
+
+
+
 class SkillsForm(forms.ModelForm):
     class Meta:
         model = Skills
 
         widgets = {
-            'skills': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your skills ', 'name': 'Name', 'id': 'Name'}),
+            'skills': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your skills ', 'skills': 'Name', 'id': 'skills'}),
 
         }
         fields = ['skills'] 
@@ -105,22 +125,7 @@ SkillsFormSet = modelformset_factory(Skills,fields=("skills",),extra=1 )
 
 
 
-class ExperienceForm(forms.ModelForm):
-    class Meta:
-        model = Experience
-
-        widgets = {
-            'company name ': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'company name', 'name': 'company name', 'id': 'company name'}),
-             'designation': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'designation', 'name': 'designation', 'id': 'designation'}),
-            'role': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'role', 'name': 'role', 'id': 'role'}),
-            'place': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'place', 'name': 'place', 'id': 'place'}),
-
-        }
-        fields = ['company_name', 'designation', 'role', 'place']
-
-ExperienceFormSet = formset_factory(ExperienceForm,extra=1,max_num=None)
-
-        
+   
 
 
 class HobbiesForm(forms.ModelForm):
@@ -128,7 +133,7 @@ class HobbiesForm(forms.ModelForm):
         model = Hobbies
 
         widgets = {
-            'hobbies': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Hobbies', 'name': 'Name', 'id': 'Name'}),
+            'hobbies': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Your Hobbies', 'name': 'hobbies', 'id': 'hobbies'}),
         }
         fields = ['hobbies']
 
@@ -141,7 +146,7 @@ class CertificateForm(forms.ModelForm):
         model = Certificate
 
         widgets = {
-            'certificate': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Certificate', 'name': 'Name', 'id': 'Name'}),
+            'certificate': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Certificate', 'name': 'certificate', 'id': 'certificate'}),
         }
         fields = ['certificate']
 
@@ -154,7 +159,7 @@ class AchievementsForm(forms.ModelForm):
         model = Achievements
 
         widgets = {
-            'achievements': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Achievements', 'name': 'achievements_name', 'id': 'achievements_name'}),
+            'achievements': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Achievements', 'name': 'achievements', 'id': 'achievements'}),
 
 
         }

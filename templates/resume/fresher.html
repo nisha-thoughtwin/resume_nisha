@@ -21,9 +21,14 @@
   <!-- One "tab" for each step in the form: -->
   <div class="tab">
    
-   {{form.as_p}}
+   {{form1.as_p}}
     
   </div>
+  <div class="tab"> <h4>Enter general Information:</h4>
+   
+    {{form2.as_p}}
+     
+   </div>
 
   <div class="tab"><h4>Enter About Your Education:</h4>
 
@@ -45,57 +50,36 @@
 </div>
 <input type="button" value="Add More" id="add_more">
 
-     
-    <!-- <div class="form_set">
-      {{ form3.management_form }}
-      {% for form_set in form3 %}
-      <div class="link-formset">
-        {{ form_set.as_p }}
-      </div>
-      {% endfor %}
-  </div> -->
-  <!-- <div id="empty_form" style="display:none">
-      <table class='no_error'>
-          {{ form3.empty_form.as_p }}
-      </table>
-  </div>
-
-   -->
-
-
-   {{ form4.management_form }}
-   <div id="form_set4">
-       {% for form in form4.forms %}
-         {{form.non_field_errors}}
-       {{form.errors}}
-           
-               {{ form }}
-           
-       {% endfor %}
-   </div>
-   <hr>
-   <div id="empty_form4" style="display:none">
-       
-           {{ form4.empty_form }}
    
-   </div>
-   <input type="button" value="Add More" id="add_more4">
+
+   
    
   </div>
 
-  <div class="tab"><h4>Enter general Information:</h4>
-  
-    {{form1.as_p}}
-   {{ form2.as_p}}
-  </div>
 
   <div class="tab"><h4>Enter  Your Skills and Hobbies:</h4>
 
-
+    {{ form6.management_form }}
+    <div id="form_set6">
+        {% for form in form6.forms %}
+          {{form.non_field_errors}}
+        {{form.errors}}
+            
+                {{ form }}
+            
+        {% endfor %}
+    </div>
+    <hr>
+    <div id="empty_form6" style="display:none">
+        
+            {{ form6.empty_form }}
+    
+    </div>
+    <input type="button" value="Add More" id="add_more6">
     <ul id="fieldListskills">
       <li>
         <!-- {{ form4.as_p}} -->
-        {{ form5.as_p}}
+        {{ form7.as_p}}
       </li>
 
       <hr>
@@ -107,8 +91,8 @@
 
   </div>
   <div class="tab"><h4>Enter  Your Certificate and Achievements Details:</h4>
-    {{ form6.as_p}}
-    {{ form7.as_p}}
+    {{ form8.as_p}}
+    {{ form9.as_p}}
   </div>
  
   <div style="overflow:auto;">
@@ -124,6 +108,9 @@
     <span class="step"></span>
     <span class="step"></span>
     <span class="step"></span>
+
+ 
+
 
 
 
@@ -229,16 +216,16 @@ $(document).on('click', '.add-form-row', function(e){
   
   
 
-  $('#add_more4').click(function() {
-    var form_idx = $('#id_skills-TOTAL_FORMS').val();
-    console.log('Element', $('#id_skills-TOTAL_FORMS'), 'Num of forms', form_idx);
+  $('#add_more6').click(function() {
+    var form_idx = $('#id_form-TOTAL_FORMS').val();
+    console.log('Element', $('#id_form-TOTAL_FORMS'), 'Num of forms', form_idx);
 
-    $('#form_set4').append($('#empty_form4').html().replace(/__prefix__/g, form_idx));
+    $('#form_set6').append($('#empty_form6').html().replace(/__prefix__/g, form_idx));
     $('#id_skills-TOTAL_FORMS').val(parseInt(form_idx) + 1);
-    console.log('Element', $('#id_skills-TOTAL_FORMS'));
+    console.log('Element', $('#id_form-TOTAL_FORMS'));
 
-    if ($("#form_set4 input").length === 0){
-      $("#add_more4").trigger("click");
+    if ($("#form_set6 input").length === 0){
+      $("#add_more6").trigger("click");
   }
 
 

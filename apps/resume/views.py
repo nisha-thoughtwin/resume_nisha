@@ -1,9 +1,16 @@
+from .utils import render_to_pdf
+from django.core import mail
+from django.contrib.auth import authenticate, login, logout
+from django.template.loader import get_template
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
 from django.core.mail import send_mail
 from resume_maker import settings
 from django.http import HttpResponse
 from collections import UserString
 from django.http.response import HttpResponse, HttpResponseRedirect
-from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from .forms import UserForm
 from django.shortcuts import redirect, render
 from django.views import View
@@ -17,44 +24,30 @@ from datetime import date
 import string
 from django.contrib.auth.models import User
 date = date.strftime
-from django.db import IntegrityError
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-#importing get_template from loader
-from django.template.loader import get_template
- 
-#import render_to_pdf from util.py 
-from .utils import render_to_pdf 
 
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-
-#from resume_maker.settings import MAIL
-from django.core import mail
 
 def sign_up(request):
-    if request.method=="POST":
+    if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
         email = request.POST["email"]
         try:
-            user = User.objects.create_user(username=username,email=email,password=password)
-            return render(request,"resume/sign_up.html",{"status":"Mr/Miss. {} your Account created Successfully".format(username)})
+            user = User.objects.create_user(
+                username=username, email=email, password=password)
+            return render(request, "resume/sign_up.html", {"status": "Mr/Miss. {} your Account created Successfully".format(username)})
         except IntegrityError as e:
-            return render(request,"resume/sign_up.html", {"status":"Mr/Miss. {} your Account Already  Exist".format(username)})
-    return render(request,"resume/sign_up.html")
-
+            return render(request, "resume/sign_up.html", {"status": "Mr/Miss. {} your Account Already  Exist".format(username)})
+    return render(request, "resume/sign_up.html")
 
 
 def sign_in(request):
     if request.method == 'POST':
-  
+
         # AuthenticationForm_can_also_be_used__
-  
+
         username = request.POST['username']
         password = request.POST['password']
-        user = authenticate(request, username = username, password = password)
+        user = authenticate(request, username=username, password=password)
         if user is not None:
             form = login(request, user)
             messages.success(request, f' welcome {username} !!')
@@ -65,18 +58,13 @@ def sign_in(request):
     return render(request, 'resume/sign_in.html')
 
 
-
-
-
-
-
 def mail(user, password):
     subject = "Greetings"
-    msg = f"Congratulations for your successfull ResumeForm username {user} ,passowrd {password}"
+    msg = f"Congratulations for your successfull ResumeForm username {user} ,password {password}"
     to = "nisha.thoughtwin@gmail.com"
     res = send_mail(subject, msg, settings.EMAIL_HOST_USER, [to])
     if(res == 1):
-        msg = "Mail Sent Successfuly"
+        msg = "Mail Sent Successfully"
     else:
         msg = "Mail could not sent"
     return HttpResponse(msg)
@@ -100,78 +88,45 @@ class Dashboard(View):
 
 class FresherResumeInput(View):
     def get(self, request):
-        form = ResumeForm
-        form1 = UserForm
-        form2 = ResumeUserDetails
+        form1 = ResumeForm
+        form2 = ResumeUserDetailsForm
         form3 = EducationFormSet(queryset=Education.objects.none())
-        form4 = SkillsFormSet(queryset=Skills.objects.none())
-
-        form5 = HobbiesForm
-        form6 = CertificateForm
-        form7 = AchievementsForm
-
-        context = {'form': form, 'form1': form1, 'form2': form2,
-                   'form3': form3, 'form4': form4, 'form5': form5, 'form7': form7, 'form6': form6}
+        form4 = ExperienceForm
+        form5 = WorkSamplesForms
+        form6 = SkillsFormSet(queryset=Skills.objects.none())
+        form7 = HobbiesForm
+        form8 = CertificateForm
+        form9 = AchievementsForm
+        context = {'form1': form1, 'form2': form2,
+                   'form3': form3, 'form4': form4, 'form5': form5, 'form6': form6, 'form7': form7, 'form8': form8, 'form9': form9, }
         return render(request, 'resume/fresher.html', context)
+
     def post(self, request):
         print(request.POST)
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
-        res = ''.join(random.choices(string.ascii_uppercase +
-                                     string.digits, k=8))
-        random_password = str(res)
-        print(random_password)
-        # D70LOX2Y
 
-        form = ResumeForm(request.POST)
-        form1 = UserForm(request.POST)
-        form2 = ResumeUserDetails(request.POST, request.FILES)
+        form1 = ResumeForm(request.POST)
+
+        form2 = ResumeUserDetailsForm(request.POST, request.FILES)
 
         form3 = EducationFormSet(data=request.POST)
-        # print(form3)
+        print(form3)
 
         form4 = SkillsFormSet(request.POST, None)
         form5 = HobbiesForm(request.POST)
         form6 = CertificateForm(request.POST)
         form7 = AchievementsForm(request.POST)
 
-        # user_data = User.objects.all(request.user)
+        if form1.is_valid and form2.is_valid and form3.is_valid and form4.is_valid and form5.is_valid and form6.is_valid and form7.is_valid:
 
-        if form.is_valid and form1.is_valid and form2.is_valid and form3.is_valid and form4.is_valid and form5.is_valid and form6.is_valid and form7.is_valid:
-
-            # for degree in request.POST.getlist('degree_class'):
-            #     e=Education(degree_class=degree)
-
-            #     e.resume= resume
-            #     for year in request.POST.getlist('year_of_passing'):
-            #         e.year_of_passing=year
-
-            #     for percentage in request.POST.getlist('percentage_or_grade',):
-            #         e.percentage_or_grade=percentage
-            #     for college in request.POST.getlist('university'):
-            #         e.university= college
-
-            #     e.save()
-
-            user = form1.save(commit=False)
-            username = first_name+str(random.randrange(100, 1000))
-            if username not in User.objects.all():
-                user.username = username
-            user.set_password(random_password)
-
-            user.save()
-            resume = form.save(commit=False)
-            resume.user = user
+            resume = form1.save(commit=False)
+            resume.user = request.user
             resume.save()
 
-            userextra = form2.save(commit=False)
-            userextra.resume = resume
-            # userextra.user = user
+            resumeUserDetails = form2.save(commit=False)
+            resumeUserDetails.resume = resume
 
-            userextra.save()
+            resumeUserDetails.save()
             for f in form3:
-                # print(f)
 
                 eductation = f.save(commit=False)
                 eductation.resume = resume
@@ -185,45 +140,44 @@ class FresherResumeInput(View):
 
             hobbies = form5.save(commit=False)
             hobbies.resume = resume
-            hobbies.user = user
+
             hobbies.save()
             certificate = form6.save(commit=False)
             certificate.resume = resume
-            certificate.user = user
+
             certificate.save()
             achievements = form7.save(commit=False)
             achievements.resume = resume
-            achievements.user = user
+
             achievements.save()
 
-            username = username
-            raw_password = random_password
-            user = authenticate(username=username, password=raw_password)
+            return HttpResponse("done")
 
-            # mail(username,random_password)
-
-            login(request, user)
-            return redirect('dashboard')
 
         return HttpResponse("not done")
-    
-@method_decorator(login_required,name='dispatch')
+
+
+@method_decorator(login_required, name='dispatch')
 class ExperienceResumeInput(View):
     def get(self, request):
-        form = ResumeForm
-        form1 = UserForm
-        form2 = UserExtraFieldsForm
-        form3 = EducationForm
-        form4 = SkillsForm
-        form5 = ExperienceForm
-        form6 = HobbiesForm
-        form7 = CertificateForm
-        form8 = AchievementsForm
-        context = {'form': form, 'form1': form1, 'form2': form2,
-                   'form3': form3, 'form4': form4, 'form5': form5, 'form6': form6, 'form7': form7, 'form8': form8}
+        form1 = ResumeForm
+
+        form2 = ResumeUserDetailsForm
+
+        form3 = EducationFormSet
+
+        form4 = ExperienceForm
+        form5 = WorkSamplesForms
+        form6 = SkillsFormSet
+        form7 = HobbiesForm
+        form8 = CertificateForm
+        form9 = AchievementsForm
+        context = {'form1': form1, 'form2': form2,
+                   'form3': form3, 'form4': form4, 'form5': form5, 'form6': form6, 'form7': form7, 'form8': form8, 'form9': form9, }
         return render(request, 'resume/experience.html', context)
-    
-@method_decorator(login_required,name='dispatch')
+
+
+@method_decorator(login_required, name='dispatch')
 class GenratePdf(View):
     def post(self, request):
         if request.method == 'POST':
@@ -232,60 +186,30 @@ class GenratePdf(View):
             # resume = Resume.objects.create(resume=pdf)
             return HttpResponse('download success')
 
-@method_decorator(login_required,name='dispatch')
+
+@method_decorator(login_required, name='dispatch')
 class Template1(View):
     def get(self, request):
-        context ={}
+        context = {}
         user = request.user
         print(user)
         resume = Resume.objects.get(user=user)
-        context['resume']= resume
+        context['resume'] = resume
         print(resume.education_set.all().first().degree_class)
-        #mail(resume)
-        return render(request,'resume/template1.html', context)
+        # mail(resume)
+        return render(request, 'resume/template1.html', context)
 
 
-@method_decorator(login_required,name='dispatch')
+@method_decorator(login_required, name='dispatch')
 class Template2(View):
     def get(self, request):
         return render(request, 'resume/template2.html')
 
 
 def logout_request(request):
-	logout(request)
-	return redirect("/")
+    logout(request)
+    return redirect("/")
 
-# class Template3(View):
-#     def get(self,request):
-#         context={}
-#         user_extra_filed=UserExtraFields.objects.get(user__pk=4)
-#         education=Education.objects.get(user__pk=4)
-#         experience=Experience.objects.get(user__pk=4)
-#         skills=Skills.objects.get(user__pk=4)
-#         certification=Certificate.objects.get(user__pk=4)
-#         achievements=Achievements.objects.get(user__pk=4)
-#         context['user_extra_filed']=user_extra_filed
-#         context['education']=education
-#         context['experience']=experience
-#         context['skills']=skills
-#         context['certification']=certification
-#         context['achievements']=achievements
-
-#         return render(request,'resume/template3.html',context=context)
-
-
-# class Template4(View):
-#     def get(self, request):
-#         context = {}
-#         user = request.user
-#         resume = Resume.objects.get(user=user)
-#         context['resume'] = resume
-#         # print(resume.education_set.all().first().degree_class)
-#         # for i in resume.education_set.all():
-#         #    print(i.degree_class)
-
-
-#         return render(request, 'resume/template4.html', context)
 
 class Template3(View):
     def get(self, request):
@@ -293,11 +217,6 @@ class Template3(View):
         user = request.user
         resume = Resume.objects.get(user=user)
         context['resume'] = resume
-        # print(resume.education_set.all())
-
-        # print(resume.education_set.all().first().degree_class)
-        # for i in resume.education_set.all():
-        #    print(i.degree_class)
 
         return render(request, 'resume/template3.html', context)
 
@@ -308,9 +227,6 @@ class Template4(View):
         user = request.user
         resume = Resume.objects.get(user=user)
         context['resume'] = resume
-        # print(resume.education_set.all().first().degree_class)
-        # for i in resume.education_set.all():
-        #    print(i.degree_class)
 
         return render(request, 'resume/template4.html', context)
 
@@ -336,11 +252,9 @@ class UpdateFresherData(View):
         modeleducation = Education.objects.filter(pk=id).first()
 
         form = EducationForm(instance=modeleducation)
-  
 
         eduform = EducationForm()
         education = Education.objects.filter(resume=resume)
-
 
         context = {'form': form, 'eduform': eduform, 'education': education}
 
@@ -355,38 +269,18 @@ class UpdateFresherData(View):
         year = request.POST.get("year_of_passing")
         percentage = request.POST.get("percentage_or_grade")
         university = request.POST.get("university")
-        addeducation = Education(resume=resume,degree_class=degree,year_of_passing=year,percentage_or_grade=percentage,university=university)
+        addeducation = Education(resume=resume, degree_class=degree, year_of_passing=year,
+                                 percentage_or_grade=percentage, university=university)
         addeducation.save()
         print(request.POST)
         print(resume)
         return redirect("dashboard")
 
-     
-
 
 class UpdateEducation(View):
 
-    # @method_decorator(login_required)
-    # def get(self, request, id):
-    #     resume = Resume.objects.get(pk=id)
-
-    #     modeleducation = Education.objects.filter(pk=id).first()
-
-    #     form = EducationForm(instance=modeleducation)
-  
-
-    #     eduform = EducationForm()
-    #     education = Education.objects.filter(resume=resume)
-
-
-    #     context = {'form': form, 'eduform': eduform, 'education': education}
-
-    #     return render(request, 'resume/updatedata.html', context)
-
     @method_decorator(login_required)
     def post(self, request):
-
-        
 
         degree = request.POST.get("degree_class")
         year = request.POST.get("year_of_passing")
@@ -394,13 +288,14 @@ class UpdateEducation(View):
         university = request.POST.get("university")
         print(request.POST)
 
-        updateedu = Education.objects.get(id= request.POST.get('id'))
-        updateedu.degree_class=degree
-        updateedu.year_of_passing=year
-        updateedu.percentage_or_grade=percentage
-        updateedu.university=university
+        updateedu = Education.objects.get(id=request.POST.get('id'))
+        updateedu.degree_class = degree
+        updateedu.year_of_passing = year
+        updateedu.percentage_or_grade = percentage
+        updateedu.university = university
         updateedu.save()
-        
+
         return redirect("dashboard")
 
-     
+
+   

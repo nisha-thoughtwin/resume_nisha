@@ -3,7 +3,13 @@ from django.contrib.auth.models import User
 from .choice import COMPETENCY_CHOICES
 
 
+
+class ChooseTemplate(models.Model):
+    name = models.CharField(max_length=100, null=True,blank=True)
+
+
 class Resume(models.Model):
+    template = models.ForeignKey(ChooseTemplate, on_delete=models.CASCADE,blank=True,null=True) #change
     user = models.ForeignKey(User, on_delete=models.CASCADE,blank=True,null=True) #change
     title = models.CharField(max_length=50)
     objective = models.TextField(max_length=400)
@@ -24,7 +30,7 @@ class ResumeUserDetails(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return str(self.user)
+        return str(self.first_name)
 
 
 class Education(models.Model):
@@ -59,9 +65,10 @@ class WorkSamples(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
     project_name =models.CharField(max_length=100)
     project_link = models.CharField(max_length=100)
-    technolgy = models.CharField(max_length=100,null=True, blank=True)
+    technology = models.CharField(max_length=100,null=True, blank=True)
     description =models.TextField(max_length=1000,null=True,blank=True)
     responsibilities =models.TextField(max_length=1000,null=True,blank=True)
+    logo = models.ImageField(upload_to='images/logos/' ,blank=True)
     date = models.DateField(null=True, blank=True)
 
 
