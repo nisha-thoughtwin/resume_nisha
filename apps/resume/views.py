@@ -35,9 +35,9 @@ def sign_up(request):
         last_name = request.POST["lastname"]
         username = request.POST["username"]
         password = request.POST["password"]
-        # email = request.POST["email"]
+        email = request.POST["email"]
         try:
-            user = User.objects.create_user(first_name=first_name,last_name=last_name,username=username,password=password)
+            user = User.objects.create_user(first_name=first_name,last_name=last_name,username=username,password=password,email=email)
             return render(request,"resume/sign_up.html",{"status":"Mr/Miss. {} your Account created Successfully".format(username)})
         except IntegrityError as e:
             return render(request,"resume/sign_up.html", {"status":"Mr/Miss. {} your Account Already  Exist".format(username)})
@@ -205,11 +205,9 @@ class Template1(View):
     def get(self, request):
         context = {}
         user = request.user
-        # print(user)
-        resume = Resume.objects.get(user=user)
+        resume = Resume.objects.filter(user=user).last()
         context['resume'] = resume
-        print(resume.education_set.all().first().degree_class)
-        # mail(resume)
+
         return render(request, 'resume/template1.html', context)
 
 

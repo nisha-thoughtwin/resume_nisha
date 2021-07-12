@@ -42,7 +42,7 @@
             <div class="entry">
               <!-- Begin Image -->
 
-              {% for object in resume.userextrafields_set.all %}
+              {% for object in resume.resumeuserdetails_set.all %}
 
               <img
                 class="portrait"
@@ -77,7 +77,7 @@
                   <li>
                     <a
                       class="north"
-                      href="{% url 'generate_pdf' %}"
+                      href=""
                       title="Download .pdf"
                     >
                       <img src="/static/images/icn-save.jpg" />
