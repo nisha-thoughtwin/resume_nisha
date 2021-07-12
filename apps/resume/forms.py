@@ -1,5 +1,5 @@
 from django import forms
-from .models import Resume, UserExtraFields, Education, Skills, Experience, Hobbies, Certificate, Achievements
+from .models import Resume, ResumeUserDetails, Education, Skills, Experience, Hobbies, Certificate, Achievements
 from django.contrib.auth.forms import UserCreationForm
 from .models import User
 from django.contrib.auth.password_validation import validate_password
@@ -53,12 +53,12 @@ class ResumeForm(forms.ModelForm):
         fields = ("title", "objective")
 
 
-class UserExtraFieldsForm(forms.ModelForm):
+class ResumeUserDetails(forms.ModelForm):
     class Meta:
-        model = UserExtraFields
+        model = ResumeUserDetails
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'name': 'date_of_birth', 'id': 'date_of_birth'}),
-            'phone': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'phone', 'name': 'phone', 'id': 'phone'}),
+            'mobile': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'phone', 'name': 'phone', 'id': 'phone'}),
             'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'address', 'name': 'address', 'id': 'address'}),
 
 
@@ -87,7 +87,7 @@ class EducationForm(forms.ModelForm):
 
 # EducationFormSet = formset_factory(EducationForm,extra=1,max_num=None,  )
 
-EducationFormSet = modelformset_factory(Education,fields=("degree_class","year_of_passing","percentage_or_grade","university"),extra=1)
+EducationFormSet = modelformset_factory(Education,fields=("degree_class","year_of_passing","percentage_or_grade","university"),extra=2)
 
 
 class SkillsForm(forms.ModelForm):
@@ -101,7 +101,7 @@ class SkillsForm(forms.ModelForm):
         fields = ['skills'] 
 
 # SkillsFormSet = formset_factory(SkillsForm,extra=1,max_num=None)
-SkillsFormSet = modelformset_factory(Skills,fields=("skills",),extra=1 )
+SkillsFormSet = modelformset_factory(Skills,fields=("skills",),extra=3 )
 
 
 

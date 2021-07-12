@@ -38,7 +38,7 @@ class AchievementsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Resume)
-admin.site.register(UserExtraFields)
+admin.site.register(ResumeUserDetails)
 admin.site.register(Education, EducationAdmin)
 admin.site.register(Experience, ExperienceAdmin)
 admin.site.register(Hobbies, HobbiesAdmin)

@@ -430,6 +430,10 @@ img.portrait {
 	background-image:url(../images/icn-web.gif);
 }
 
+.self ul li.cake {
+		background-image:url(https://img.icons8.com/material-outlined/24/000000/birthday-cake.png);
+}
+
 .self ul li {
 	background-repeat: no-repeat;
 	padding-left:26px;
