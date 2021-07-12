@@ -6,10 +6,7 @@
  
 
   <div>
-      <!-- Button trigger modal -->
-      <button type="button" class="btn btn-primary btn-lg" id="modal" data-toggle="modal" data-target="#modelId">
-        Launch
-      </button>
+      
       
       <!-- Modal -->
       <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
@@ -101,13 +98,17 @@
 
       <div class="jumbotron text-center">
         <h1 class="display-3">Thank You!</h1>
-        <p class="lead"><strong>Please check your email</strong> for further instructions on how to complete your account setup.</p>
+        <p class="lead"><strong>Please fill Sign Up or Sign In details</strong> for download resume.</p>
         <hr>
-        <p>
+        <!-- <p>
           Having trouble? <a href="">Contact us</a>
-        </p>
+        </p> -->
         <p class="lead">
-          <a class="btn btn-primary btn-sm" href="https://bootstrapcreative.com/" role="button">Continue to homepage</a>
+          <!-- <a class="btn btn-primary btn-sm" href="https://bootstrapcreative.com/" role="button">Continue to homepage</a> -->
+        <!-- Button trigger modal -->
+      <button type="button" class="btn btn-primary btn-sm" id="modal" data-toggle="modal" data-target="#modelId">
+        Sign Up/Sign In
+      </button>
         </p>
       </div>
   </div>
@@ -117,5 +118,7 @@
     $(document).ready(function(){
         $("#modal").click(); 
     });
+
+    
     </script>   
    {% endblock js %}
