@@ -33,8 +33,31 @@ urlpatterns =[
     
     path('logout', logout_request, name='logout'),
 
-    path('updatedata/<int:id>/', views.UpdateFresherData.as_view(), name='updatedata'),
+     path('updateresume/<int:id>/', views.ViewResumeDetail.as_view(), name='updateresume'),
+   
+   
+    path('add-edu/', views.AddEducation.as_view(), name='add_education'),
     path('update-edu/', views.UpdateEducation.as_view(), name='update_edu'),
+    path('deleteEdu/', views.DeleteEducation.as_view(), name='deleteEdu'),
+
+    path('add-skills/', views.AddSkillsData.as_view(), name='add_skills'),
+    path('deleteskill/<int:id>/', views.DeleteSkills.as_view(), name='deleteskill'),
+    path('update_skill/',UpdateSkills.as_view(),name='update_skill'),
+
+    path('add-hobbie/', views.AddHobbiesData.as_view(), name='add_hobbies'),
+    path('deletehobbie/<int:id>/', views.DeleteHobbies.as_view(), name='deletehobbie'),
+    path('update_hobbie/',UpdateHobbies.as_view(),name='update_hobbie'),
+
+
+    path('add-achievements/', views.AddAchievementsData.as_view(), name='add_achievements'),
+    path('deleteachievements/<int:id>/', views.DeleteAchievements.as_view(), name='deleteachievements'),
+    path('update_achievements/',UpdateAchievements.as_view(),name='update_achievements'),
+
+
+    path('add-experience/', views.AddExperienceData.as_view(), name='add_experience'),
+    path('deleteexperience/', views.DeleteExperience.as_view(), name='deleteexperience'),
+    path('update_experience/',UpdateExperience.as_view(),name='update_experience'),
+
     path('template1', choose_template1, name='template1'),
     path('template2', choose_template2, name='template2'),
     path('template3', choose_template3, name='template3'),

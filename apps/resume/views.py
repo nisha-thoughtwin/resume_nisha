@@ -1,4 +1,5 @@
-from .utils import render_to_pdf
+import datetime
+# from .utils import render_to_pdf
 from django.core import mail
 from django.contrib.auth import authenticate, login, logout
 from django.template.loader import get_template
@@ -24,6 +25,7 @@ from datetime import date
 import string
 from django.contrib.auth.models import User
 date = date.strftime
+# from .utils import render_to_pdf 
 
 
 def sign_up(request):
@@ -231,7 +233,7 @@ class Template4(View):
     def get(self, request):
         context = {}
         user = request.user
-        resume = Resume.objects.get(user=user)
+        resume = Resume.objects.filter(user=user).last()
         context['resume'] = resume
 
         return render(request, 'resume/template4.html', context)
@@ -249,60 +251,248 @@ class Template5(View):
         return render(request, 'resume/template5.html', context)
 
 
-class UpdateFresherData(View):
 
+
+
+class ViewResumeDetail(View):
     @method_decorator(login_required)
     def get(self, request, id):
         resume = Resume.objects.get(pk=id)
-
-        modeleducation = Education.objects.filter(pk=id).first()
-
-        form = EducationForm(instance=modeleducation)
-
+        print('...........',resume)
         eduform = EducationForm()
         education = Education.objects.filter(resume=resume)
 
-        context = {'form': form, 'eduform': eduform, 'education': education}
+        skillsform = SkillsForm()
+        skills = Skills.objects.filter(resume=resume)
+        
+        hobbiesform = HobbiesForm()
+        hobbies = Hobbies.objects.filter(resume=resume)
 
+        achievementsform = AchievementsForm()
+        achievements = Achievements.objects.filter(resume=resume)
+
+        experienceform = ExperienceForm()
+        experience = Experience.objects.filter(resume=resume)       
+        
+        context = {'resume':resume,'eduform': eduform, 'education': education,'skillsform': skillsform, 'skills': skills,'hobbiesform': hobbiesform, 'hobbies': hobbies,'achievementsform':achievementsform,'achievements':achievements ,'experienceform':experienceform,'experience':experience}
         return render(request, 'resume/updatedata.html', context)
 
+
+#poornima...........................................................
+
+class AddEducation(View):
     @method_decorator(login_required)
-    def post(self, request, id):
+    def post(self, request):
 
-        resume = Resume.objects.get(id=id)
-
-        degree = request.POST.get("degree_class")
+        resume = Resume.objects.get(pk=request.POST.get('id'))
+        qualification = request.POST.get("qualification_name")
         year = request.POST.get("year_of_passing")
         percentage = request.POST.get("percentage_or_grade")
         university = request.POST.get("university")
-        addeducation = Education(resume=resume, degree_class=degree, year_of_passing=year,
-                                 percentage_or_grade=percentage, university=university)
+        addeducation = Education(resume=resume,qualification_name=qualification,year_of_passing=year,percentage_or_grade=percentage,university=university)
+       
         addeducation.save()
         print(request.POST)
-        print(resume)
-        return redirect("dashboard")
+        
+        return redirect("updateresume" ,id=resume.id )
 
+     
 
 class UpdateEducation(View):
 
     @method_decorator(login_required)
     def post(self, request):
-
-        degree = request.POST.get("degree_class")
+        
+        degree = request.POST.get("qualification_name")
         year = request.POST.get("year_of_passing")
         percentage = request.POST.get("percentage_or_grade")
         university = request.POST.get("university")
+
+        upd_education = Education.objects.get(id = request.POST.get('id'))
+        upd_education.qualification_name=degree
+        upd_education.year_of_passing=year
+        upd_education.percentage_or_grade=percentage
+        upd_education.university=university
+        upd_education.save()
+  
         print(request.POST)
+        resume_id=request.POST.get("r_id")
+        return redirect("updateresume" ,id=resume_id )
+        
 
-        updateedu = Education.objects.get(id=request.POST.get('id'))
-        updateedu.degree_class = degree
-        updateedu.year_of_passing = year
-        updateedu.percentage_or_grade = percentage
-        updateedu.university = university
-        updateedu.save()
 
+class DeleteEducation(View):
+
+    def post(self, request):
+        edu = Education.objects.get(id=request.POST.get("e_id"))
+        edu.delete()
+        resume_id=request.POST.get("r_id")
+        return redirect("updateresume" ,id=resume_id )
+
+
+#poornima...........................................................
+
+class AddSkillsData(View):
+    @method_decorator(login_required)
+
+ 
+    @method_decorator(login_required)
+    def post(self, request, *args):
+        resume_id=request.POST.get("id")
+        
+        resume = Resume.objects.get(id=resume_id)
+        skills = request.POST.get("skills")
+        addskills = Skills(resume=resume)
+        addskills.skills = skills
+        addskills.save()
+       
+        return redirect("updateresume" ,id=resume.id )
+
+
+class UpdateSkills(View):
+
+    @method_decorator(login_required)
+    def post(self, request):
+        skill = Skills.objects.get(id=request.POST.get("id")) 
+        skill.skills=request.POST.get("skills")
+        skill.save()
+
+        resume_id=request.POST.get("r_id")
+        return redirect("updateresume" ,id=resume_id )
+
+
+class DeleteSkills(View):
+    @method_decorator(login_required)
+    def get(self, request,id):
+       
+        skills = Skills.objects.get(id=id)
+
+        skills.delete()
+
+        return HttpResponseRedirect("/dashboard/")
+#..................................................................   
+
+class AddHobbiesData(View):
+ 
+    @method_decorator(login_required)
+    def post(self, request):
+        resume = Resume.objects.get(id=request.POST.get("id"))
+        print(resume.id)
+        hobbies = request.POST.get("hobbies")
+        addhobbies = Hobbies(resume=resume)
+        addhobbies.hobbies = hobbies
+        addhobbies.save()
+        print(request.POST)
+        print(resume)
+        resume_id=request.POST.get("r_id")
+        return redirect("updateresume" ,id=resume.id )
+
+class UpdateHobbies(View):
+
+    @method_decorator(login_required)
+    def post(self, request):
+        hobbie = Hobbies.objects.get(id=request.POST.get("id")) 
+        hobbie.hobbies=request.POST.get("hobbies")
+        hobbie.save()
+
+        resume_id=request.POST.get("r_id")
+        return redirect("updateresume" ,id=resume_id )
+
+
+class DeleteHobbies(View):
+    @method_decorator(login_required)
+    def get(self, request,id):
+        hobbies = Hobbies.objects.get(id=id)
+        hobbies.delete()
         return redirect("dashboard")
 
+#.................................................................
+
+class AddAchievementsData(View):
+ 
+    @method_decorator(login_required)
+    def post(self, request):
+        resume = Resume.objects.get(id=request.POST.get("id"))
+        print(resume.id)
+        achievements = request.POST.get("achievements")
+        addachievements = Achievements(resume=resume)
+        addachievements.achievements = achievements
+        addachievements.save()
+        print(request.POST)
+        print(resume)
+        
+        return redirect("updateresume" ,id=resume.id )
+
+class UpdateAchievements(View):
+
+    @method_decorator(login_required)
+    def post(self, request):
+        achievement = Achievements.objects.get(id=request.POST.get("id")) 
+        achievement.achievements=request.POST.get("achievements")
+        achievement.save()
+
+        resume_id=request.POST.get("r_id")
+        return redirect("updateresume" ,id=resume_id )
+
+
+class DeleteAchievements(View):
+    @method_decorator(login_required)
+    def get(self, request,id):
+        achievements = Achievements.objects.get(id=id)
+        achievements.delete()
+        return HttpResponseRedirect("/dashboard")
+#..................................................................
+
+class AddExperienceData(View):
+    @method_decorator(login_required)
+    def post(self, request):
+        
+        resume = Resume.objects.get(pk=request.POST.get('id'))
+        company_name = request.POST.get("company_name")
+        designation = request.POST.get("designation")
+        role = request.POST.get("role")
+        place = request.POST.get("place")
+        start_date = request.POST.get("start_date")
+        end_date = request.POST.get("end_date")
+
+        addexperience = Experience(resume=resume,company_name=company_name,designation=designation,start_date=start_date,end_date=end_date,role=role,place=place)
+       
+        addexperience.save()
+        print(request.POST)
+        
+     
+        return redirect("updateresume" ,id=resume.id )
+
+
+class UpdateExperience(View):
+
+    @method_decorator(login_required)
+    def post(self, request):
+        experience = Experience.objects.get(id=request.POST.get("id")) 
+        experience.company_name=request.POST.get("company_name")
+        experience.designation=request.POST.get("designation")
+        experience.role=request.POST.get("role")
+        experience.place=request.POST.get("place")
+        experience.start_date=request.POST.get("start_date")
+        experience.end_date=request.POST.get("end_date")
+
+
+        
+        experience.save()
+
+        resume_id=request.POST.get("r_id")
+        return redirect("updateresume" ,id=resume_id )
+
+
+class DeleteExperience(View):
+    @method_decorator(login_required)
+    def post(self, request):
+        experience = Experience.objects.get(id=request.POST.get("ex_id"))
+        experience.delete()
+        resume_id=request.POST.get("r_id")
+        return redirect("updateresume" ,id=resume_id )
+
+#..............................................................................
 
    
 def choose_template1(request):
@@ -386,4 +576,16 @@ def choose_template4(request):
                 'form3': form3, 'form4': form4, 'form5': form5, 'form6': form6, 'form7': form7, 'form8': form8, 'form9': form9, }
 
 
+
     return render(request,'resume/fresher.html',context)
+
+
+import imgkit
+
+class GenratePdf(View):
+
+    def get(self, request):
+
+        imgkit.from_url('127.0.0.1:8000/resume4/', 'out.jpg')
+        return HttpResponse('done')
+

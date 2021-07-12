@@ -49,7 +49,7 @@ class Education(models.Model):
 
 class Experience(models.Model):
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    
     company_name = models.CharField(max_length=100)
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
