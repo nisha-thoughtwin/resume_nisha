@@ -1,3 +1,6 @@
+from django.shortcuts import render
+from .models import *
+
 COMPETENCY_CHOICES = (
     ('', '-----'),
     (1, 'Below Average'),
@@ -10,3 +13,6 @@ RESUME_CHOICES = (
     ('template2', 'Template2'),
     ('template3', 'Template3'),
     ('template4', 'Template4'), )
+
+
+

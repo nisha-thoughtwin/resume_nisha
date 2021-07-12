@@ -12,11 +12,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 
-    <link rel="stylesheet" href="{%static 'css/updatedata.css' %}">
+    <link rel="stylesheet" href="{% static 'css/updatedata.css' %}">
 </head>
 
 <body style="background: linear-gradient(to right, #667db6, #0082c8, #0082c8, #667db6); ">
- 
+
 
     <div class="container bg-white p-0" style="margin-top:200px ;min-height:600px;">
         <hr class="resume-progress ">
@@ -33,75 +33,97 @@
 
             </div>
             <!--Education Sction-->
+
             <div class="mt-2">
                 <div class="row m-2">
                     <div class=" text-info col-md-3 h4">EDUCATION</div>
                     <div class="col-md-9 row">
 
-                        {% for education in education %}
-                            <table class="table">
-                                <thead>
-                                  <tr>
-                                    
+                        <table class="table">
+                            <thead>
+                                <tr>
+
                                     <th scope="col">Degree class</th>
                                     <th scope="col">Year of passing</th>
                                     <th scope="col">Percentage or grade</th>
                                     <th scope="col">University</th>
                                     <th scope="col">Update</th>
                                     <th scope="col">Delete</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <td>{{education.degree_class}}</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for education in education %}
+
+                                <tr>
+                                    <td>{{education.qualification_name}}</td>
                                     <td>{{education.year_of_passing}}</td>
                                     <td>{{education.percentage_or_grade}}</td>
                                     <td>{{education.university}}</td>
-                                    <td><button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modelId">
-                                        update
-                                      </button></td>
-                                    <td><button type="button" class="btn btn-danger">Delete</button></td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                        {% endfor %}
-                        {% if educate %}
-                        <a href="{% url 'deleteEdu' %}" class="nav-link text-decoration-none"  style="position:absolute;left:720px;" class="d-inline " ><span>
-                            <i class="fas fa-trash-alt"></i></span></a>
-                        {% endif %}
-                       
+                                    <td><button type="button" class="btn btn-warning" data-id={{education.id}}
+                                            data-toggle="modal" data-target="#modelId{{education.id}}">
+                                            update
+                                        </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="modelId{{education.id}}" tabindex="-1" role="dialog"
+                                            aria-labelledby="modelTitleId" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">update</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="{% url 'update_edu' %}" method="post"
+                                                            enctype="multipart/form-data">
+                                                            {% csrf_token %}
+
+                                                            <div class="modal-body">
+                                                                <input type="hidden" name="r_id" value="{{ resume.id }}">
+
+
+                                                                <input type="hidden" value="{{education.id}}" name="id">
+
+                                                                {{eduform.as_p}}
+
+                                                                <button type="submit" value="Submit"
+                                                                    class="btn btn-success">Update</button>
+                                                            </div>
+
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <form method="post" , action="{% url 'deleteEdu' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="e_id" value="{{ education.id }}">
+                                            <input type="hidden" name="r_id" value="{{ resume.id }}">
+
+                                            
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                
+                                        </form>
+                                       
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+
+
                         <!-- Button trigger modal -->
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Modal title</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form action="" method="post" enctype="multipart/form-data">
-                                            {% csrf_token %}
-                                        
-                                            <div class="modal-body">
-                                    
-                                               {{ form.as_p }}                 
-                                        
-                                                <button type="submit" value="Submit" class="btn btn-success">Update</button>
-                                            </div>
-                                        
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
 
                         <a href="http://" class="addMoreItemContainer" data-toggle="modal" data-dismiss="modal"
                             data-target="#add-education-modal" id="education">+ Add Education</a>
@@ -111,459 +133,545 @@
                 <hr />
 
             </div>
+            <!--   education end-->
 
-            <!--Education section ends-->
-            <!--Job section-->
+                <!-- exprince start -->
+
+                <div class="mt-2">
+                <div class="row m-2">
+                    <div class=" text-info col-md-3 h4">Experience</div>
+                    <div class="col-md-9 row">
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+
+                                    <th scope="col">Company Name</th>
+                                    <th scope="col">Designation</th>
+                                    <th scope="col">Role</th>
+                                    <th scope="col">Place</th>
+                                    <th scope="col">start date</th>
+                                    <th scope="col">end date</th>
+                                    <th scope="col">Update</th>
+                                    <th scope="col">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for experience in experience %}
+
+                                <tr>
+                                    <td>{{experience.company_name}}</td>
+                                    <td>{{experience.designation}}</td>
+                                    <td>{{experience.start_date}}</td>
+                                    <td>{{experience.end_date}}</td>
+
+                                    <td>{{experience.role}}</td>
+                                    <td>{{experience.place}}</td>
+                                    
+                                    <td><button type="button" class="btn btn-warning" data-id={{experience.id}}
+                                            data-toggle="modal" data-target="#modelexperience{{experience.id}}">
+                                            update
+                                        </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="modelexperience{{experience.id}}" tabindex="-1" role="dialog"
+                                            aria-labelledby="modelTitleId" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">update</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="{% url 'update_experience' %}" method="post"
+                                                            enctype="multipart/form-data">
+                                                            {% csrf_token %}
+
+                                                            <div class="modal-body">
+                                                                <input type="hidden" name="r_id" value="{{ resume.id }}">
+
+
+                                                                <input type="hidden" value="{{experience.id}}" name="id">
+
+                                                                {{experienceform.as_p}}
+
+                                                                <button type="submit" value="Submit"
+                                                                    class="btn btn-success">Update</button>
+                                                            </div>
+
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <form method="post" , action="{% url 'deleteexperience' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="ex_id" value="{{ experience.id }}">
+                                            <input type="hidden" name="r_id" value="{{ resume.id }}">
+
+                                            
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                
+                                        </form>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+
+
+                        <!-- Button trigger modal -->
+
+
+
+                        <a href="http://" class="addMoreItemContainer" data-toggle="modal" data-dismiss="modal"
+                            data-target="#add-experience-modal" id="experience">+ Add Experience</a>
+                    </div>
+
+                </div>
+                <hr />
+
+            </div>
+                <!-- exprince end -->
+
+
+
+            <!-- skill section -->
+
             <div class="mt-2">
                 <div class="row m-2">
                     <div class=" text-info col-md-3 h4">SKILLS</div>
                     <div class="col-md-9 row">
-                        {% if jobs %}
-                        <a href="{% url 'deletejob' %}" class="nav-link text-decoration-none"  style="position:absolute;left:720px;" class="d-inline " ><span>
-                            <i class="fas fa-trash-alt"></i></span></a>
-                        {% endif %}
-                         {% for i in jobs%}
-                        <div class="col-md-12 p-2">
-                            <h6 class="font-weight-bold d-inline">{{i.0}}</h6>
-                            <div>{{i.1}} </div>
-                            <div>Location :{{i.2}}</div>
-                            <div class="d-inline">{{i.3}}</div> to
-                            <div class="d-inline">{{i.4}}</div>
-                            <div>Description :{{i.5}}</div>
-                        </div>
-                        {% endfor %}
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+
+                                    <th scope="col">Skills</th>
+                                    <th scope="col">update</th>
+                                    <th scope="col">Delete</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for skill in skills %}
+
+                                <tr>
+                                    <td>{{skill.skills}}</td>
+
+                                    <td><button type="button" class="btn btn-warning" data-id={{skill.id}}
+                                            data-toggle="modal" data-target="#modelId{{skill.id}}">
+                                            update
+                                        </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="modelId{{skill.id}}" tabindex="-1" role="dialog"
+                                            aria-labelledby="modelTitleId" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">update</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="{% url 'update_skill' %}" method="post"
+                                                            enctype="multipart/form-data">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="r_id" value="{{ resume.id }}">
+
+
+
+                                                            <input type="hidden" value="{{skill.id}}" name="id">
+
+                                                            {{skillsform.as_p}}
+
+                                                            <button type="submit" value="Submit"
+                                                                class="btn btn-success">Update</button>
+
+
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td><a type="button" class="btn btn-danger"
+                                            href="{% url 'deleteskill' skill.id %}">Delete</a></td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+
+
+                        <!-- Button trigger modal -->
+
+
 
                         <a href="http://" class="addMoreItemContainer" data-toggle="modal" data-dismiss="modal"
-                            data-target="#job-modal" id="education">+ Add Job</a>
+                            data-target="#add-skills-modal" id="skill">+ Add Skills</a>
                     </div>
-                </div>
-            </div>
-            <hr>
 
-            <!--Job section -->
-            <!--Internship section-->
+                </div>
+                <hr />
+
+            </div>
+
+            <!-- skill end -->
+
+
+
+            <!-- -------------------------- -->
+
+
+            <!-- hobbies section -->
+
             <div class="mt-2">
                 <div class="row m-2">
-                    <div class=" text-info col-md-3 h4">Internship</div>
+                    <div class=" text-info col-md-3 h4">HOBBIES</div>
                     <div class="col-md-9 row">
-                        {% if intern %}
-                        <a href="{% url 'deleteintern' %}" class="nav-link text-decoration-none"  style="position:absolute;left:720px;" class="d-inline " ><span>
-                            <i class="fas fa-trash-alt"></i></span></a>
-                        {% endif %}
-                         {% for i in intern%}
-                        <div class="col-md-12 p-2">
-                            <h6 class="font-weight-bold d-inline">{{i.0}}</h6>
-                            <div>{{i.1}} </div>
-                            <div>Location :{{i.2}}</div>
-                            <div class="d-inline">{{i.3}}</div> to
-                            <div class="d-inline">{{i.4}}</div>
-                            <div>Description :{{i.5}}</div>
-                        </div>
-                        {% endfor %}
-                        <a href="http://" class="addMoreItemContainer" data-toggle="modal" data-dismiss="modal"
-                            data-target="#intern-modal" id="education">+ Add Internship</a>
-                    </div>
-                </div>
-            </div>
-            <hr>
 
-            <!--Internship section -->
-            <!--Trainings section-->
-            <div class="mt-2">
+                        <table class="table">
+                            <thead>
+                                <tr>
+
+                                    <th scope="col">hobbies</th>
+                                    <th scope="col">update</th>
+                                    <th scope="col">Delete</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for hobbie in hobbies %}
+
+                                <tr>
+                                    <td>{{hobbie.hobbies}}</td>
+
+                                    <td><button type="button" class="btn btn-warning" data-id={{hobbie.id}}
+                                            data-toggle="modal" data-target="#modelid{{hobbie.id}}">
+                                            update
+                                        </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="modelid{{hobbie.id}}" tabindex="-1" role="dialog"
+                                            aria-labelledby="modelTitleId" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">update</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="{% url 'update_hobbie' %}" method="post"
+                                                            enctype="multipart/form-data">
+                                                            {% csrf_token %}
+
+                                                            <input type="hidden" name="r_id" value="{{ resume.id }}">
+
+
+                                                            <input type="hidden" value="{{hobbie.id}}" name="id">
+
+                                                            
+
+                                                            <button type="submit" 
+                                                                class="btn btn-success">Update</button>
+
+
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        
+
+                                        
+                                    </td>
+
+                                    <td><a type="button" class="btn btn-danger"
+                                            href="{% url 'deletehobbie' hobbie.id %}">Delete</a></td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+
+
+                        <!-- Button trigger modal -->
+
+
+
+                        <a href="http://" class="addMoreItemContainer" data-toggle="modal" data-dismiss="modal"
+                            data-target="#add-hobbies-modal" id="hobbie">+ Add Hobbies</a>
+                    </div>
+
+                </div>
+                <hr />
+
+            </div>
+
+            <!-- hobbies end -->
+
+            <!-- acviment start-->
+                                
+                <div class="mt-2">
                 <div class="row m-2">
-                    <div class=" text-info col-md-3 h4">Trainings</div>
+                    <div class=" text-info col-md-3 h4">ACHIEVEMENTS</div>
                     <div class="col-md-9 row">
-                        {% if train %}
-                        <a href="{% url 'deletetrain' %}" class="nav-link text-decoration-none"  style="position:absolute;left:720px;" class="d-inline " ><span>
-                            <i class="fas fa-trash-alt"></i></span></a>
-                        {% endif %}
-                        {% for i in train%}
-                        <div class="col-md-12 p-2">
-                            <h6 class="font-weight-bold d-inline">{{i.0}}</h6>
-                            <div>{{ i.1}} </div>
-                            <div class="d-inline">{{i.2}}</div>-
-                            <div class="d-inline"> {{i.3}} </div>
-                            <div>Description: {{i.4}}</div>
-                        </div>
-                        {% endfor %}
-                        <a href="http://" class="addMoreItemContainer" data-toggle="modal" data-dismiss="modal"
-                            data-target="#train-modal" id="education">+ Add Trainings</a>
-                    </div>
-                </div>
-            </div>
-            <hr>
 
-            <!--Trainings section ends-->
-            <!--Project Section-->
-            <div class="mt-2">
-                <div class="row m-2">
-                    <div class=" text-info col-md-3 h4">Projects</div>
-                    <div class="col-md-9 row">
-                        {% if project %}
-                        <a href="{% url 'deleteproject' %}" class="nav-link text-decoration-none"  style="position:absolute;left:720px;" class="d-inline " ><span>
-                            <i class="fas fa-trash-alt"></i></span></a>
-                        {% endif %}
-                        {% for i in project%}
-                        <div class="col-md-12 p-2">
-                            <h6 class="font-weight-bold d-inline">{{i.0}}</h6>
-                            <br>
-                            <div class="d-inline"> {{ i.1}} </div>-
-                            <div class="d-inline">{{i.2}}</div>
-                            <div><a href="{{i.3}}" target="_blank">{{i.3}}</a>
-                            </div>
-                            <div>Description :{{i.4}}</div>
-                        </div>
-                        {% endfor %}
+                        <table class="table">
+                            <thead>
+                                <tr>
 
-                        <a href="http://" class="addMoreItemContainer" data-toggle="modal" data-dismiss="modal"
-                            data-target="#pro-modal" id="education">+ Add Project</a>
-                    </div>
-                </div>
-            </div>
-            <hr>
+                                    <th scope="col">achievements</th>
+                                    <th scope="col">update</th>
+                                    <th scope="col">Delete</th>
 
-            <!--Project Section ends-->
-            <!--Skills Section-->
-            <div class="mt-2">
-                <div class="row m-2">
-                    <div class=" text-info col-md-3 h4">Skills</div>
-                    <div class="col-md-9 row">
-                        <div class="col-md-12  row">
-                            {% if skill %}
-                                <a href="{% url 'deleteskill' %}" class="nav-link text-decoration-none"  style="position:absolute;left:720px;" class="d-inline " ><span>
-                                <i class="fas fa-trash-alt"></i></span></a>
-                            {% endif %}
-                            {% for i in skill%}
-                            <div class="d-inline col-md-6 p-2"><li>{{i.0}}</li></div>
-                            {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for achievement in achievements %}
 
-                        </div>
+                                <tr>
+                                    <td>{{achievement.achievements}}</td>
 
-                        <a href="http://" class="addMoreItemContainer" data-toggle="modal" data-dismiss="modal"
-                            data-target="#skill-modal" id="education">+ Add Trainings</a>
-                    </div>
-                </div>
-            </div>
-            <hr>
+                                    <td><button type="button" class="btn btn-warning" data-id={{achievement.id}}
+                                            data-toggle="modal" data-target="#modelachievement{{achievement.id}}">
+                                            update
+                                        </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="modelachievement{{achievement.id}}" tabindex="-1" role="dialog"
+                                            aria-labelledby="modelTitleId" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">update</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="{% url 'update_achievements' %}" method="post"
+                                                            enctype="multipart/form-data">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="r_id" value="{{ resume.id }}">
 
-            <!--Skills Sction Ends-->
-            <!--additional section-->
-            <div class="mt-2">
-                <div class="row m-2">
-                    <div class=" text-info col-md-3 h4">Additional Details</div>
-                    <div class="col-md-9 row">
-                        <div class="col-md-11">
-                            {% if add %}
-                                <a href="{% url 'deleteadd' %}" class="nav-link text-decoration-none"  style="position:absolute;left:700px;" class="d-inline " ><span>
-                                <i class="fas fa-trash-alt"></i></span></a>
-                            {% endif %}
-                            {% for i in add %}
-                            <div class="p-2"><li>{{i.0}}</li></div>
-                            {% endfor %}
-                        </div>
+
+
+                                                            <input type="hidden" value="{{achievement.id}}" name="id">
+                                                            {{achievementsform.as_p}}
+
+                                                            
+
+                                                            <button type="submit" 
+                                                                class="btn btn-success">Update</button>
+
+
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        
+
+                                        
+                                    </td>
+
+                                    <td><a type="button" class="btn btn-danger"
+                                            href="{% url 'deleteachievements' achievement.id %}">Delete</a></td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+
+
+                        <!-- Button trigger modal -->
+
+
 
                         <a href="http://" class="addMoreItemContainer" data-toggle="modal" data-dismiss="modal"
-                            data-target="#add-modal" id="education">+ Additional Details</a>
+                            data-target="#add-achievements-modal" id="achievement">+ Add Achievements</a>
                     </div>
+
                 </div>
+                <hr />
+
             </div>
 
-            <!--additional Section ends-->
+                <!--     acviment end -->        
 
-        </div>
+
+            </div>
+
         <!--Education Section-->
-        <!--modals-->
-        <!-- Education Modal-->
+
         <div class="modal fade" id="add-education-modal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body">
+
+
                         <h4 class="modal-title d-inline">Education :</h4>
                         <button type="button" class="close d-inline" data-dismiss="modal">&times;</button>
-                        {{eduform}}
+                        <form method="post" , action="{% url 'add_education' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ resume.id }}">
+                            {{eduform}}
+                            <button type="submit" class="btn btn-primary">Submit</button>
+
+                        </form>
                         <hr>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--modals-->
+
+            <!-- exprince -->
+            <div class="modal fade" id="add-experience-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+
+
+                        <h4 class="modal-title d-inline">Experience :</h4>
+                        <button type="button" class="close d-inline" data-dismiss="modal">&times;</button>
+                        <form method="post" , action="{% url 'add_experience' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ resume.id }}">
+                            {{experienceform}}
+                            <button type="submit" class="btn btn-primary">Submit</button>
+
+                        </form>
+                        <hr>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--modals-->
+
+
+
+
+        <!-- Skills Modal-->
+        <div class="modal fade" id="add-skills-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body">
+
+
+                        <h4 class="modal-title d-inline">Skills :</h4>
+                        <button type="button" class="close d-inline" data-dismiss="modal">&times;</button>
+                        <form method="post" , action="{% url 'add_skills' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ resume.id }}">
+                            {{ skillsform }}
+                            <button type="submit" class="btn btn-primary">Submit</button>
+
+                        </form>
+                        <hr>
+
+
                     </div>
                 </div>
             </div>
         </div>
 
-       
-        <!--Job Modal-->
-        <div class="modal fade" tabindex="-1" id="job-modal" role="dialog">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header ">
-                        <h5 class="modal-title">Job details</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="" method="post">
-                            {%csrf_token%}
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label>Profile*:</label>
-                                    <input type="text" class="form-control" name="profile" id="collegeName"
-                                        placeholder="eg :Data Scientist" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>organization*:</label>
-                                    <input type="text" class="form-control" name="organization" id="collegeName" placeholder="IBM" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Location*:</label>
-                                    <input type="text" class="form-control" name="location" id="collegeName" placeholder="Location"
-                                        required>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col">
-                                            <label>Start Date:</label>
-                                            <input type="text" date1="datepicker" name="sdate" class="form-control" required />
-                                        </div>
-                                        <div class="col">
-                                            <label>End Date</label>
-                                            <input type="text" date1="datepicker" name="edate" class="form-control" required />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>Description</label>
-                                    <textarea class="form-control" type="text" id="exampleFormControlTextarea1" rows="3"
-                                        placeholder="short description max 250 character" id="sessionNo"
-                                        name="description" onkeypress="return isNumberKey(event)"
-                                        maxlength="250"></textarea>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary my-1">Submit</button>
-                    </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!--Job model Ends-->
-        <!-- Internship Model Starts-->
-        <div class="modal fade" tabindex="-1" id="intern-modal" role="dialog">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header ">
-                        <h5 class="modal-title">Internship Details</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="" method="post">
-                          {%csrf_token%}
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label>Profile*:</label>
-                                    <input type="text" class="form-control" name="profile" id="collegeName"
-                                        placeholder="eg :Data Scientist" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>organization*:</label>
-                                    <input type="text" class="form-control" name="organization" id="collegeName" placeholder="IBM" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Location*:</label>
-                                    <input type="text" class="form-control" name="location" id="collegeName" placeholder="Location"
-                                        required>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col">
-                                            <label>Start Date:</label>
-                                            <input type="text" date1="datepicker" name="sdate" class="form-control" required />
-                                        </div>
-                                        <div class="col">
-                                            <label>End Date</label>
-                                            <input type="text" date1="datepicker" name="edate" class="form-control" required />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>Description</label>
-                                    <textarea class="form-control" type="text" id="exampleFormControlTextarea1" rows="3"
-                                        placeholder="short description max 250 character" id="sessionNo"
-                                        name="description" onkeypress="return isNumberKey(event)"
-                                        maxlength="250"></textarea>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary my-1">Submit</button>
-                    </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!--Internship Model Ends-->
-        <!--Training model-->
-        <div class="modal fade" tabindex="-1" id="train-modal" role="dialog">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header ">
-                        <h5 class="modal-title">Training Details</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="" method="post">
-                            {%csrf_token%}
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label>Training Program*:</label>
-                                    <input type="text" class="form-control" name="program" id="collegeName"
-                                        placeholder="eg :Data Scientist" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>organization*:</label>
-                                    <input type="text" class="form-control" name="organization" id="collegeName" placeholder="IBM" required>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col">
-                                            <label>Start Date:</label>
-                                            <input type="text" date1="datepicker" name="sdate" class="form-control" required />
-                                        </div>
-                                        <div class="col">
-                                            <label>End Date</label>
-                                            <input type="text" date1="datepicker"  name="edate" class="form-control" required />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>Description</label>
-                                    <textarea class="form-control" type="text" id="exampleFormControlTextarea1" rows="3"
-                                        placeholder="short description max 250 character" id="sessionNo"
-                                        name="description" onkeypress="return isNumberKey(event)"
-                                        maxlength="250"></textarea>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary my-1">Submit</button>
-                    </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!--Training model ends-->
-        <!--Projects Model-->
-        <div class="modal fade" tabindex="-1" id="pro-modal" role="dialog">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header ">
-                        <h5 class="modal-title">Project Details</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="" method="post">
-                        {%csrf_token%}
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label>Project Name*:</label>
-                                    <input type="text" class="form-control" name="pname" id="collegeName" placeholder="" required>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col">
-                                            <label>Start Date:</label>
-                                            <input type="text" date1="datepicker" name="sdate" class="form-control" required />
-                                        </div>
-                                        <div class="col">
-                                            <label>End Date</label>
-                                            <input type="text" date1="datepicker" name="edate" class="form-control" required />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>Project Link:</label>
-                                    <input type="text" name="link" class="form-control" id="collegeName"
-                                        placeholder="eg:http://github.com/project" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Description</label>
-                                    <textarea class="form-control" type="text" id="exampleFormControlTextarea1" rows="3"
-                                        placeholder="short description max 250 character" id="sessionNo"
-                                        name="description" onkeypress="return isNumberKey(event)"
-                                        maxlength="250"></textarea>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary my-1">Submit</button>
-                    </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!--Projects model ends-->
-        <!--skills section-->
-        <div class="modal fade" tabindex="-1" id="skill-modal" role="dialog">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header ">
-                        <h5 class="modal-title">Add Skills</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="" method="post">
-                            {%csrf_token%}
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <input type="text" name="skill" class="form-control" id="collegeName"
-                                        placeholder="Eg :Adobe Photoshop" required>
-                                </div>
-
-
-                            </div>
-                            <button type="submit" class="btn btn-primary my-1">Submit</button>
-                    </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!--Skills section ends-->
-        <!--additional Details modal-->
-        <div class="modal fade" tabindex="-1" id="add-modal" role="dialog">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header ">
-                        <h5 class="modal-title">Additional Details</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="" method="post">
-                        {%csrf_token%}
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label>Description</label>
-                                    <textarea class="form-control" type="text" id="exampleFormControlTextarea1" rows="3"
-                                        placeholder="short description max 250 character" id="sessionNo"
-                                        name="description" onkeypress="return isNumberKey(event)"
-                                        maxlength="250"></textarea>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary my-1">Submit</button>
-                    </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!--additional details ends-->
         <!--modals-->
     </div>
+
+
+
+    <!-- Hobbies Modal-->
+    <div class="modal fade" id="add-hobbies-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+
+
+                    <h4 class="modal-title d-inline">Hobbies :</h4>
+                    <button type="button" class="close d-inline" data-dismiss="modal">&times;</button>
+                    <form method="post" , action="{% url 'add_hobbies' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ resume.id }}">
+                        {{ hobbiesform }}
+                        <button type="submit" class="btn btn-primary">Submit</button>
+
+                    </form>
+                    <hr>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--modals-->
+    </div>
+
+     <!--achivment Modal-->
+    <div class="modal fade" id="add-achievements-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+
+
+                    <h4 class="modal-title d-inline">Achievements :</h4>
+                    <button type="button" class="close d-inline" data-dismiss="modal">&times;</button>
+                    <form method="post" , action="{% url 'add_achievements' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="id" value="{{ resume.id }}">
+                        {{ achievementsform }}
+                        <button type="submit" class="btn btn-primary">Submit</button>
+
+                    </form>
+                    <hr>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--modals-->
+    </div>
+
     <br>
     <br>
-    <br>
-    <br>
-  
+
 
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -611,9 +719,9 @@
 
         });
     });
-    $(document).ready(function(){
-  $('[data-toggle="popover"]').popover();
-});
+    $(document).ready(function () {
+        $('[data-toggle="popover"]').popover();
+    });
 
 
 </script>

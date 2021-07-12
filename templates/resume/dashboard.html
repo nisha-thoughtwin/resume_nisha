@@ -48,26 +48,33 @@
   <h2>Your Resume's<i class="fas fa-arrow-down"></i></h2>
   <div class="tabla">
     <table cellpadding="0" cellspacing="0" >
-      <tr class="negrita">
+      <tr class="negrita bg-dark ">
         <th>Resume Name</th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
         <th>Action</th>
+        <th>View Resume</th>
       </tr>
-      <tr>
-        {% for resumes in resume %}
-        <th>{{ resumes.title }}</th>
-        <th>&nbsp;</th>
-        <th>&nbsp;</th>
-        <th><a href="{% url 'updatedata' resumes.id %}"
-        class="btn btn-warning btn-sm">Update</a></th>
+      {% for resumes in resume %}
 
-        {% endfor %}
+      <tr>
+        <th><h4>{{ resumes.title }}  {{resumes.template_set.all.first.name}}</h4></th>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+        <th><a href="{% url 'updateresume' resumes.id %}"
+        class="btn btn-warning btn-sm">edit and add more</a></th>
+        <th><a href="{% url 'updateresume' resumes.id %}"
+          class="btn btn-success btn-sm">View</a></th>
+
       </tr>
+      {% endfor %}
       
     </table>
   </div>
 
+
+  
+  
   
 </main>
 

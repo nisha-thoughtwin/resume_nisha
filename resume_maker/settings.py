@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-lm4#us@p7-08(#hpaz8yo%c_aaojdfx#q5t$r*h!l&)0u(l58@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'apps.resume.apps.ResumeConfig',
 
 ]
-
+DATE_INPUT_FORMATS = ['%d/%m/%Y', ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -50,6 +50,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
+
 ]
 
 
@@ -145,8 +148,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER ='nisha.thoughtwin@gmail.com'
-EMAIL_HOST_PASSWORD ='nisha1234567890'
+EMAIL_HOST_USER ='sdvf.sdxvfsdx@gmail.com'
+EMAIL_HOST_PASSWORD ='sdfvds'
 EMAIL_USE_TLS = True
 
 PROTOCOL = "http"

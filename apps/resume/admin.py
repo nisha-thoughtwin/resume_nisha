@@ -4,17 +4,21 @@ from apps.resume.models import *
 
 
 class EducationAdmin(admin.ModelAdmin):
-    readonly_fields = ('year_of_passing',)
-    search_fields = ['degree_class', ]
+   
+    search_fields = ['qualification_name', ]
     list_filter = ['percentage_or_grade', ]
-    list_display = ['resume','degree_class', 'percentage_or_grade', 'university', ]
+    list_display = ['resume','qualification_name', 'percentage_or_grade', 'university', ]
 
 
 class ExperienceAdmin(admin.ModelAdmin):
     search_fields = ['company_name', 'designation', ]
     list_filter = ['designation', ]
-    list_display = ['resume','company_name', 'duration', 'designation','role','place' ]
+    list_display = ['resume','company_name', 'start_date','end_date', 'designation','role','place' ]
 
+
+class WorkSamplesAdmin(admin.ModelAdmin):
+    search_fields = ['project_name', ]
+    list_display = ['project_name', 'project_link', ]
 
 class HobbiesAdmin(admin.ModelAdmin):
     search_fields = ['resume', ]
@@ -41,10 +45,13 @@ admin.site.register(Resume)
 admin.site.register(ResumeUserDetails)
 admin.site.register(Education, EducationAdmin)
 admin.site.register(Experience, ExperienceAdmin)
+admin.site.register(WorkSamples, WorkSamplesAdmin)
 admin.site.register(Hobbies, HobbiesAdmin)
 admin.site.register(Skills, SkillAdmin)
 admin.site.register(Certificate, CertificateAdmin)
 admin.site.register(Achievements, AchievementsAdmin)
+admin.site.register(ChooseTemplate)
+
 
 
 
